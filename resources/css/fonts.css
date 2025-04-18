@@ -1,0 +1,61 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+@font-face {
+  font-family: "OpenSans";
+  src: url("../fonts/OpenSans-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../fonts/OpenSans-Regular.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../fonts/OpenSans-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("../fonts/OpenSans-ExtraBold.ttf");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("../fonts/GothicA1-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("../fonts/GothicA1-Regular.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("../fonts/GothicA1-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("../fonts/GothicA1-Black.ttf");
+  font-weight: 900;
+}
+
+html {
+  font-family: "OpenSans", "GothicA1", sans-serif !important;
+}

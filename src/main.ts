@@ -20,6 +20,9 @@ async function bootstrap() {
   app.useStaticAssets(join(process.cwd(), 'resources', 'imgs'), {
     prefix: '/imgs',
   });
+  app.useStaticAssets(join(process.cwd(), 'resources', 'fonts'), {
+    prefix: '/fonts',
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }
