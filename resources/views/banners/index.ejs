@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%- include('../partials/_head.ejs', { 
+  title: '배너 이미지 관리',
+  description: `
+  - 배너 이미지 관리 시스템입니다.
+  - 외부 링크로 이동하는 배너는 자유롭게 추가 등록이 가능합니다.
+  - 그 외에 국민DR,플러스DR,가이드는 배너가 고정이며 최대 1개씩만 등록 가능합니다.
+  `,
+}) %>
+<body>
+  <div class="flex h-screen">
+    <%- include('../partials/_sidebar.ejs', { activePage: 'banners' }) %>
+    <main class="w-full h-full p-10" style="min-width: 800px; max-width: 800px;">
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800">
+          배너 이미지 관리
+        </h1>
+        <a href="/admin/banners/new" class="flex items-center justify-center gap-2 h-12 px-4 bg-blue-900 text-white rounded-xl" style="width: 170px;">
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span class="text-sm">
+            배너 이미지 등록
+          </span>
+        </a>
+      </div>
+
+      <!-- 배너 이미지 리스트 - 한 줄에 2개씩 표시 -->
+      <div class="mt-10">
+        <!-- 배너 목록 -->
+        <div class="flex flex-wrap gap-6">
+          <% if (banners && banners.length > 0) { %>
+            <% banners.forEach((banner) => { %>
+              <!-- 배너 이미지 아이템 -->
+              <div class="flex flex-col gap-2" style="width:calc(50% - 12px); max-width: 400px;">
+                <div class="flex items-center justify-between text-xs">
+                  <div>
+                    <span class="bg-gray-500 text-white px-2 py-1 rounded-lg flex-shrink-0"><%= banner.displayOrder %></span>
+                    <span class="<%= actionTypeColors[banner.actionType] %> text-white text-xs px-2 py-1 rounded-lg flex-shrink-0">
+                      <%= actionTypeLabels[banner.actionType] %>
+                    </span>
+                  </div>
+                  <!-- <% if (banner.actionType === 'LINK' && banner.actionUrl) { %>
+                    <span class="text-gray-500 truncate"><%= banner.actionUrl %></span>
+                  <% } %> -->
+                  <div>
+                    <a href="/admin/banners/edit/<%= banner.id %>" class="text-yellow-500">수정</a>
+                    <a 
+                      href="/admin/banners/destroy/<%= banner.id %>" 
+                      class="text-red-500"
+                      data-turbo="">삭제</a>
+                  </div>
+                </div>
+                <div class="w-full rounded-2xl overflow-hidden border border-gray-300">
+                  <img src="<%= banner.imageUrl %>" class="block w-full"/>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <div class="w-full text-center py-10 text-gray-500">
+              등록된 배너가 없습니다.
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </min>
+  </div>
+</body>
+</html>

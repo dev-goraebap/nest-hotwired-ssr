@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%- include('../partials/_head.ejs', { 
+  title: '앱 버전관리',
+  description: '앱 버전 관리 시스템입니다',
+}) %>
+<body>
+  <div class="flex h-screen">
+    <%- include('../partials/_sidebar.ejs', { activePage: 'versions' }) %>
+    <min class="w-full h-full p-4">
+      앱 버전 관리
+    </min>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%- include('../partials/_head.ejs', { 
+  title: 'DR 공지 이미지 관리',
+  description: `
+  DR 공지 이미지 관리 시스템입니다.
+  DR 공지 이미지는 실시간 발령 정보를 이미지에 노출시켜줘야하므로
+  관리자페이지에서는 이미지를 업로드하고 텍스트 좌표를 미리 지정할 수 있는 오버레이 영역생성만 하게됩니다.
+  `,
+}) %>
+<body>
+  <div class="flex h-screen">
+    <%- include('../partials/_sidebar.ejs', { activePage: 'dr-notices' }) %>
+    <main class="w-full h-full p-4">
+      DR 공지 이미지 관리
+    </main>
+  </div>
+</body>
+</html>

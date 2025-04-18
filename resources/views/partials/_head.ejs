@@ -1,0 +1,29 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 파라미터로 넘어온 title 데이터 사용 -->
+  <% if (typeof title !== 'undefined') { %>
+    <title><%= title %></title>
+  <% } %>
+  <!-- 파라미터로 description 데이터 사용  -->
+  <% if (typeof description !== 'undefined') { %>
+    <meta name="description" content="<%= description %>">
+  <% } %>
+
+  <!-- Tailwindcss -->
+  <link rel="stylesheet" href="/css/tailwindcss@2.2.19.min.css"/>
+  <link rel="stylesheet" href="/css/app.css"/>
+
+  <!-- 
+    hotwired/turbo 라이브러리
+    
+    Hotwired Turbo는 단일 페이지 앱(SPA)과 같은 사용자 경험을 제공하면서도
+    서버 측 렌더링의 장점을 유지하는 JavaScript 라이브러리 입니다.
+    
+    주요 기능:
+    - Turbo Drive: 페이지 이동 시 전체 페이지를 다시 로드하지 않고 AJAX로 컨텐츠를 가져와 DOM을 업데이트
+    - Turbo Frames: 페이지 일부분만 독립적으로 업데이트 가능
+    - Turbo Streams: 서버로부터 실시간 업데이트를 받아 DOM 요소 조작 (CRUD 작업)
+  -->
+  <script src="/js/turbo@8.0.13.min.js"></script>
+</head>
