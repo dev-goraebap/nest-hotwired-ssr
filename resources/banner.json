@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "actionType": "LINK",
+    "imageUrl": "/imgs/banner-ef1028ecb34651105e69c7a998cc93c771.webp",
+    "displayOrder": 1,
+    "actionUrl": "https://example.com/promotion/summer-sale"
+  },
+  {
+    "id": 2,
+    "actionType": "PLUS_DR",
+    "imageUrl": "/imgs/banner-5c8e9ae3d4810c3055abe5296de11e307.webp",
+    "displayOrder": 3
+  },
+  {
+    "id": 3,
+    "actionType": "DR",
+    "imageUrl": "/imgs/banner-3b0f64b7ffa3a14f6805b9bdc19bbe56.webp",
+    "displayOrder": 2
+  },
+  {
+    "id": 4,
+    "actionType": "GUIDE",
+    "imageUrl": "/imgs/banner-4d4e4f94fc6b7176d10c3cf1e95fc7739.webp",
+    "displayOrder": 4
+  }
+]
