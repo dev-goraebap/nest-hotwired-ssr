@@ -2,6 +2,25 @@ body {
   background-color: oklch(96.7% 0.003 264.542);
 }
 
+/* 페이지 애니메이션 효과 */
+.page-animation-enter {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: page-animation-enter-active 0.3s ease-in-out forwards;
+}
+
+@keyframes page-animation-enter-active {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    overflow: auto;
+  }
+}
+
 /* 모달 트랜지션을 위한 스타일 */
 .transition-opacity {
   transition-property: opacity;
