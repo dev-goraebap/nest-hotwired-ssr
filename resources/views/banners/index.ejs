@@ -48,9 +48,14 @@
       <% } %>
 
       <!-- 배너 이미지 리스트 - 한 줄에 2개씩 표시 -->
-      <div class="mt-6" data-controller="drag-drop">
+      <div class="mt-6" 
+        data-controller="drag-drop"
+        data-drag-drop-url-value="/admin/banners/update-order"
+        data-drag-drop-order-badge-selector-value=".order-badge">
         <!-- 배너 목록 -->
-        <div class="flex flex-wrap gap-6" data-drag-drop-target="container">
+        <div 
+          class="flex flex-wrap gap-6" 
+          data-drag-drop-target="container">
           <% if (banners && banners.length > 0) { %>
             <% banners.forEach((banner) => { %>
               <!-- 배너 이미지 아이템 -->
