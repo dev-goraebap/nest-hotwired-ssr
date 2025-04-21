@@ -51,7 +51,32 @@
       <div class="mt-6" 
         data-controller="drag-drop"
         data-drag-drop-url-value="/admin/banners/update-order"
-        data-drag-drop-order-badge-selector-value=".order-badge">
+        data-drag-drop-order-badge-selector-value=".order-badge"
+        data-drag-drop-confirmation-delay-value="3000">
+
+        <!-- 확인 UI - 기본적으로 숨김 -->
+        <div 
+          class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-4 w-96 hidden z-50"
+          data-drag-drop-target="confirmationBar">
+          <div class="flex justify-between mb-2">
+            <span class="font-semibold text-gray-700">순서 변경 적용 중...</span>
+            <button 
+              class="text-gray-500 hover:text-gray-800"
+              data-action="drag-drop#cancelUpdate">
+              취소
+            </button>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div 
+              class="h-full bg-blue-600 rounded-full"
+              data-drag-drop-target="progressBar"
+              style="width: 0%;"></div>
+          </div>
+          <div class="text-xs text-gray-500 mt-1 text-center delay-text">
+            3초 후 자동으로 적용됩니다. 취소하려면 '취소' 버튼을 클릭하세요.
+          </div>
+        </div>
+
         <!-- 배너 목록 -->
         <div 
           class="flex flex-wrap gap-6" 
