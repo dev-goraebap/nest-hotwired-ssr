@@ -1,4 +1,4 @@
-import { Controller } from '/js/stimulus@3.2.2.min.js';
+import { Controller } from '/public/js/stimulus@3.2.2.min.js';
 
 /**
  * 플래시 메시지를 제어하는 Stimulus 컨트롤러

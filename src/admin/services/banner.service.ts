@@ -202,7 +202,7 @@ export class BannerService {
     // 배너 생성 DTO 준비
     const newBannerData: CreateBannerDto = {
       actionType: createBannerDto.actionType as BannerActionType,
-      imageUrl: file ? `/imgs/${file.filename}` : '',
+      imageUrl: file ? `/public/imgs/${file.filename}` : '',
     };
 
     // 액션 타입이 LINK인 경우에만 URL 포함
@@ -266,7 +266,7 @@ export class BannerService {
 
     // 이미지가 업로드된 경우에만 업데이트
     if (file) {
-      updateData.imageUrl = `/imgs/${file.filename}`;
+      updateData.imageUrl = `/public/imgs/${file.filename}`;
     }
 
     return Result.success(updateData, '배너 수정 데이터가 유효합니다.');

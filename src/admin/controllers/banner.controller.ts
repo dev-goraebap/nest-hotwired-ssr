@@ -20,11 +20,10 @@ import { BannerActionType, BannerService } from '../services/banner.service';
 export class BannerController {
   constructor(private readonly bannerService: BannerService) {}
 
-  // 파일 업로드 옵션 - 컨트롤러 내부로 통합
   private static getFileOptions() {
     return {
       storage: diskStorage({
-        destination: './resources/imgs',
+        destination: './resources/public/imgs',
         filename: (req, file, cb) => {
           const randomName = Array(32)
             .fill(null)
@@ -46,7 +45,7 @@ export class BannerController {
   @Render('banners/index')
   async index() {
     const result = await this.bannerService.getAll();
-    
+
     return {
       banners: result.data || [],
       actionTypeLabels: this.bannerService.getActionTypeLabels(),
@@ -75,8 +74,8 @@ export class BannerController {
   ) {
     // 유효성 검사
     const validateResult = await this.bannerService.validateCreate(
-      createBannerDto, 
-      file
+      createBannerDto,
+      file,
     );
 
     if (validateResult.failure) {
@@ -90,7 +89,7 @@ export class BannerController {
 
     // 배너 생성
     const createResult = await this.bannerService.create(validateResult.data!);
-    
+
     if (createResult.failure) {
       return res.render('banners/new', {
         formData: createBannerDto,
@@ -108,11 +107,11 @@ export class BannerController {
   @Render('banners/edit')
   async edit(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const bannerResult = await this.bannerService.getOne(id);
-    
+
     if (bannerResult.failure) {
       return res.redirect('/admin/banners');
     }
-    
+
     return {
       formData: bannerResult.data,
       actionTypes: Object.values(BannerActionType),
@@ -132,17 +131,17 @@ export class BannerController {
   ) {
     // 현재 배너 가져오기
     const currentBannerResult = await this.bannerService.getOne(id);
-    
+
     if (currentBannerResult.failure) {
       return res.redirect('/admin/banners');
     }
-    
+
     // 유효성 검사
     const validateResult = await this.bannerService.validateUpdate(
       updateBannerDto,
       file,
       currentBannerResult.data!,
-      id
+      id,
     );
 
     if (validateResult.failure) {
@@ -156,8 +155,11 @@ export class BannerController {
     }
 
     // 배너 업데이트
-    const updateResult = await this.bannerService.update(id, validateResult.data!);
-    
+    const updateResult = await this.bannerService.update(
+      id,
+      validateResult.data!,
+    );
+
     if (updateResult.failure) {
       return res.render('banners/edit', {
         formData: { ...currentBannerResult.data, ...updateBannerDto },
@@ -173,16 +175,19 @@ export class BannerController {
   }
 
   @Post('update-order')
-  async updateOrder(@Body() data: { orders: { id: number; order: number }[] }, @Res() res: Response) {
+  async updateOrder(
+    @Body() data: { orders: { id: number; order: number }[] },
+    @Res() res: Response,
+  ) {
     const result = await this.bannerService.updateOrder(data.orders);
-    
+
     if (result.failure) {
       return res.status(500).json({
         success: false,
         message: result.firstMessage,
       });
     }
-    
+
     return res.json({
       success: true,
       message: result.firstMessage,

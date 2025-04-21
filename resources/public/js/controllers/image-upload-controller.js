@@ -1,4 +1,4 @@
-import { Controller } from '/js/stimulus@3.2.2.min.js';
+import { Controller } from '/public/js/stimulus@3.2.2.min.js';
 
 /**
  * 이미지 업로드 및 드래그 앤 드롭 기능을 제어하는 Stimulus 컨트롤러

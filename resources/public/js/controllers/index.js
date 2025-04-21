@@ -4,7 +4,7 @@
  */
 
 // Stimulus 프레임워크에서 Application 클래스 가져오기
-import { Application } from '/js/stimulus@3.2.2.min.js';
+import { Application } from '/public/js/stimulus@3.2.2.min.js';
 
 // 컨트롤러 파일 가져오기
 import ImageUploadController from './image-upload-controller.js'; // 이미지 업로드/미리보기 기능

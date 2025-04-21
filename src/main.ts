@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -11,17 +11,8 @@ async function bootstrap() {
   app.setBaseViewsDir(join(process.cwd(), 'resources', 'views'));
 
   // 정적 파일 경로 설정
-  app.useStaticAssets(join(process.cwd(), 'resources', 'js'), {
-    prefix: '/js',
-  });
-  app.useStaticAssets(join(process.cwd(), 'resources', 'css'), {
-    prefix: '/css',
-  });
-  app.useStaticAssets(join(process.cwd(), 'resources', 'imgs'), {
-    prefix: '/imgs',
-  });
-  app.useStaticAssets(join(process.cwd(), 'resources', 'fonts'), {
-    prefix: '/fonts',
+  app.useStaticAssets(join(process.cwd(), 'resources', 'public'), {
+    prefix: '/public',
   });
 
   await app.listen(process.env.PORT ?? 3000);
