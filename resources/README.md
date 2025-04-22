@@ -64,8 +64,8 @@ Stimulus는 서버 사이드 렌더링된 HTML에 자바스크립트 동작을 �
    - 필요한 페이지에서 include 문으로 포함 (예: `<%- include('../partials/_header.ejs') %>`)
 
 3. 클라이언트 측 동작 추가 시:
-   - `js/controllers/` 폴더에 새 Stimulus 컨트롤러 추가
-   - `js/controllers/index.js`에 해당 컨트롤러 등록
+   - `/public/js/controllers/` 폴더에 새 Stimulus 컨트롤러 추가
+   - `/public/js/controllers/index.js`에 해당 컨트롤러 등록
 
 ## 추가 정보
 

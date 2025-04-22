@@ -29,13 +29,13 @@ export interface UpdateBannerDto {
 export class BannerService {
   constructor(
     @InjectRepository(BannerEntity)
-    private readonly bannerRepository: Repository<BannerEntity>,
+    private readonly repository: Repository<BannerEntity>,
   ) {}
 
   // 데이터 조회 메소드
   async getAll(): Promise<Result<BannerEntity[]>> {
     try {
-      const banners = await this.bannerRepository.find({
+      const banners = await this.repository.find({
         order: {
           displayOrder: 'ASC',
         },
@@ -48,7 +48,7 @@ export class BannerService {
 
   async getOne(id: number): Promise<Result<BannerEntity>> {
     try {
-      const banner = await this.bannerRepository.findOne({ where: { id } });
+      const banner = await this.repository.findOne({ where: { id } });
       return Result.from(banner, `ID가 ${id}인 배너를 찾을 수 없습니다.`);
     } catch (error) {
       return Result.failure(
@@ -61,7 +61,7 @@ export class BannerService {
     actionType: BannerActionType,
   ): Promise<Result<BannerEntity | null>> {
     try {
-      const banner = await this.bannerRepository.findOne({
+      const banner = await this.repository.findOne({
         where: { actionType },
       });
       return Result.success(banner); // 없어도 성공으로 처리 (존재 여부 확인용)
@@ -79,19 +79,19 @@ export class BannerService {
 
       // displayOrder가 제공되지 않은 경우 현재 최대 값 + 1 사용
       if (!displayOrder) {
-        const maxOrderBanner = await this.bannerRepository.findOne({
+        const maxOrderBanner = await this.repository.findOne({
           order: { displayOrder: 'DESC' },
           where: {},
         });
         displayOrder = maxOrderBanner ? maxOrderBanner.displayOrder + 1 : 1;
       }
 
-      const banner = this.bannerRepository.create({
+      const banner = this.repository.create({
         ...dto,
         displayOrder,
       });
 
-      const savedBanner = await this.bannerRepository.save(banner);
+      const savedBanner = await this.repository.save(banner);
       return Result.success(savedBanner, '배너가 성공적으로 등록되었습니다.');
     } catch (error) {
       return Result.failure(
@@ -105,13 +105,13 @@ export class BannerService {
     dto: UpdateBannerDto,
   ): Promise<Result<BannerEntity | null>> {
     try {
-      const updateResult = await this.bannerRepository.update(id, dto);
+      const updateResult = await this.repository.update(id, dto);
 
       if (updateResult.affected === 0) {
         return Result.failure(`ID가 ${id}인 배너를 찾을 수 없습니다.`);
       }
 
-      const updatedBanner = await this.bannerRepository.findOne({
+      const updatedBanner = await this.repository.findOne({
         where: { id },
       });
       return Result.success(updatedBanner, '배너가 성공적으로 수정되었습니다.');
@@ -124,7 +124,7 @@ export class BannerService {
 
   async delete(id: number): Promise<Result<void>> {
     try {
-      const result = await this.bannerRepository.delete(id);
+      const result = await this.repository.delete(id);
 
       if (result.affected === 0) {
         return Result.failure(`ID가 ${id}인 배너를 찾을 수 없습니다.`);
@@ -143,7 +143,7 @@ export class BannerService {
   ): Promise<Result<void>> {
     try {
       // 트랜잭션 사용하여 모든 순서 업데이트를 원자적으로 처리
-      await this.bannerRepository.manager.transaction(async (manager) => {
+      await this.repository.manager.transaction(async (manager) => {
         for (const item of orders) {
           await manager.update(BannerEntity, item.id, {
             displayOrder: item.order,

@@ -28,4 +28,32 @@
   -->
   <script src="/public/js/turbo@8.0.13.min.js"></script>
   <script type="module" src="/public/js/controllers/index.js"></script>
+
+  <!--
+    페이지 필터링 시 애니메이션 제어 스크립트
+    
+    문제: 같은 페이지 내에서 필터링 등의 쿼리 파라미터 변경 시에도
+    'page-animation-enter' 애니메이션이 매번 실행되어 불필요한 페이드 효과가 발생함
+    
+    해결: 같은 경로 내에서 쿼리 파라미터만 변경된 경우(필터링)에는
+    애니메이션 클래스를 제거하여 부드러운 전환 경험을 제공
+    
+    효과: 페이지 첫 로드나 다른 페이지에서 이동할 때만 애니메이션 적용됨
+  -->
+  <script>
+    document.addEventListener('turbo:before-render', function(event) {
+      // 현재 URL과 새로운 URL의 경로가 같은지 확인 (쿼리 파라미터 제외)
+      const currentPath = window.location.pathname;
+      const newPath = new URL(event.detail.newBody.baseURI).pathname;
+      
+      if (currentPath === newPath) {
+        // 같은 페이지 내에서의 필터링 변경인 경우, 애니메이션 클래스 제거
+        const newBody = event.detail.newBody;
+        const mainElement = newBody.querySelector('#main-content, main');
+        if (mainElement) {
+          mainElement.classList.remove('page-animation-enter');
+        }
+      }
+    });
+  </script>
 </head>
