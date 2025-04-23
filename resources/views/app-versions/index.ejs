@@ -7,81 +7,83 @@
 <body>
   <div class="flex h-screen">
     <%- include('../partials/_sidebar.ejs', { activePage: 'versions' }) %>
-    <main class="w-full h-full p-10 page-animation-enter" style="min-width: 1000px; max-width: 1000px;">
-      <div class="flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-gray-800">
-          앱 버전 관리
-        </h1>
-        <!-- 등록 버튼 -->
-        <a href="/admin/versions/new" class="flex items-center justify-center gap-2 p-3 bg-blue-900 text-white rounded-xl" style="width: 170px;">
-          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          <span class="text-sm">
-            앱 버전 등록
-          </span>
-        </a>
+    <main class="w-full h-full p-10 page-animation-enter">
+      <div style="min-width: 1000px; max-width: 1000px;">
+        <div class="flex justify-between items-center">
+          <h1 class="text-3xl font-bold text-gray-800">
+            앱 버전 관리
+          </h1>
+          <!-- 등록 버튼 -->
+          <a href="/admin/versions/new" class="flex items-center justify-center gap-2 p-3 bg-blue-900 text-white rounded-xl" style="width: 170px;">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span class="text-sm">
+              앱 버전 등록
+            </span>
+          </a>
+        </div>
+  
+        <!-- 설명 메시지 -->
+        <div class="mt-4 p-4 bg-blue-100 text-blue-700 rounded-md">
+          <div class="flex items-center text-sm">
+            <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            앱 버전을 관리할 수 있습니다. 강제 업데이트가 필요한 버전은 체크박스를 선택하세요.
+          </div>
+        </div>
+  
+        <!-- 
+          필터 조회, 강제업데이트 활성/비활성화, 삭제시 일어나는 form 요청은
+          turbo가 가로채서 비동기적으로 처리. 
+          
+        -->
+        <turbo-frame id="versions-list">
+          <!-- 필터 및 정렬 옵션 -->
+          <div class="mt-6 mb-4">
+            <form 
+              id="filter-form"
+              action="/admin/versions" 
+              method="GET" 
+              class="flex space-x-4"
+              data-turbo-frame="_top"
+            >
+              <div class="w-40">
+                <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">플랫폼</label>
+                <select 
+                  id="platform" 
+                  name="platform"
+                  class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onchange="this.form.requestSubmit()"
+                >
+                  <option value="all" <%= locals.filters && filters.platform === 'all' ? 'selected' : '' %>>전체</option>
+                  <option value="ANDROID" <%= locals.filters && filters.platform === 'ANDROID' ? 'selected' : '' %>>ANDROID</option>
+                  <option value="IOS" <%= locals.filters && filters.platform === 'IOS' ? 'selected' : '' %>>IOS</option>
+                </select>
+              </div>
+              
+              <div class="w-40">
+                <label for="sort" class="block text-sm font-medium text-gray-700 mb-1">정렬</label>
+                <select 
+                  id="sort" 
+                  name="sort"
+                  class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onchange="this.form.requestSubmit()"
+                >
+                  <option value="latest" <%= locals.filters && filters.sort === 'latest' ? 'selected' : '' %>>최신순</option>
+                  <option value="oldest" <%= locals.filters && filters.sort === 'oldest' ? 'selected' : '' %>>오래된순</option>
+                </select>
+              </div>
+            </form>
+          </div>
+  
+          <!-- 앱 버전 리스트 -->
+          <div class="mt-4">
+            <%- include('./_list.ejs', { versions }) %>
+          </div>
+        </turbo-frame>
       </div>
-
-      <!-- 설명 메시지 -->
-      <div class="mt-4 p-4 bg-blue-100 text-blue-700 rounded-md">
-        <div class="flex items-center text-sm">
-          <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          앱 버전을 관리할 수 있습니다. 강제 업데이트가 필요한 버전은 체크박스를 선택하세요.
-        </div>
-      </div>
-
-      <!-- 
-        필터 조회, 강제업데이트 활성/비활성화, 삭제시 일어나는 form 요청은
-        turbo가 가로채서 비동기적으로 처리. 
-        
-      -->
-      <turbo-frame id="versions-list">
-        <!-- 필터 및 정렬 옵션 -->
-        <div class="mt-6 mb-4">
-          <form 
-            id="filter-form"
-            action="/admin/versions" 
-            method="GET" 
-            class="flex space-x-4"
-            data-turbo-frame="_top"
-          >
-            <div class="w-40">
-              <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">플랫폼</label>
-              <select 
-                id="platform" 
-                name="platform"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onchange="this.form.requestSubmit()"
-              >
-                <option value="all" <%= locals.filters && filters.platform === 'all' ? 'selected' : '' %>>전체</option>
-                <option value="ANDROID" <%= locals.filters && filters.platform === 'ANDROID' ? 'selected' : '' %>>ANDROID</option>
-                <option value="IOS" <%= locals.filters && filters.platform === 'IOS' ? 'selected' : '' %>>IOS</option>
-              </select>
-            </div>
-            
-            <div class="w-40">
-              <label for="sort" class="block text-sm font-medium text-gray-700 mb-1">정렬</label>
-              <select 
-                id="sort" 
-                name="sort"
-                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                onchange="this.form.requestSubmit()"
-              >
-                <option value="latest" <%= locals.filters && filters.sort === 'latest' ? 'selected' : '' %>>최신순</option>
-                <option value="oldest" <%= locals.filters && filters.sort === 'oldest' ? 'selected' : '' %>>오래된순</option>
-              </select>
-            </div>
-          </form>
-        </div>
-
-        <!-- 앱 버전 리스트 -->
-        <div class="mt-4">
-          <%- include('./_list.ejs', { versions }) %>
-        </div>
-      </turbo-frame>
     </main>
   </div>
 </body>
