@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <%- include('../partials/_head.ejs', { 
+    title: '접근 거부됨',
+    description: '접근할 수 없는 페이지입니다.',
+  }) %>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="p-8 rounded-lg shadow-md max-w-md w-full text-center">
+      <svg
+        class="w-16 h-16 text-red-500 mx-auto mb-4"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+        />
+      </svg>
+      <h1 class="text-2xl font-bold text-red-600 mb-4">접근 거부됨</h1>
+      <p class="text-gray-700 mb-5">
+        <%= locals.message || '이 페이지에 접근할 권한이 없습니다.' %>
+      </p>
+      <div class="text-sm text-gray-500 mb-5">
+        IP: <%= locals.clientIp || '알 수 없음' %>
+      </div>
+      <div class="border-t border-gray-200 pt-4">
+        <p class="text-sm text-gray-600">
+          접근 권한이 필요하시면 시스템 관리자에게 문의하세요.
+        </p>
+      </div>
+
+      <div class="mt-6">
+        <a href="/" class="text-blue-500 hover:underline">홈으로 돌아가기</a>
+      </div>
+    </div>
+  </body>
+</html>

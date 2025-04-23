@@ -9,11 +9,13 @@ import { winstonConfig } from './common/logging/winston.config';
 async function bootstrap() {
   // 윈스턴 로거 인스턴스 생성
   const logger = WinstonModule.createLogger(winstonConfig);
-  
+
   // 앱 생성 시 로거 주입
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger,
   });
+
+  app.set('trust proxy', true);
 
   // EJS 템플릿 엔진 설정
   app.setViewEngine('ejs');
@@ -25,7 +27,7 @@ async function bootstrap() {
   });
 
   await app.listen(process.env.PORT ?? 3000);
-  
+
   logger.log(`Application is running on: ${await app.getUrl()}`, 'Bootstrap');
 }
 bootstrap();
