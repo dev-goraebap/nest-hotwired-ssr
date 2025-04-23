@@ -9,9 +9,12 @@
   - 배너 순서는 드래그하여 변경할 수 있습니다.
   `,
 }) %>
-<body data-controller="modal">
+<body>
   <div class="flex h-screen">
+    <!-- 사이드바 -->
     <%- include('../partials/_sidebar.ejs', { activePage: 'banners' }) %>
+
+    <!-- 메인컨텐츠 -->
     <main class="w-full h-full p-10 page-animation-enter">
       <div style="min-width: 1000px; max-width: 1000px;">
         <div class="flex justify-between items-center">
@@ -48,85 +51,12 @@
         </div>
         <% } %>
   
-        <!-- 배너 이미지 리스트 - 한 줄에 2개씩 표시 -->
-        <div class="mt-6" 
-          data-controller="drag-drop"
-          data-drag-drop-url-value="/admin/banners/update-order"
-          data-drag-drop-order-badge-selector-value=".order-badge"
-          data-drag-drop-confirmation-delay-value="3000">
-  
-          <!-- 확인 UI - 기본적으로 숨김 -->
-          <div 
-            class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-4 w-96 hidden z-50"
-            data-drag-drop-target="confirmationBar">
-            <div class="flex justify-between mb-2">
-              <span class="font-semibold text-gray-700">순서 변경 적용 중...</span>
-              <button 
-                class="text-gray-500 hover:text-gray-800"
-                data-action="drag-drop#cancelUpdate">
-                취소
-              </button>
-            </div>
-            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                class="h-full bg-blue-600 rounded-full"
-                data-drag-drop-target="progressBar"
-                style="width: 0%;"></div>
-            </div>
-            <div class="text-xs text-gray-500 mt-1 text-center delay-text">
-              3초 후 자동으로 적용됩니다. 취소하려면 '취소' 버튼을 클릭하세요.
-            </div>
-          </div>
-  
-          <!-- 배너 목록 -->
-          <div 
-            class="flex flex-wrap gap-6" 
-            data-drag-drop-target="container">
-            <% if (banners && banners.length > 0) { %>
-              <% banners.forEach((banner) => { %>
-                <!-- 배너 이미지 아이템 -->
-                <div class="flex flex-col gap-2" data-drag-drop-target="item" data-id="<%= banner.id %>" style="width:calc(50% - 12px); max-width: 500px;">
-                  <div class="flex items-center justify-between text-xs">
-                    <div class="flex items-center">
-                      <!-- 드래그 핸들 -->
-                      <div class="drag-handle cursor-move p-1 mr-1 text-gray-500 hover:text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                        </svg>
-                      </div>
-                      <span class="bg-gray-500 text-white px-2 py-1 rounded-lg flex-shrink-0 order-badge"><%= banner.displayOrder %></span>
-                      <span class="<%= actionTypeColors[banner.actionType] %> text-white text-xs px-2 py-1 rounded-lg flex-shrink-0 ml-1">
-                        <%= actionTypeLabels[banner.actionType] %>
-                      </span>
-                    </div>
-                    <div>
-                      <a href="/admin/banners/edit/<%= banner.id %>" class="text-yellow-500">수정</a>
-                      <a 
-                        href="/admin/banners/destroy/<%= banner.id %>" 
-                        class="text-red-500"
-                        data-id="<%= banner.id %>"
-                        data-banner-type="<%= actionTypeLabels[banner.actionType] %>"
-                        data-action="click->modal#open"
-                        data-turbo="false">삭제</a>
-                    </div>
-                  </div>
-                  <div class="w-full rounded-2xl overflow-hidden border border-gray-300">
-                    <img src="<%= banner.imageUrl %>" class="block w-full"/>
-                  </div>
-                </div>
-              <% }); %>
-            <% } else { %>
-              <div class="w-full text-center py-10 text-gray-500">
-                등록된 배너가 없습니다.
-              </div>
-            <% } %>
-          </div>
-        </div>
+        <!-- 배너 목록 -->
+        <turbo-frame id="banner-list">
+          <%- include('./_list.ejs', { banners, actionTypeLabels, actionTypeColors }) %>
+        </turbo-frame>
       </div>
     </main>
-  </div>
-  
-  <!-- 삭제 확인 모달 -->
-  <%- include('./_delete-modal.ejs') %>
+  </div>  
 </body>
 </html>

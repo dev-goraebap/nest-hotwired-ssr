@@ -6,7 +6,10 @@
 }) %>
 <body>
   <div class="flex h-screen">
+    <!-- 사이드바 -->
     <%- include('../partials/_sidebar.ejs', { activePage: 'whitelist' }) %>
+
+    <!-- 메인컨텐츠 -->
     <main class="w-full h-full overflow-y-auto p-10 page-animation-enter" >
       <div style="min-width: 1000px; max-width: 1000px;">
         <div class="flex justify-between items-center mb-6">
@@ -52,68 +55,9 @@
         <% } %>
 
         <!-- IP 리스트 테이블 -->
-        <div class="overflow-x-auto bg-white rounded-lg border border-gray-300">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  IP 주소
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  설명
-                </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  등록일자
-                </th>
-                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  관리
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% if (ipList && ipList.length > 0) { %>
-                <% ipList.forEach(ip => { %>
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900"><%= ip.ip %></div>
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="text-sm text-gray-900"><%= ip.description || '-' %></div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-500">
-                        <%= new Date(ip.createdAt).toLocaleDateString('ko-KR', { 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        }) %>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                      <form
-                        action="/admin/whitelist/delete/<%= encodeURIComponent(ip.ip) %>"
-                        method="POST"
-                        onsubmit="return confirm('정말 이 IP 주소를 삭제하시겠습니까?');"
-                      >
-                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm">
-                          삭제
-                        </button>
-                      </form>
-                    </td>
-                  </tr>
-                <% }); %>
-              <% } else { %>
-                <tr>
-                  <td colspan="4" class="px-6 py-8 text-center text-gray-500">
-                    등록된 IP 주소가 없습니다.
-                  </td>
-                </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
+        <turbo-frame id="ip-whitelist">
+          <%- include('./_list.ejs', { ipList }) %>
+        </turbo-frame>
       </div>
     </main>
   </div>

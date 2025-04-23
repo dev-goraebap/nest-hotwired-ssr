@@ -194,7 +194,7 @@ export class BannerController {
     });
   }
 
-  @Get('destroy/:id')
+  @Post('delete/:id')
   async destroy(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     await this.bannerService.delete(id);
     return res.redirect('/admin/banners');

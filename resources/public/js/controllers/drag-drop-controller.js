@@ -4,10 +4,10 @@ import { Controller } from '/public/js/stimulus@3.2.2.min.js';
  * 드래그 앤 드롭으로 항목 순서를 관리하는 Stimulus 컨트롤러
  */
 export default class extends Controller {
-  static targets = ['container', 'item', 'confirmationBar', 'progressBar'];
+  static targets = ['container', 'item'];
   static values = {
     url: String, // API 엔드포인트 URL (필수)
-    confirmationDelay: { type: Number, default: 5000 }, // 지연 시간(ms), 기본값 5초
+    orderBadgeSelector: { type: String, default: '.order-badge' } // 순서를 표시하는 요소의 선택자
   };
 
   // ------------------------------------------------------------
@@ -20,69 +20,10 @@ export default class extends Controller {
   connect() {
     console.log('Drag-drop controller connected');
     this.initializeDragDrop();
-    this.pendingOrderUpdate = null;
-    this.countdown = null;
     // 원래 순서 저장
     this.originalOrder = Array.from(this.itemTargets).map(
       (item) => item.dataset.id,
     );
-  }
-
-  // ------------------------------------------------------------
-  // 2. 값 변경 콜백 (값이 변경될 때 Stimulus에 의해 자동 호출)
-  // ------------------------------------------------------------
-
-  /**
-   * confirmationDelay 값이 변경될 때 호출됨
-   */
-  confirmationDelayValueChanged() {
-    this.updateDelayText();
-  }
-
-  // ------------------------------------------------------------
-  // 3. HTML에서 직접 호출하는 액션 메서드 (data-action 속성으로 연결)
-  // ------------------------------------------------------------
-
-  /**
-   * 순서 업데이트를 취소하고 원래 순서로 돌아감
-   * HTML에서 data-action="drag-drop#cancelUpdate"로 호출
-   */
-  cancelUpdate() {
-    // 타이머 정리
-    if (this.countdown) {
-      clearTimeout(this.countdown);
-      this.countdown = null;
-    }
-
-    // UI 숨기기
-    this.hideConfirmationUI();
-
-    // 원래 순서로 되돌리기 - 페이지를 새로고침하는 대신 DOM을 조작
-    const container = this.containerTarget;
-    const currentItems = {};
-
-    // 현재 아이템들을 ID별로 맵에 저장
-    this.itemTargets.forEach((item) => {
-      currentItems[item.dataset.id] = item;
-    });
-
-    // 원래 순서대로 다시 정렬
-    if (this.originalOrder && this.originalOrder.length > 0) {
-      // 컨테이너를 비우고
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
-      }
-
-      // 원래 순서대로 아이템 추가
-      this.originalOrder.forEach((id) => {
-        if (currentItems[id]) {
-          container.appendChild(currentItems[id]);
-        }
-      });
-    } else {
-      // 원래 순서가 없으면 페이지 새로고침
-      window.location.reload();
-    }
   }
 
   // ------------------------------------------------------------
@@ -93,23 +34,6 @@ export default class extends Controller {
    * 드래그 시작 시 처리
    */
   handleDragStart(e) {
-    // 이미 진행 중인 업데이트가 있다면 취소
-    if (this.countdown) {
-      clearTimeout(this.countdown);
-      this.countdown = null;
-    }
-
-    this.pendingOrderUpdate = null;
-
-    if (this.hasProgressBarTarget) {
-      this.progressBarTarget.style.width = '0%';
-      this.progressBarTarget.style.transition = 'none';
-    }
-
-    if (this.hasConfirmationBarTarget) {
-      this.confirmationBarTarget.classList.add('hidden');
-    }
-
     e.target.classList.add('dragging');
     e.dataTransfer.setData('text/plain', e.target.dataset.id);
     e.dataTransfer.effectAllowed = 'move';
@@ -183,8 +107,15 @@ export default class extends Controller {
           container.insertBefore(draggedItem, dropTarget);
         }
 
-        // 순서 업데이트를 바로 실행하지 않고, 확인 UI 표시
-        this.showConfirmationUI();
+        // 사용자에게 확인 후 저장
+        const confirmSave = window.confirm('배너 순서를 변경하시겠습니까?');
+        if (confirmSave) {
+          // 사용자가 확인을 눌렀을 때만 변경사항 저장
+          this.saveOrderChanges();
+        } else {
+          // 취소한 경우 원래 순서로 되돌리기
+          this.revertToOriginalOrder();
+        }
       } catch (error) {
         console.error('드래그 앤 드롭 처리 중 오류 발생:', error);
       }
@@ -222,84 +153,104 @@ export default class extends Controller {
       item.addEventListener('drop', this.handleDrop.bind(this));
       item.addEventListener('dragend', this.handleDragEnd.bind(this));
     });
-
-    // 초기 지연 시간 텍스트 설정
-    this.updateDelayText();
   }
 
   /**
-   * 지연 시간 텍스트 업데이트
+   * 순서 변경 내용을 서버에 저장
    * @private
    */
-  updateDelayText() {
-    // 밀리초를 초로 변환
-    const delaySeconds = this.confirmationDelayValue / 1000;
-
-    // 확인 UI 내의 delay-text 클래스를 가진 요소 찾기
-    const delayText = this.element.querySelector('.delay-text');
-    if (delayText) {
-      delayText.textContent = `${delaySeconds}초 후 자동으로 적용됩니다. 취소하려면 '취소' 버튼을 클릭하세요.`;
+  saveOrderChanges() {
+    const orders = this.collectCurrentOrder();
+    
+    if (!orders || orders.length === 0) {
+      console.warn('순서를 업데이트할 아이템이 없습니다.');
+      return;
     }
+
+    // URL 값은 반드시 외부에서 제공되어야 함
+    if (!this.hasUrlValue) {
+      console.error(
+        'API URL이 지정되지 않았습니다. data-drag-drop-url-value 속성을 설정해주세요.',
+      );
+      return;
+    }
+
+    // 서버에 순서 업데이트 요청
+    fetch(this.urlValue, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ orders }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // 성공 메시지 표시
+          this.showMessage(
+            data.message || '순서가 업데이트되었습니다.',
+            'success',
+          );
+
+          // 화면에 표시된 순서 번호 업데이트
+          const items = Array.from(this.itemTargets);
+          items.forEach((item, index) => {
+            // 모든 순서 배지 요소를 찾아서 업데이트
+            if(this.hasOrderBadgeSelectorValue) {
+              const orderBadges = item.querySelectorAll(this.orderBadgeSelectorValue);
+              orderBadges.forEach((badge) => {
+                badge.textContent = index + 1;
+              });
+            }
+          });
+
+          // 업데이트 완료 후 원래 순서를 새 순서로 업데이트
+          this.originalOrder = items.map((item) => item.dataset.id);
+        } else {
+          // 에러 메시지 표시
+          this.showMessage(
+            data.message || '순서 업데이트에 실패했습니다.',
+            'error',
+          );
+          // 실패 시 원래 순서로 되돌리기
+          this.revertToOriginalOrder();
+        }
+      })
+      .catch((error) => {
+        console.error('순서 업데이트 요청 실패:', error);
+        this.showMessage('네트워크 오류가 발생했습니다.', 'error');
+        // 오류 시 원래 순서로 되돌리기
+        this.revertToOriginalOrder();
+      });
   }
 
   /**
-   * 확인 UI 표시
+   * 원래 순서로 되돌리기
    * @private
    */
-  showConfirmationUI() {
-    // 이미 진행 중인 업데이트가 있다면 취소
-    if (this.countdown) {
-      clearTimeout(this.countdown);
-    }
+  revertToOriginalOrder() {
+    const container = this.containerTarget;
+    const currentItems = {};
 
-    // 확인 바 표시
-    if (this.hasConfirmationBarTarget) {
-      // 지연 시간 텍스트 업데이트 (필요시)
-      this.updateDelayText();
+    // 현재 아이템들을 ID별로 맵에 저장
+    this.itemTargets.forEach((item) => {
+      currentItems[item.dataset.id] = item;
+    });
 
-      // UI 표시
-      this.confirmationBarTarget.classList.remove('hidden');
-
-      // 현재 아이템 순서 저장
-      this.pendingOrderUpdate = this.collectCurrentOrder();
-
-      // 프로그레스 바 초기화 및 애니메이션 시작
-      if (this.hasProgressBarTarget) {
-        const progressBar = this.progressBarTarget;
-        progressBar.style.width = '0%';
-
-        // 지연 시간을 HTML에서 설정한 값으로 사용
-        const delaySeconds = this.confirmationDelayValue / 1000;
-        progressBar.style.transition = `width ${delaySeconds}s linear`;
-
-        // 잠시 대기 후 프로그레스 바 애니메이션 시작
-        setTimeout(() => {
-          progressBar.style.width = '100%';
-        }, 50);
+    // 원래 순서대로 다시 정렬
+    if (this.originalOrder && this.originalOrder.length > 0) {
+      // 컨테이너를 비우고
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
       }
 
-      // 카운트다운 시작 - HTML에서 설정한 지연 시간 사용
-      this.countdown = setTimeout(() => {
-        this.applyOrderUpdate();
-      }, this.confirmationDelayValue);
-    } else {
-      // 확인 UI가 없는 경우 바로 적용
-      this.applyOrderUpdate();
-    }
-  }
-
-  /**
-   * 확인 UI 숨기기
-   * @private
-   */
-  hideConfirmationUI() {
-    if (this.hasConfirmationBarTarget) {
-      this.confirmationBarTarget.classList.add('hidden');
-    }
-
-    if (this.hasProgressBarTarget) {
-      this.progressBarTarget.style.width = '0%';
-      this.progressBarTarget.style.transition = 'none';
+      // 원래 순서대로 아이템 추가
+      this.originalOrder.forEach((id) => {
+        if (currentItems[id]) {
+          container.appendChild(currentItems[id]);
+        }
+      });
     }
   }
 
@@ -326,91 +277,17 @@ export default class extends Controller {
   }
 
   /**
-   * 순서 업데이트 적용
-   * @private
-   */
-  applyOrderUpdate() {
-    if (!this.pendingOrderUpdate || this.pendingOrderUpdate.length === 0) {
-      console.warn('순서를 업데이트할 아이템이 없습니다.');
-      this.hideConfirmationUI();
-      return;
-    }
-
-    // URL 값은 반드시 외부에서 제공되어야 함
-    if (!this.hasUrlValue) {
-      console.error(
-        'API URL이 지정되지 않았습니다. data-drag-drop-url-value 속성을 설정해주세요.',
-      );
-      this.hideConfirmationUI();
-      return;
-    }
-
-    // 서버에 순서 업데이트 요청
-    fetch(this.urlValue, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({ orders: this.pendingOrderUpdate }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          // 성공 메시지 표시
-          this.showMessage(
-            data.message || '순서가 업데이트되었습니다.',
-            'success',
-          );
-
-          // 화면에 표시된 순서 번호 업데이트
-          const items = Array.from(this.itemTargets);
-          items.forEach((item, index) => {
-            // 모든 .order-badge 요소를 찾아서 업데이트
-            const orderBadges = item.querySelectorAll('.order-badge');
-            orderBadges.forEach((badge) => {
-              badge.textContent = index + 1;
-            });
-          });
-
-          // 업데이트 완료 후 원래 순서를 새 순서로 업데이트
-          this.originalOrder = items.map((item) => item.dataset.id);
-
-          // 업데이트 완료 후 확인 UI 숨기기
-          this.hideConfirmationUI();
-        } else {
-          // 에러 메시지 표시
-          this.showMessage(
-            data.message || '순서 업데이트에 실패했습니다.',
-            'error',
-          );
-          this.hideConfirmationUI();
-        }
-      })
-      .catch((error) => {
-        console.error('순서 업데이트 요청 실패:', error);
-        this.showMessage('네트워크 오류가 발생했습니다.', 'error');
-        this.hideConfirmationUI();
-      })
-      .finally(() => {
-        this.pendingOrderUpdate = null;
-      });
-  }
-
-  /**
    * 메시지 표시
    * @private
    * @param {string} message - 표시할 메시지
    * @param {string} type - 메시지 타입 ('info', 'success', 'error')
    */
   showMessage(message, type = 'info') {
-    // 이벤트 발생을 통한 메시지 표시
-    const event = new CustomEvent('drag-drop:message', {
-      detail: { message, type },
-      bubbles: true,
-    });
-    this.element.dispatchEvent(event);
-
+    // 간단하게 alert로 성공 메시지만 표시
+    if (type === 'success') {
+      alert(message);
+    }
+    
     // 콘솔에도 로그
     if (type === 'error') {
       console.error(message);

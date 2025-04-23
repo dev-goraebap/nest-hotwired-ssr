@@ -7,11 +7,9 @@
 import { Application } from '/public/js/stimulus@3.2.2.min.js';
 
 // 컨트롤러 파일 가져오기
-import ImageUploadController from './image-upload-controller.js';  // 이미지 업로드/미리보기 기능
+import DragDropController from './drag-drop-controller.js'; // 드래그 앤 드롭으로 순서 변경 기능
 import FlashMessageController from './flash-message-controller.js'; // 알림 메시지 표시 기능
-import ModalController from './modal-controller.js';               // 모달 대화상자 기능
-import ConfirmController from './confirm-controller.js';           // 확인 대화상자 기능
-import DragDropController from './drag-drop-controller.js';        // 드래그 앤 드롭으로 순서 변경 기능
+import ImageUploadController from './image-upload-controller.js'; // 이미지 업로드/미리보기 기능
 
 /**
  * Stimulus 애플리케이션 초기화
@@ -25,6 +23,4 @@ window.StimulusApp = Application.start();
  */
 window.StimulusApp.register("image-upload", ImageUploadController);
 window.StimulusApp.register("flash-message", FlashMessageController);
-window.StimulusApp.register("modal", ModalController);
-window.StimulusApp.register("confirm", ConfirmController);
 window.StimulusApp.register("drag-drop", DragDropController);

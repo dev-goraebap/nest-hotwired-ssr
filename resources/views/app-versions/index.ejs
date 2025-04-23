@@ -6,7 +6,10 @@
 }) %>
 <body>
   <div class="flex h-screen">
+    <!-- 사이드바 -->
     <%- include('../partials/_sidebar.ejs', { activePage: 'versions' }) %>
+
+    <!-- 메인컨텐츠 -->
     <main class="w-full h-full p-10 page-animation-enter">
       <div style="min-width: 1000px; max-width: 1000px;">
         <div class="flex justify-between items-center">
@@ -34,50 +37,44 @@
           </div>
         </div>
   
-        <!-- 
-          필터 조회, 강제업데이트 활성/비활성화, 삭제시 일어나는 form 요청은
-          turbo가 가로채서 비동기적으로 처리. 
-          
-        -->
+        <!-- 필터 및 정렬 옵션 -->
+        <div class="mt-6 mb-4">
+          <form 
+            id="filter-form"
+            action="/admin/versions" 
+            method="GET" 
+            class="flex space-x-4"
+          >
+            <div class="w-40">
+              <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">플랫폼</label>
+              <select 
+                id="platform" 
+                name="platform"
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                onchange="this.form.requestSubmit()"
+              >
+                <option value="all" <%= locals.filters && filters.platform === 'all' ? 'selected' : '' %>>전체</option>
+                <option value="ANDROID" <%= locals.filters && filters.platform === 'ANDROID' ? 'selected' : '' %>>ANDROID</option>
+                <option value="IOS" <%= locals.filters && filters.platform === 'IOS' ? 'selected' : '' %>>IOS</option>
+              </select>
+            </div>
+            
+            <div class="w-40">
+              <label for="sort" class="block text-sm font-medium text-gray-700 mb-1">정렬</label>
+              <select 
+                id="sort" 
+                name="sort"
+                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                onchange="this.form.requestSubmit()"
+              >
+                <option value="latest" <%= locals.filters && filters.sort === 'latest' ? 'selected' : '' %>>최신순</option>
+                <option value="oldest" <%= locals.filters && filters.sort === 'oldest' ? 'selected' : '' %>>오래된순</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        
         <turbo-frame id="versions-list">
-          <!-- 필터 및 정렬 옵션 -->
-          <div class="mt-6 mb-4">
-            <form 
-              id="filter-form"
-              action="/admin/versions" 
-              method="GET" 
-              class="flex space-x-4"
-              data-turbo-frame="_top"
-            >
-              <div class="w-40">
-                <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">플랫폼</label>
-                <select 
-                  id="platform" 
-                  name="platform"
-                  class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  onchange="this.form.requestSubmit()"
-                >
-                  <option value="all" <%= locals.filters && filters.platform === 'all' ? 'selected' : '' %>>전체</option>
-                  <option value="ANDROID" <%= locals.filters && filters.platform === 'ANDROID' ? 'selected' : '' %>>ANDROID</option>
-                  <option value="IOS" <%= locals.filters && filters.platform === 'IOS' ? 'selected' : '' %>>IOS</option>
-                </select>
-              </div>
-              
-              <div class="w-40">
-                <label for="sort" class="block text-sm font-medium text-gray-700 mb-1">정렬</label>
-                <select 
-                  id="sort" 
-                  name="sort"
-                  class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  onchange="this.form.requestSubmit()"
-                >
-                  <option value="latest" <%= locals.filters && filters.sort === 'latest' ? 'selected' : '' %>>최신순</option>
-                  <option value="oldest" <%= locals.filters && filters.sort === 'oldest' ? 'selected' : '' %>>오래된순</option>
-                </select>
-              </div>
-            </form>
-          </div>
-  
           <!-- 앱 버전 리스트 -->
           <div class="mt-4">
             <%- include('./_list.ejs', { versions }) %>
