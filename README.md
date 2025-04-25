@@ -59,24 +59,6 @@ npm install
 npm run start:dev
 ```
 
-## 프로젝트 구조
-
-```
-nest-hotwired-ssr/
-├── src/
-│   ├── controllers/       # NestJS 컨트롤러
-│   ├── services/          # 비즈니스 로직
-│   ├── views/             # 템플릿 파일
-│   │   └── layouts/       # 레이아웃 템플릿
-│   ├── public/            # 정적 자산
-│   │   ├── js/
-│   │   │   ├── turbo/     # Turbo 관련 코드
-│   │   │   └── controllers/ # Stimulus 컨트롤러
-│   │   └── css/
-│   └── main.ts            # 애플리케이션 진입점
-└── package.json
-```
-
 ## 사용 방법
 
 ### Turbo Frames 예제
