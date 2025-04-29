@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'; // 추가된 부분
 import { WinstonModule } from 'nest-winston';
 import { join } from 'path';
 
+import { AdminModule } from './admin';
 import { AppModule } from './app.module';
 import { winstonConfig } from './common/logging/winston.config';
 
@@ -17,6 +19,9 @@ async function bootstrap() {
 
   app.set('trust proxy', true);
 
+  // Swagger 설정
+  AdminModule.setupSwagger(app);
+
   // EJS 템플릿 엔진 설정
   app.setViewEngine('ejs');
   app.setBaseViewsDir(join(process.cwd(), 'resources', 'views'));
@@ -29,5 +34,6 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 
   logger.log(`Application is running on: ${await app.getUrl()}`, 'Bootstrap');
+  logger.log(`Swagger documentation is available at: ${await app.getUrl()}/api/docs`, 'Bootstrap');
 }
 bootstrap();

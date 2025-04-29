@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppVersionController } from './controllers/app-version.controller';
 import { BannerController } from './controllers/banner.controller';
@@ -36,7 +37,7 @@ import { LogViewerService } from './services/log-viewer.service';
     LogViewerService,
     IpWhitelistService,
     IpWhitelistMiddleware,
-  ]
+  ],
 })
 export class AdminModule {
   configure(consumer: MiddlewareConsumer) {
@@ -44,5 +45,28 @@ export class AdminModule {
     consumer
       .apply(IpWhitelistMiddleware)
       .forRoutes({ path: 'admin/*', method: RequestMethod.ALL });
+  }
+
+  // 관리자용 스웨거 설정을 위한 정적 메서드
+  static setupSwagger(app) {
+    const options = new DocumentBuilder()
+      .setTitle('관리자 API 문서')
+      .setDescription('관리자용 API 문서')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+
+    const document = SwaggerModule.createDocument(app, options, {
+      include: [AdminModule], // 관리자 모듈만 문서화
+    });
+
+    // 'admin/api-docs' 경로로 스웨거 설정
+    // 이 경로는 'admin/*' 패턴과 일치하므로 IP 화이트리스트 미들웨어가 적용됨
+    SwaggerModule.setup('admin/api-docs', app, document, {
+      swaggerOptions: {
+        persistAuthorization: true,
+      },
+      customSiteTitle: '관리자 API 문서',
+    });
   }
 }
