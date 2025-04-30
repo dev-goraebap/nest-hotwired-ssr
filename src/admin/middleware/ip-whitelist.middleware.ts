@@ -21,10 +21,10 @@ export class IpWhitelistMiddleware implements NestMiddleware {
     this.logger.debug(`요청 IP: ${clientIp}, 경로: ${req.originalUrl}`);
 
     // 로컬 개발 환경인 경우 IP 체크 생략
-    // if ((clientIp === '127.0.0.1' || clientIp === '::1')) {
-    //   this.logger.debug('로컬 개발 환경에서의 접근이므로 IP 검사 생략');
-    //   return next();
-    // }
+    if ((clientIp === '127.0.0.1' || clientIp === '::1')) {
+      this.logger.debug('로컬 개발 환경에서의 접근이므로 IP 검사 생략');
+      return next();
+    }
 
     try {
       // 화이트리스트에 IP가 있는지 확인

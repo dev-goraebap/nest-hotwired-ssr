@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%- include('../partials/_head.ejs', { 
+  title: '다이나믹 컨텐츠 관리',
+  description: `
+  `,
+}) %>
+<body>
+  <div class="flex h-screen">
+    <!-- 사이드바 -->
+    <%- include('../partials/_sidebar.ejs', { activePage: 'dr-notices' }) %>
+
+    <!-- 메인컨텐츠 -->
+    <main class="w-full h-full p-10 page-animation-enter overflow-y-auto" data-controller="dynamic-content">
+      <div style="min-width: 1300px; max-width: 1300px;">
+        <div class="flex justify-between items-center">
+          <h1 class="text-3xl font-bold text-gray-800">
+            다이나믹 컨텐츠 관리
+          </h1>
+          <!-- 컨텐츠 등록 버튼 -->
+          <a href="/admin/dynamic-content/new" class="flex items-center justify-center gap-2 p-3 bg-blue-900 text-white rounded-xl" style="width: 170px;">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span class="text-sm">
+              컨텐츠 등록
+            </span>
+          </a>
+        </div>
+  
+        <!-- 메인화면 컨텐츠 섹션 -->
+        <div class="mt-6">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">메인화면 컨텐츠</h2>
+          
+          <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                    타입
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    미리보기
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                    상태
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                    생성일
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                    작업
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <% if (mainContents && mainContents.length > 0) { %>
+                  <% mainContents.forEach(content => { %>
+                    <tr data-screen-type="main">
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="text-sm font-medium text-gray-900">
+                          타입 <%= content.contentType %>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 text-center">
+                        <div class="flex justify-center">
+                          <div class="preview-container bg-white border border-gray-200 shadow-md overflow-hidden" style="width: 180px; height: 132px;">
+                            <%- content.content %>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <% if (content.useYn === 'Y') { %>
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            사용중
+                          </span>
+                        <% } else { %>
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                            미사용
+                          </span>
+                        <% } %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="text-sm text-gray-900">
+                          <%= new Date(content.createdAt).toLocaleDateString('ko-KR') %>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="flex justify-center items-center space-x-3">
+                          <% if (content.useYn === 'N') { %>
+                            <button 
+                              type="button" 
+                              data-dynamic-content-target="useButton"
+                              data-action="click->dynamic-content#changeUseStatus"
+                              data-content-id="<%= content.id %>"
+                              class="text-indigo-600 hover:text-indigo-900"
+                            >
+                              사용하기
+                            </button>
+                          <% } %>
+                          <a href="/admin/dynamic-content/edit/<%= content.id %>" class="text-blue-600 hover:text-blue-900">
+                            수정
+                          </a>
+                          <button 
+                            type="button" 
+                            data-dynamic-content-target="deleteButton"
+                            data-action="click->dynamic-content#deleteContent"
+                            data-content-id="<%= content.id %>"
+                            class="text-red-600 hover:text-red-900"
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                      등록된 메인화면 컨텐츠가 없습니다.
+                    </td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 상세화면 컨텐츠 섹션 -->
+        <div class="mt-10">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">상세화면 컨텐츠</h2>
+          
+          <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                    타입
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    미리보기
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                    상태
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                    생성일
+                  </th>
+                  <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-40">
+                    작업
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <% if (detailContents && detailContents.length > 0) { %>
+                  <% detailContents.forEach(content => { %>
+                    <tr data-screen-type="detail">
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="text-sm font-medium text-gray-900">
+                          타입 <%= content.contentType %>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 text-center">
+                        <div class="flex justify-center">
+                          <div class="preview-container bg-white border border-gray-200 shadow-md overflow-hidden" style="width: 160px; height: 250px;">
+                            <%- content.content %>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <% if (content.useYn === 'Y') { %>
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            사용중
+                          </span>
+                        <% } else { %>
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                            미사용
+                          </span>
+                        <% } %>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="text-sm text-gray-900">
+                          <%= new Date(content.createdAt).toLocaleDateString('ko-KR') %>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="flex justify-center items-center space-x-3">
+                          <% if (content.useYn === 'N') { %>
+                            <button 
+                              type="button" 
+                              data-dynamic-content-target="useButton"
+                              data-action="click->dynamic-content#changeUseStatus"
+                              data-content-id="<%= content.id %>"
+                              class="text-indigo-600 hover:text-indigo-900"
+                            >
+                              사용하기
+                            </button>
+                          <% } %>
+                          <a href="/admin/dynamic-content/edit/<%= content.id %>" class="text-blue-600 hover:text-blue-900">
+                            수정
+                          </a>
+                          <button 
+                            type="button" 
+                            data-dynamic-content-target="deleteButton"
+                            data-action="click->dynamic-content#deleteContent"
+                            data-content-id="<%= content.id %>"
+                            class="text-red-600 hover:text-red-900"
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } else { %>
+                  <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                      등록된 상세화면 컨텐츠가 없습니다.
+                    </td>
+                  </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { Application, Controller } from '/public/js/stimulus@3.2.2.min.js';
+    
+    class DynamicContentController extends Controller {
+      static targets = ['useButton', 'deleteButton', 'mainPreviewContainer', 'detailPreviewContainer'];
+
+      connect() {
+        console.log('Dynamic Content controller connected');
+        this.setupPreviewContainers();
+      }
+      
+      setupPreviewContainers() {
+        // 미리보기 컨테이너 스타일 설정
+        const mainPreviewContainers = document.querySelectorAll('tr[data-screen-type="main"] .preview-container');
+        const detailPreviewContainers = document.querySelectorAll('tr[data-screen-type="detail"] .preview-container');
+        
+        mainPreviewContainers.forEach(container => {
+          container.style.width = '360px';
+          container.style.height = '264px';
+        });
+        
+        detailPreviewContainers.forEach(container => {
+          container.style.width = '320px';
+          container.style.height = '500px';
+        });
+      }
+      
+      async changeUseStatus(event) {
+        const button = event.currentTarget;
+        const id = button.dataset.contentId;
+        if (!id) return;
+        
+        if (confirm('이 컨텐츠를 사용 상태로 변경하시겠습니까? 같은 타입의 기존 컨텐츠는 미사용 상태로 변경됩니다.')) {
+          try {
+            const response = await fetch(`/admin/dynamic-content/change-use/${id}`, {
+              method: 'POST'
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+              alert('컨텐츠 상태가 변경되었습니다.');
+              location.reload();
+            } else {
+              alert(result.message || '상태 변경에 실패했습니다.');
+            }
+          } catch (error) {
+            console.error('상태 변경 중 오류:', error);
+            alert('상태 변경 중 오류가 발생했습니다.');
+          }
+        }
+      }
+      
+      async deleteContent(event) {
+        const button = event.currentTarget;
+        const id = button.dataset.contentId;
+        if (!id) return;
+        
+        if (confirm('이 컨텐츠를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+          try {
+            const response = await fetch(`/admin/dynamic-content/delete/${id}`, {
+              method: 'POST'
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+              alert('컨텐츠가 삭제되었습니다.');
+              location.reload();
+            } else {
+              alert(result.message || '삭제에 실패했습니다.');
+            }
+          } catch (error) {
+            console.error('삭제 중 오류:', error);
+            alert('삭제 중 오류가 발생했습니다.');
+          }
+        }
+      }
+    }
+
+    const isAlreadyRegistered = window.StimulusApp.controllers.some(
+      controller => controller.identifier === "dynamic-content"
+    );
+    if (!isAlreadyRegistered) {
+      window.StimulusApp.register("dynamic-content", DynamicContentController);
+    }
+  </script>
+</body>
+</html>

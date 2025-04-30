@@ -1,0 +1,274 @@
+<!-- 화면 타입 선택 (메인화면, 상세화면) -->
+<div class="mb-6">
+  <label class="block text-gray-700 text-sm font-bold mb-2" for="screenType">
+    화면 타입 선택
+  </label>
+  <div class="flex gap-4">
+    <label class="inline-flex items-center">
+      <input type="radio" class="form-radio" name="screenType" value="main" <%= (!formData || formData.screenType === 'main' || !formData.screenType) ? 'checked' : '' %>>
+      <span class="ml-2">메인화면</span>
+    </label>
+    <label class="inline-flex items-center">
+      <input type="radio" class="form-radio" name="screenType" value="detail" <%= (formData && formData.screenType === 'detail') ? 'checked' : '' %>>
+      <span class="ml-2">상세화면</span>
+    </label>
+  </div>
+</div>
+
+<!-- 컨텐츠 타입 선택 (A, B) -->
+<div class="mb-6">
+  <label class="block text-gray-700 text-sm font-bold mb-2" for="contentType">
+    컨텐츠 타입 선택
+  </label>
+  <div class="flex gap-4">
+    <label class="inline-flex items-center">
+      <input type="radio" class="form-radio" name="contentType" value="A" <%= (!formData || formData.contentType === 'A' || !formData.contentType) ? 'checked' : '' %>>
+      <span class="ml-2">타입 A</span>
+    </label>
+    <label class="inline-flex items-center">
+      <input type="radio" class="form-radio" name="contentType" value="B" <%= (formData && formData.contentType === 'B') ? 'checked' : '' %>>
+      <span class="ml-2">타입 B</span>
+    </label>
+  </div>
+</div>
+
+<!-- Stimulus 컨트롤러 적용된 컨테이너 -->
+<div data-controller="dynamic-content-form">
+  <!-- 이미지 업로드 섹션 -->
+  <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+    <label class="block text-gray-700 text-sm font-bold mb-2">
+      이미지 업로드
+    </label>
+    <div class="flex items-center gap-4">
+      <label class="cursor-pointer flex items-center justify-center p-2 bg-blue-900 text-white rounded-md hover:bg-blue-700">
+        <span>업로드</span>
+        <input type="file" data-dynamic-content-form-target="imageUpload" accept="image/*" class="hidden" multiple data-action="change->dynamic-content-form#uploadImages">
+      </label>
+      <span data-dynamic-content-form-target="uploadStatus" class="text-sm text-gray-500">이미지를 선택하세요</span>
+    </div>
+
+    <!-- 업로드된 이미지 목록 -->
+    <div data-dynamic-content-form-target="uploadedImages" class="mt-4 grid grid-cols-3 gap-2">
+      <!-- 업로드된 이미지가 여기에 표시됨 -->
+    </div>
+  </div>
+
+  <!-- 컨텐츠 에디터 및 미리보기 섹션 -->
+  <div class="flex gap-8">
+    <!-- 왼쪽: HTML 에디터 -->
+    <div class="flex-1">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="content">
+        HTML 작성
+      </label>
+      <textarea 
+        id="content" 
+        name="content"
+        rows="30"
+        data-dynamic-content-form-target="contentTextarea"
+        data-action="input->dynamic-content-form#updatePreview"
+        class="w-full p-3 border border-gray-300 rounded-md font-mono text-md"
+        spellcheck="false"
+      ><%= formData && formData.content ? formData.content : '' %></textarea>
+    </div>
+    
+    <!-- 오른쪽: 미리보기 -->
+    <div class="flex-1">
+      <div class="flex justify-between items-center mb-2">
+        <label class="block text-gray-700 text-sm font-bold">
+          미리보기
+        </label>
+        <button 
+          type="button" 
+          data-action="click->dynamic-content-form#updatePreview"
+          class="px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700"
+        >
+          미리보기 업데이트
+        </button>
+      </div>
+      
+      <div class="relative bg-gray-100 border border-gray-300 rounded-md p-4 flex items-center justify-center">
+        <div 
+          data-dynamic-content-form-target="previewContainer" 
+          class="bg-white border border-gray-200 shadow-md overflow-hidden" 
+          style="width: <%= formData && formData.screenType === 'detail' ? '320px' : '360px' %>; height: <%= formData && formData.screenType === 'detail' ? '500px' : '263px' %>;"
+        >
+          <!-- 미리보기 내용이 여기에 표시됨 -->
+          <% if (formData && formData.content) { %>
+            <%- formData.content %>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 버튼 영역 -->
+<div class="mt-8 flex justify-between">
+  <a href="/admin/dynamic-content" class="flex items-center justify-center gap-2 h-12 px-4 bg-gray-300 text-gray-700 rounded-xl" style="width: 100px;">
+    <span class="text-sm">취소</span>
+  </a>
+  
+  <button type="submit" class="flex items-center justify-center gap-2 h-12 px-4 bg-blue-900 text-white rounded-xl" style="width: 200px;">
+    <span class="text-sm"><%= isEdit ? '컨텐츠 수정' : '컨텐츠 등록' %></span>
+  </button>
+</div>
+
+<script type="module">
+  import { Application, Controller } from '/public/js/stimulus@3.2.2.min.js';
+  
+  class DynamicContentFormController extends Controller {
+    static targets = [
+      'imageUpload', 
+      'uploadStatus', 
+      'uploadedImages', 
+      'contentTextarea', 
+      'previewContainer'
+    ];
+
+    connect() {
+      console.log('Dynamic Content Form controller connected');
+      // 화면 타입 변경에 따른 미리보기 크기 조절
+      const screenTypeRadios = document.querySelectorAll('input[name="screenType"]');
+      screenTypeRadios.forEach(radio => {
+        radio.addEventListener('change', this.adjustPreviewSize.bind(this));
+      });
+      
+      // 초기 내용으로 미리보기 설정
+      this.updatePreview();
+    }
+
+    adjustPreviewSize(event) {
+      const screenType = event.target.value;
+      if (screenType === 'main') {
+        this.previewContainerTarget.style.width = '360px';
+        this.previewContainerTarget.style.height = '263px';
+      } else if (screenType === 'detail') {
+        this.previewContainerTarget.style.width = '320px';
+        this.previewContainerTarget.style.height = '500px';
+      }
+    }
+
+    updatePreview() {
+      this.previewContainerTarget.innerHTML = this.contentTextareaTarget.value;
+    }
+
+    async uploadImages(event) {
+      const files = event.target.files;
+      if (!files.length) return;
+      
+      // 업로드 상태 표시
+      this.uploadStatusTarget.textContent = '업로드 중...';
+      this.uploadStatusTarget.className = 'text-sm text-blue-500';
+      
+      // FormData 생성 및 파일 추가
+      const formData = new FormData();
+      Array.from(files).forEach(file => {
+        formData.append('images', file);
+      });
+      
+      try {
+        // 서버에 파일 업로드
+        const response = await fetch('/admin/dynamic-content/upload-images', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          throw new Error('업로드 실패');
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          this.uploadStatusTarget.textContent = '업로드 완료';
+          this.uploadStatusTarget.className = 'text-sm text-green-500';
+          
+          // 업로드된 이미지 표시
+          result.images.forEach(image => {
+            this.addImageToList(image);
+          });
+        } else {
+          throw new Error(result.message || '업로드 실패');
+        }
+      } catch (error) {
+        console.error('이미지 업로드 중 오류 발생:', error);
+        this.uploadStatusTarget.textContent = '업로드 실패';
+        this.uploadStatusTarget.className = 'text-sm text-red-500';
+      }
+      
+      // 파일 인풋 초기화
+      this.imageUploadTarget.value = '';
+    }
+    
+    addImageToList(image) {
+      const imageItem = document.createElement('div');
+      imageItem.className = 'p-2 bg-white border border-gray-200 rounded flex items-center justify-between';
+      imageItem.dataset.filename = image.filename;
+      imageItem.innerHTML = `
+        <span class="text-sm truncate" style="max-width: 150px;" title="${image.originalname}">${image.originalname}</span>
+        <div class="flex gap-2">
+          <button type="button" class="copy-image-tag text-blue-600 hover:text-blue-800 text-sm">
+            복사
+          </button>
+          <button type="button" class="delete-image text-red-600 hover:text-red-800 text-sm">
+            삭제
+          </button>
+        </div>
+      `;
+      
+      // 복사 버튼 이벤트
+      imageItem.querySelector('.copy-image-tag').addEventListener('click', () => {
+        this.copyImageTag(image);
+      });
+      
+      // 삭제 버튼 이벤트
+      imageItem.querySelector('.delete-image').addEventListener('click', () => {
+        this.deleteImage(image.filename, imageItem);
+      });
+      
+      this.uploadedImagesTarget.appendChild(imageItem);
+    }
+    
+    copyImageTag(image) {
+      const imgTag = `<img src="${image.path}" alt="${image.originalname}" />`;
+      navigator.clipboard.writeText(imgTag)
+        .then(() => {
+          alert('이미지 태그가 복사되었습니다');
+        })
+        .catch(err => {
+          console.error('복사 실패:', err);
+        });
+    }
+    
+    async deleteImage(filename, imageItem) {
+      if (confirm('이미지를 삭제하시겠습니까?')) {
+        try {
+          const response = await fetch(`/admin/dynamic-content/delete-image/${filename}`, {
+            method: 'DELETE'
+          });
+          
+          if (!response.ok) {
+            throw new Error('삭제 실패');
+          }
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            imageItem.remove();
+            alert('이미지가 삭제되었습니다.');
+          } else {
+            alert(result.message || '이미지 삭제에 실패했습니다.');
+          }
+        } catch (error) {
+          console.error('이미지 삭제 중 오류 발생:', error);
+          alert('이미지 삭제 중 오류가 발생했습니다.');
+        }
+      }
+    }
+  }
+
+  const isAlreadyRegistered = window.StimulusApp.controllers.some(
+    controller => controller.identifier === "dynamic-content-form"
+  );
+  window.StimulusApp.register("dynamic-content-form", DynamicContentFormController);
+</script>
