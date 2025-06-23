@@ -1,1 +1,3 @@
-console.log('hello world');
+import * as Turbo from '@hotwired/turbo';
+
+window.Turbo = Turbo;
