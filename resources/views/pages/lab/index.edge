@@ -1,5 +1,52 @@
-@component('layout::app', { title: "실험실" })
+@component('layout::app', { title: "실험실", titleLink: "/lab" })
   @slot('main')
-    <div>실험실</div>
+    <div class="prose-sm p-10">
+      <!-- 보안 및 템플릿 설정 챙기기 -->
+      <h2 class="font-bold">다른 프레임워크가 해주는거 똑같이 해주냐</h2>
+      <ul>
+        <li>
+          <a href="/lab/xss-example">01. 일단 템플릿 엔진에서 xss는 잘 막아줌</a>
+        </li>
+        <li>
+          <a href="/lab/csrf-example">02. csrf는 역시 내가 만들어야해 쓰읍..</a>
+        </li>
+      </ul>
+
+      <!-- 모달 -->
+      <h2 class="font-bold">여기서 모달은 어떻게 만드나요.</h2>
+      <ul>
+        <li>
+          <a href="/lab/modal-example-01">01. 프론트엔드에 익숙하다면 이 방법이 가장 먼저 떠오름</a>
+        </li>
+        <li>
+          <a href="/lab/modal-example-02">02. 모달안에 서버에서 가져온 데이터를 넣어줘야해. 그렇다면 Turbo Frame 까지 사용해보기</a>
+        </li>
+        <li>
+          <a href="/lab/modal-example-03">03. 모달을 띄우는건 CSR로. 서버에서 가져오는 데이터는 template과 stimulus로</a>
+        </li>
+      </ul>
+
+      <!-- 플래시 -->
+      <h2 class="font-bold">작업에 대한 성공, 실패 피드백 어떻게 해야나요.</h2>
+      <ul>
+        <li>
+          <a href="/lab/flash-example-01">01. 세션을 사용한 플레시 개념</a>
+        </li>
+        <li>
+          <a href="/lab/flash-example-02">02. 이제 stimulus로 반응 챙기기</a>
+        </li>
+      </ul>
+
+      <!-- 이미지 -->
+      <h2 class="font-bold">이미지 랜더링</h2>
+      <ul>
+        <li>
+          <a href="/lab/image-example-01">01. 일단 업로드부터</a>
+        </li>
+        <li>
+          <a href="/lab/image-example-02">02. 이미지의 지배적 색상 이용하여 부드럽게 보여주기</a>
+        </li>
+      </ul>
+    </div>
   @end
 @end

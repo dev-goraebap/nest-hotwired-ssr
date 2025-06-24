@@ -1,7 +1,65 @@
-@component('layout::app', { title: "Home" })
+@component('layout::app', { title: "Nestjs MVC" })
   @slot('main')
-    <h2 class="text-5xl">{{ message }}</h2>
-    
-    <turbo-frame id="modal_frame"></turbo-frame>
+    <div class="prose-sm p-10">
+      <h1 class="font-bold">Nestjs MVC 실험실</h1>
+      <p>이것저것 테스트중</p>
+      <!-- 보안 및 템플릿 설정 챙기기 -->
+      <h2 class="font-bold">보안, 예외 챙기기</h2>
+      <ul>
+        <li>
+          <a href="/lab/xss-example">01. 오,, 템플릿 엔진에서 xss는 잘 막아줌</a>
+        </li>
+        <li>
+          <a href="/lab/csrf-example">02. csrf token 활용은 새로 만들어줘야함</a>
+        </li>
+        <li>
+          <a href="/lab/error-example">03. ssr 상황별 에러처리</a>
+        </li>
+      </ul>
+
+      <!-- 모달 -->
+      <h2 class="font-bold">모달 만들기</h2>
+      <ul>
+        <li>
+          <a href="/lab/modal-example-01">01. 프론트엔드에 익숙하다면 이 방법이 가장 먼저 떠오름</a>
+        </li>
+        <li>
+          <a href="/lab/modal-example-02">02. 모달안에 서버에서 가져온 데이터를 넣어줘야함? 그렇다면 Turbo Frame 까지 사용해보기</a>
+        </li>
+        <li>
+          <a href="/lab/modal-example-03">03. 모달을 띄우는건 CSR로- 서버에서 가져오는 데이터는 template과 stimulus로</a>
+        </li>
+      </ul>
+
+      <!-- 플래시 -->
+      <h2 class="font-bold">작업에 대한 성공, 실패 피드백</h2>
+      <ul>
+        <li>
+          <a href="/lab/flash-example-01">01. 세션을 사용한 플레시 개념</a>
+        </li>
+        <li>
+          <a href="/lab/flash-example-02">02. 이제 stimulus로 반응 챙기기</a>
+        </li>
+      </ul>
+
+      <!-- 이미지 -->
+      <h2 class="font-bold">이미지 업로드, 랜더링</h2>
+      <ul>
+        <li>
+          <a href="/lab/image-example-01">01. 이미지 업로더, 프리뷰 모범사례</a>
+        </li>
+        <li>
+          <a href="/lab/image-example-02">02. 이미지의 지배적 색상 이용하여 부드럽게 보여주기</a>
+        </li>
+      </ul>
+
+      <!-- 투두리스트 -->
+      <h2 class="font-bold">투두리스트</h2>
+      <ul>
+        <li>
+          <a href="/todos">CRUD 어떻게 처리하는지 확인 ㄱㄱ</a>
+        </li>
+      </ul>
+    </div>
   @end
 @end
