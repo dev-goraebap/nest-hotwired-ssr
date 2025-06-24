@@ -58,7 +58,7 @@ concurrent 라이브러리를 통해 프론트엔드 에셋파일(javascript,typ
 npm run start:dev:all
 ```
 
-## TMI
+## 궁금할만한 부분들
 
 ### 많은 Template Engine 중에 Edge.js를 선택한 이유
 
