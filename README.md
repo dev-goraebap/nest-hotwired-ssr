@@ -45,7 +45,8 @@ git clone https://github.com/dev-goraebap/nestjs-mvc-is-coming.git
 <sub>현대 프론트엔드 개발은 tailwindcss, typescript 등 여러 라이브러리를 조합하고 빌드 과정을 거쳐야 하는데, Assets pipeline은 이러한 프로세스를 체계화하여 개발 효율성을 높이고 최적화된 결과물을 생성합니다.</sub>
 
 Q. 같은 nodejs 환경인데 프론트엔드설정을 nestjs에 바로 통합할 수 없나요? <br/>
-A. 구성이 아예 불가능한것은 아닙니다. Vite는 ESM을 기본으로 사용하는 반면, NestJS는 CommonJS 환경을 기본으로 합니다. NestJS 팀은 ESM 지원에 대해 [회의적인 입장](https://github.com/nestjs/nest/issues/13319#issuecomment-2022145229)을 말했으며(듣고보니 타당함..), Vite를 NestJS에 직접 통합하려면 복잡한 보일러플레이트 코드가 필요합니다. 이전에 NestJS에 React 개발 환경을 통합하려다 실패하였습니다.(어떻게든 돌아는 가는데, 다른 라이브러리들이  박살남)
+A. 구성이 아예 불가능한것은 아닙니다. Vite는 ESM을 기본으로 사용하는 반면, NestJS는 CommonJS 환경을 기본으로 합니다. NestJS 팀은 ESM 지원에 대해 [회의적인 입장](https://github.com/nestjs/nest/issues/13319#issuecomment-2022145229)을 말했으며(듣고보니 타당함..), Vite를 NestJS에 직접 통합하려면 복잡한 보일러플레이트 코드가 필요합니다. 이번 프로젝트의 방향성은 Nestjs의 기본적인 구조는 손대지 않고 추가로 확장하는데 초점을 두었습니다.
+
 ```
 npm run setup
 ```
@@ -56,3 +57,25 @@ concurrent 라이브러리를 통해 프론트엔드 에셋파일(javascript,typ
 ```
 npm run start:dev:all
 ```
+
+## TMI
+
+### 많은 Template Engine 중에 Edge.js를 선택한 이유
+
+- [pug](https://pugjs.org/api/getting-started.html): 4~5년 전에 써본적이 있었습니다. 당시엔 상당히 좋아했는데, 요즘은 tailwindcss 등의 UI관련사이트에서 html 조각을 복사해서 가져오는데, pug 문법으로 바꾸는게 오히려 더 번거롭다고 느꼈습니다.
+- [nunjucks](https://mozilla.github.io/nunjucks/): 모질라제단에서 만들었고, 이번에 처음 알았습니다. 상당히 완성도가 높으며 레이아웃 상속, 파셜, 변수등 깔끔하게 지원하지만 edge.js의 맛을 알고있는 저에겐 오히려 2% 부족한 느낌입니다.
+- [ejs](https://ejs.co/): nodejs측 SSR을 혐오하게 만드는 주범입니다. 그냥 탈락입니다.
+- [handlebars](https://handlebarsjs.com/) 문법이 나쁘지 않은데, 레이아웃이나 파셜 사용이 정말 아쉽습니다. nunjucks가 상위호환이라고 생각합니다.
+
+[Edge.js](https://edgejs.dev/docs/introduction)는 adonisjs측에서 만든 템플릿엔진입니다. 이녀석을 nestjs에서 깔끔하게 사용할 수 있으면 정말 좋았겠지만 esm에서 작동하는 친구라 살짝 작업이 필요한것 말곤 괜찮은 편입니다. (주관적인 생각입니다)
+
+### Assets Pipeline 구성 이슈
+
+- 원래 vite까지 사용할 의도는 없었고 esbuild를 통해 더 간단하게 구성하려고 했습니다.
+즉, resources 디렉토리에서 vite 없이 esbuild만으로 tailwindcss, js 파일등의 빌드 자동화가 가능합니다. 그런데, template engine이 문제인지(이 때 당시 구성은 nunjucks로 테스트 중이였음) html 파일에서 변경이 일어나면 서버는 재시작이 되는데 tailwindcss가 해당 구성을 잡질 못하는 문제가 생김 
+
+  ex) text-2xl 같은 클래스를 태그에 추가했는데 새로고침해도 변경되지 않음
+
+  - [초기 에셋파이프라인 구성 커밋](https://github.com/dev-goraebap/nestjs-mvc-is-coming/commit/89ca81046dd0fcf8ce7a5e7c7047223265a627b0) 해당 내역에서 확인 가능.
+
+- vite를 사용하고 있지만 vite dev는 사용하지 않음. HMR 역시 사용하지 않습니다. build --watch 옵션을 사용. 지금은 귀찮아서 나중에 필요하면 개선할 예정
