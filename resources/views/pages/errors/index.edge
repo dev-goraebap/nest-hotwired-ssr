@@ -1,0 +1,10 @@
+@component('layout::app', { title: "Home" })
+  @slot('main')
+    <div class="flex flex-col items-center justify-center h-screen">
+      <h1 class="text-5xl font-bold">{{ status }}</h1>
+      <p>{{ message }}</p>
+      <br/>
+      <a href="/" class="btn btn-soft">메인 페이지로 이동</a>
+    </div>
+  @end
+@end
