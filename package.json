@@ -7,11 +7,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "resources:build:watch": "cd resources/assets && npm run build:watch",
-    "resources:css:watch": "cd resources/assets && npm run css:watch",
+    "resources:build:watch": "cd resources && npm run build:watch",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:dev:all": "concurrently \"npm run start:dev\" \"npm run resources:css:watch\" \"npm run resources:build:watch\"",
+    "start:dev:all": "concurrently \"npm run start:dev\" \"npm run resources:build:watch\"",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main"
   },
