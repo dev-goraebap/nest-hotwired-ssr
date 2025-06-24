@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "resources:build:watch": "cd resources && npm run build:watch",
+    "setup": "npm install && cd resources && npm install",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:dev:all": "concurrently \"npm run start:dev\" \"npm run resources:build:watch\"",
