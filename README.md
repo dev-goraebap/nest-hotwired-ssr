@@ -79,3 +79,9 @@ npm run start:dev:all
   - [초기 에셋파이프라인 구성 커밋](https://github.com/dev-goraebap/nestjs-mvc-is-coming/commit/89ca81046dd0fcf8ce7a5e7c7047223265a627b0) 해당 내역에서 확인 가능.
 
 - vite를 사용하고 있지만 vite dev는 사용하지 않음. HMR 역시 사용하지 않습니다. build --watch 옵션을 사용. 지금은 귀찮아서 나중에 필요하면 개선할 예정
+
+### 프론트엔드측 소스코드도 typescript 사용하면 안되나요?
+
+구성이 어려운건 아닙니다만, 현재 프로젝트 구조정도에선 과한 투자라고 생각합니다.
+
+프론트엔드 소스코드의 주력을 담당할 `hotwired/stimulus`도 기본적으로 [타입스크립트사용](https://stimulus.hotwired.dev/reference/using-typescript) 이 용의하게 구성되어있기 때문에, vite 설정만 ts파일로 바꿔주면 됩니다.
