@@ -37,9 +37,9 @@ export class EdgeService {
         cache: process.env.NODE_ENV === 'production',
       });
 
-      this.edge.mount('layouts', join(this.BASE_VIEWS_PATH, 'layouts'));
-      this.edge.mount('pages', join(this.BASE_VIEWS_PATH, 'pages'));
-      this.edge.mount('shared', join(this.BASE_VIEWS_PATH, 'shared'));
+      this.edge.mount('layout', join(this.BASE_VIEWS_PATH, 'layouts'));
+      this.edge.mount('page', join(this.BASE_VIEWS_PATH, 'pages'));
+      this.edge.mount('uikit', join(this.BASE_VIEWS_PATH, 'uikit'));
 
       this.logger.debug(`Edge.js 경로 초기화: ${this.BASE_VIEWS_PATH}`);
     } catch (err) {

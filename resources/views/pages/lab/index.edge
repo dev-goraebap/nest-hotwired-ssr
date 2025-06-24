@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Nestjs MVC Is Coming{% endblock %}</title>
+  <title>Nestjs MVC Is Coming</title>
 
   <!-- 에셋파이프라인을 통해 빌드되는 자산 파일들 -->
   <link rel="stylesheet" href="public/builds/global.css">
   <script src="public/builds/app.js"></script>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+  <div class="text-2xl">{{ message }}</div>
 </body>
 </html>

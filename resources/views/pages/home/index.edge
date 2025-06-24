@@ -1,0 +1,7 @@
+@component('layout::app', { title: "Home" })
+  @slot('main')
+    <h2 class="text-5xl">{{ message }}</h2>
+    
+    <turbo-frame id="modal_frame"></turbo-frame>
+  @end
+@end
