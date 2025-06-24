@@ -1,0 +1,11 @@
+{
+  "emmet.includeLanguages": {
+    "edge": "html"
+  },
+  "[edge]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.suggest.insertMode": "replace"
+  }
+}
