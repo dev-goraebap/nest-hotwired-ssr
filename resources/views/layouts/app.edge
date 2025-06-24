@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="cupcake">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title || "Nestjs MVC Is Coming" }}</title>
+
+  <!-- 에셋파이프라인을 통해 빌드되는 자산 파일들 -->
+  <link rel="stylesheet" href="/public/builds/global.css">
+  <script src="/public/builds/app.js"></script>
+
+  <!-- 페이지에 메타태그가 추가로 필요할 경우 슬롯을 통해 사용 -->
+  @if ($slots.meta)
+    {{{ await $slots.meta() }}}
+  @endif
+</head>
+<body>
+  {{{ await $slots.main() }}}
+</body>
+</html>
