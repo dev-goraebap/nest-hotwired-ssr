@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "OpenSans";
+  src: url("/public/fonts/OpenSans-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("/public/fonts/OpenSans-Regular.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("/public/fonts/OpenSans-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "OpenSans";
+  src: url("/public/fonts/OpenSans-ExtraBold.ttf");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("/public/fonts/GothicA1-Light.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("/public/fonts/GothicA1-Regular.ttf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("/public/fonts/GothicA1-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "GothicA1";
+  src: url("/public/fonts/GothicA1-Black.ttf");
+  font-weight: 900;
+}
+
+html {
+  font-family: "OpenSans", "GothicA1", sans-serif !important;
+}

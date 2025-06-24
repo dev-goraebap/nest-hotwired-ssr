@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="cupcake">
+<html lang="ko" data-theme="lemonade">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title || "Nestjs MVC Is Coming" }}</title>
 
   <!-- 에셋파이프라인을 통해 빌드되는 자산 파일들 -->
+  <link rel="stylesheet" href="/public/stylesheets/font.css">
   <link rel="stylesheet" href="/public/builds/global.css">
   <script src="/public/builds/app.js"></script>
 
@@ -15,6 +16,18 @@
   @endif
 </head>
 <body>
-  {{{ await $slots.main() }}}
+  <div class="flex flex-col h-screen">
+    <div class="navbar bg-base-300">
+      <a href="{{ titleLink || "/" }}" class="btn btn-ghost text-xl">
+        {{ title || "Nestjs MVC Is Coming" }}
+      </a>
+    </div>
+
+    <div class="grow">
+      {{{ await $slots.main() }}}
+    </div>
+    
+    @!component('layout::_footer')
+  </div>
 </body>
 </html>
