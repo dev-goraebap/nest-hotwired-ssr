@@ -1,6 +1,6 @@
 import { HttpStatus, Logger } from '@nestjs/common';
 import type { Edge } from 'edge.js';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { join } from 'path';
 
 /**
@@ -50,7 +50,10 @@ export class EdgeJsAdapter {
   }
 
   /**
-   * 컨트롤러에서 반복되는 코드를 래핑
+   * 일반적인 페이지를 랜더링할 때 사용
+   * - templatePath에 일단 볼륨 명시 해줘야함
+   *    - ex) page::home/index
+   * - 데이터가 있는경우 state에 {} 형태로 값 할당
    */
   static async render(
     res: Response,
@@ -67,6 +70,27 @@ export class EdgeJsAdapter {
     }
   }
 
+  /**
+   * turbo request(비동기)를 통해 요청이 온게 아니라면 404 페이지로 튕겨냄
+   * - 받는 인자값은 render와 동일
+   */
+  static async renderOnlyTurboRequest(
+    req: Request,
+    res: Response,
+    templatePath: string,
+    state?: Record<string, any>,
+  ) {
+    if (!req.headers['x-turbo-request-id']) {
+      return this.renderErrorPage(res, HttpStatus.NOT_FOUND);
+    }
+
+    return await this.render(res, templatePath, state);
+  }
+
+  /**
+   * status 코드에 따라 해당하는 에러페이지로 이동
+   * - 코드 정리필요
+   */
   static async renderErrorPage(res: Response, status: HttpStatus) {
     let message = '';
     if (status === HttpStatus.NOT_FOUND) {
@@ -76,9 +100,9 @@ export class EdgeJsAdapter {
     }
 
     const edge = this.getEdgeInstance();
-    const template = await edge.render('page::errors/index', { 
+    const template = await edge.render('page::errors/index', {
       status,
-      message 
+      message,
     });
     return res.send(template);
   }
