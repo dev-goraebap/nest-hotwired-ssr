@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { EdgeJsAdapter } from 'src/shared/edge-js';
 
@@ -11,12 +11,7 @@ export class ModalExampleController {
 
   @Get('content')
   content(@Req() req: Request, @Res() res: Response) {
-    // turbo 비동기 요청이 아니면 404 페이지로 이동
-    if (!req.headers['x-turbo-request-id']) {
-      return EdgeJsAdapter.renderErrorPage(res, HttpStatus.NOT_FOUND);
-    }
-
-    return EdgeJsAdapter.render(res, 'uikit::modal/ssr');
+    return EdgeJsAdapter.renderOnlyTurboRequest(req, res, 'uikit::modal/ssr');
   }
 
   @Get('lazy-content')
@@ -28,11 +23,6 @@ export class ModalExampleController {
       }, 1000);
     });
 
-    // turbo 비동기 요청이 아니면 404 페이지로 이동
-    if (!req.headers['x-turbo-request-id']) {
-      return EdgeJsAdapter.renderErrorPage(res, HttpStatus.NOT_FOUND);
-    }
-
-    return EdgeJsAdapter.render(res, 'uikit::modal/ssr');
+    return EdgeJsAdapter.renderOnlyTurboRequest(req, res, 'uikit::modal/ssr');
   }
 }
