@@ -6,9 +6,12 @@
   <title>{{ title || "Nestjs MVC Is Coming" }}</title>
 
   <!-- 에셋파이프라인을 통해 빌드되는 자산 파일들 -->
-  <link rel="stylesheet" href="/public/stylesheets/font.css">
-  <link rel="stylesheet" href="/public/builds/global.css">
   <script src="/public/builds/app.js"></script>
+  <link rel="stylesheet" href="/public/builds/global.css">
+
+  <!-- 일반 자산 파일들 -->
+  <link rel="stylesheet" href="/public/stylesheets/font.css">
+  <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon">
 
   <!-- 페이지에 메타태그가 추가로 필요할 경우 슬롯을 통해 사용 -->
   @if ($slots.meta)
