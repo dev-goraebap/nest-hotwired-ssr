@@ -18,19 +18,51 @@
         json 형식이 아닌 html을 요청함.
       </li>
       <li>
-        3. 원래 href 요청은 동기적인 페이지 요청이지만, 태그에 data-turbo-frame 이라는 속성을 명시했음<br/>
-        modalFrame 이 속성값인데, 아래 언급해놓은 turbo-frame 태그의 id도 modalFrame임
+        3. 원래 href 요청은 동기적인 페이지 요청이지만, 태그에 
+        
+        @!component('uikit::active-link', {
+          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/index.edge#L53",
+          text: "data-turbo-frame"
+        })
+        이라는 속성을 명시했음<br/>
+        modalFrame 이 속성값인데, 아래 언급해놓은 
+        @!component('uikit::active-link', {
+          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/index.edge#L65",
+          text: "turbo-frame"
+        })
+        태그의 id도 modalFrame임
       </li>
       <li>
         4. 이 경우 비동기로 요청하게 되고 받아온 html 덩어리에 똑같은 태그 turbo-frame#turboFrame<br/>
         가 있다면 두 태그를 교체한다고 생각하면 됨
       </li>
       <li>
-        5. 서버에서 _content 라는 html 조각을 가져오게 되는데, 해당 _content는 modal layout html에 감싸이고 있음<br/>
+        5. 
+        @!component('uikit::active-link', {
+          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/src/controllers/lab/modal-example-02.controller.ts#L19",
+          text: "서버"
+        })
+        에서 _content 라는 html 조각을 가져오게 되는데,       
+        @!component('uikit::active-link', {
+          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/_content.edge",
+          text: "해당 html 조각은"
+        })
+
+        @!component('uikit::active-link', {
+          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/_modal-layout.edge",
+          text: "modal layout html"
+        })
+        에 감싸이고 있음<br/>
         결과적으로 모달UI가 나타나는 것 처럼 보임
       </li>
       <li>
-        6. 모달을 닫을 때도 close 요청을 서버로 하게 되는데 보다시피 빈껍대기의 turbo-frame#modalFrame을 
+        6. 모달을 닫을 때도 close 요청을 서버로 하게 되는데 
+        
+        @!component('uikit::active-link', {
+          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/src/controllers/lab/modal-example-02.controller.ts#L39",
+          text: "보다시피 빈껍대기의 turbo-frame#modalFrame을"
+        })
+        
         보내서 프레임을 교체하게되니 모달이 닫히는것처럼 보임(controller에서 문자열로 태그를 사용한건 귀찮아서 그런것도 있지만, 실제로 저렇게 사용이 가능하단 것도 알 수 있음)<br/>
         가능하면 template은 html 파일(템플릿 파일)에 작성하고 가져오는게 좋음
       </li>
