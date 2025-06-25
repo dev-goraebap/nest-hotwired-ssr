@@ -4,9 +4,19 @@ import { join } from 'path';
 
 import { AppModule } from './app.module';
 import { EdgeJsAdapter } from './shared/edge-js';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.use(
+    session({
+      secret: 'hello-world',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 60000 }
+    }),
+  );
 
   await EdgeJsAdapter.init();
 

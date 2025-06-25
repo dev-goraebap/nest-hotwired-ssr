@@ -54,15 +54,23 @@ export class EdgeJsAdapter {
    * - templatePath에 일단 볼륨 명시 해줘야함
    *    - ex) page::home/index
    * - 데이터가 있는경우 state에 {} 형태로 값 할당
+   * - session 의 값을 사용하기 위해 req 객체를 받게끔 변경했는데,
+   * 개발 경험이 별로 안좋음. 이쯤에서 리팩토링 한번 해줘야함
    */
   static async render(
+    req: Request,
     res: Response,
     templatePath: string,
     state?: Record<string, any>,
   ) {
+    let mergedState = { ...state };
+    const flash = this.getFlash(req);
+    if (flash) {
+      mergedState = { ...mergedState, flash };
+    }
     const edge = this.getEdgeInstance();
     try {
-      const template = await edge.render(templatePath, state);
+      const template = await edge.render(templatePath, mergedState);
       return res.send(template);
     } catch (err) {
       this.logger.error(err);
@@ -84,7 +92,7 @@ export class EdgeJsAdapter {
       return this.renderErrorPage(res, HttpStatus.NOT_FOUND);
     }
 
-    return await this.render(res, templatePath, state);
+    return await this.render(req, res, templatePath, state);
   }
 
   /**
@@ -105,6 +113,35 @@ export class EdgeJsAdapter {
       message,
     });
     return res.send(template);
+  }
+
+  static setFlash(req: Request, type: 'notice' | 'alert', message: string) {
+    this.logger.log(req.session);
+    if (!req.session) {
+      let message =
+        '세션이 활성화 되지 않았습니다. 플래시 메시지를 설정할 수 없습니다.';
+      this.logger.warn(message);
+      throw new Error(message);
+    }
+
+    req.session['flash'] = {
+      type,
+      message,
+    };
+  }
+
+  static getFlash(req: Request) {
+    if (!req.session) {
+      return null;
+    }
+
+    const flash = req.session['flash'];
+    // 읽은 후 삭제
+    delete req.session['flash'];
+
+    this.logger.log(flash);
+
+    return flash;
   }
 
   static getEdgeInstance() {

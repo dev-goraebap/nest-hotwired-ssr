@@ -1,12 +1,13 @@
 import { Controller, Get, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
+
 import { EdgeJsAdapter } from 'src/shared/edge-js';
 
 @Controller({ path: 'lab/modal-example-03' })
 export class ModalExample03Controller {
   @Get()
-  index(@Res() res: Response) {
-    return EdgeJsAdapter.render(res, 'page::lab/modal-example-03/index');
+  index(@Req() req: Request, @Res() res: Response) {
+    return EdgeJsAdapter.render(req, res, 'page::lab/modal-example-03/index');
   }
 
   @Get('content')

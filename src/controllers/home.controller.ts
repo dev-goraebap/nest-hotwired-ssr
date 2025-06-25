@@ -1,12 +1,12 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get, Query, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { EdgeJsAdapter } from 'src/shared/edge-js';
 
 @Controller({ path: '' })
 export class HomeController {
   @Get()
-  index(@Res() res: Response, @Query('message') message?: string) {
-    return EdgeJsAdapter.render(res, 'page::home/index', {
+  index(@Req() req: Request, @Res() res: Response, @Query('message') message?: string) {
+    return EdgeJsAdapter.render(req, res, 'page::home/index', {
       message: message || 'hello world',
     });
   }
