@@ -8,8 +8,8 @@ export default defineConfig({
     outDir: 'assets/builds',
     rollupOptions: {
       input: {
-        app: resolve(__dirname, 'assets/javascripts/app.js'),
-        global: resolve(__dirname, 'assets/stylesheets/global.css')
+        app: resolve(__dirname, 'javascripts/app.js'),
+        tailwind: resolve(__dirname, 'stylesheets/tailwind.css')
       },
       output: {
         entryFileNames: '[name].js',

@@ -1,11 +1,6 @@
 {
+  // edge 확장자에서 html 자동완성 지원
   "emmet.includeLanguages": {
     "edge": "html"
   },
-  "[edge]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.suggest.insertMode": "replace"
-  }
 }
