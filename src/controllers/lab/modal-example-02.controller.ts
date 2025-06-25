@@ -1,38 +1,38 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Get, Res } from '@nestjs/common';
+import { Response } from 'express';
 
-import { EdgeJsAdapter } from 'src/shared/edge-js';
+import { EdgeJsView, View } from 'src/shared/edge-js';
 
 @Controller({ path: 'lab/modal-example-02' })
 export class ModalExample02Controller {
   @Get()
-  index(@Req() req: Request, @Res() res: Response) {
-    return EdgeJsAdapter.render(req, res, 'page::lab/modal-example-02/index');
+  async index(@View() view: EdgeJsView, @Res() res: Response) {
+    const template = await view.render('page::lab/modal-example-02/index');
+    return res.send(template);
   }
 
   @Get('content')
-  content(@Req() req: Request, @Res() res: Response) {
+  async content(@View() view: EdgeJsView, @Res() res: Response) {
     const data = {
       title: 'hello world',
       content:
         'Ea mollit consectetur qui duis laborum irure. Sunt elit ex irure duis non irure irure aute aliquip consectetur elit commodo tempor. Duis eiusmod est nulla incididunt in excepteur ad eu ea exercitation.',
     };
-    return EdgeJsAdapter.renderOnlyTurboRequest(
-      req,
-      res,
+    const template = await view.renderOnlyTurboRequest(
       'page::lab/modal-example-02/_content',
       data,
     );
+    return res.send(template);
   }
 
   @Get('lazy-content')
-  async lazyContent(@Req() req: Request, @Res() res: Response) {
+  async lazyContent(@View() view: EdgeJsView, @Res() res: Response) {
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve(null);
       }, 1000);
     });
-    return this.content(req, res);
+    return this.content(view, res);
   }
 
   @Get('close')
