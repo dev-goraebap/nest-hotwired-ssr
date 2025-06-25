@@ -1,1 +1,4 @@
-export * from './edge-js-adapter';
+export * from './decorators';
+export * from './edge-js.module';
+export * from './edge-js.view';
+

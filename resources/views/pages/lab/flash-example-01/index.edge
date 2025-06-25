@@ -1,0 +1,35 @@
+@component('layout::app')
+@slot('main')
+  <div class="prose-sm p-10">
+    <h2 class="font-bold">플레시메시지 01: 세션을 사용한 플레시 개념</h2>
+
+    {{-- 플래시 메시지 표시 --}}
+    @if(flash)
+      @if(flash.type === 'notice')
+        <div class="alert alert-success mb-4">
+          {{ flash.message }}
+        </div>
+      @elseif(flash.type === 'alert')
+        <div class="alert alert-error mb-4">
+          {{ flash.message }}
+        </div>
+      @end
+    @end
+
+    <div class="flex gap-4">
+      <a 
+        href="/lab/flash-example-01/success"
+        data-turbo-method="post"
+        class="btn btn-soft btn-primary">
+        성공적인 작업 요청
+      </a>
+      <a 
+        href="/lab/flash-example-01/failure"
+        data-turbo-method="post"
+        class="btn btn-soft btn-primary">
+        작업 실패 요청
+      </a>
+    </div>
+  </div>
+@end
+@end
