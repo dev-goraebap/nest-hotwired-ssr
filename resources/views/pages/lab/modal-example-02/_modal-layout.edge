@@ -1,0 +1,23 @@
+<!-- 모달 오버레이 -->
+<turbo-frame id="modalFrame">
+  <div class="flex justify-center items-center fixed inset-0 bg-black/80">
+
+    <div class="w-full h-full md:w-[600px] md:h-auto md:rounded-xl bg-base-100">
+      <div class="flex justify-end p-4">
+        <!-- 닫기버튼 -->
+        <a href="/lab/modal-example-02/close">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </a>
+      </div>
+      <!-- 모달 컨텐츠 -->
+      <div class="p-4">
+        @if($slots && $slots.content)
+          {{{ await $slots.content() }}}
+        @end
+      </div>
+    </div>
+  </div>
+</turbo-frame>

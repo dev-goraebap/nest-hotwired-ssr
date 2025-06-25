@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { HomeController } from './controllers/home.controller';
 import { ModalExample01Controller } from './controllers/lab/modal-example-01.controller';
-import { ModalExampleController } from './controllers/lab/modal-example.controller';
+import { ModalExample02Controller } from './controllers/lab/modal-example-02.controller';
 
 @Module({
   imports: [],
   controllers: [
     HomeController,
     ModalExample01Controller,
-    ModalExampleController
+    ModalExample02Controller
   ]
 })
 export class AppModule {}

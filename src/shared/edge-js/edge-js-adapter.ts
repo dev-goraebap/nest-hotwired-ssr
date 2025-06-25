@@ -107,7 +107,7 @@ export class EdgeJsAdapter {
     return res.send(template);
   }
 
-  private static getEdgeInstance() {
+  static getEdgeInstance() {
     if (!this.edge) {
       throw new Error(
         'Edge.js가 초기화되지 않았습니다. 먼저 main.ts 파일에 await EdgeService.init(); 를 선언해주세요.',
