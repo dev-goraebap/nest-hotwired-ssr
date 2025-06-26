@@ -97,17 +97,19 @@ export class EdgeJsView {
    * 쿠키에서 테마 정보 가져오기
    * @description
    * - cookie-parser 설정이 되어있지 않으면 쿠키를 읽을 수 없습니다.
+   * - 쿠키에서 theme 값을 가져올 수 없으면 lemonade가 기본값입니다.
    */
-  getTheme(): string | null {
+  getTheme(): string {
+    const defaultTheme = 'lemonade';
     const cookies = this.request.cookies;
     if (!cookies) {
       this.logger.warn('쿠키가 활성화되지 않았습니다.');
-      return null;
+      return defaultTheme;
     }
 
     const theme = cookies?.theme;
     if (!theme) {
-      return null;
+      return defaultTheme;
     }
 
     return theme;
