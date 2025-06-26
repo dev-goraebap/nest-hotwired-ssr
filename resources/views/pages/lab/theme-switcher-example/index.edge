@@ -1,0 +1,23 @@
+@component('layout::app')
+@slot('main')
+<div class="prose-sm p-10">
+
+  @!component('uikit::back-button')
+  
+  <h2 class="font-bold">테마 변경 기능: 쿠키를 이용한 전역 상태와 stimulus 이용</h2>
+
+  <ul>
+    <li><strong>SSR 테마 적용:</strong> 서버에서 쿠키를 읽어 현재 테마를 파악하고, 해당 테마로 버튼 활성화 상태를 렌더링</li>
+    <li><strong>CSR 테마 전환:</strong> Stimulus 컨트롤러를 통해 클라이언트에서 실시간으로 테마 변경</li>
+    <li><strong>쿠키 저장:</strong> 선택한 테마를 쿠키에 저장하여 페이지 새로고침이나 재방문 시에도 테마 유지</li>
+    <li><strong>HTML 데이터 속성:</strong> <code>data-theme</code> 속성을 HTML 루트 요소에 적용하여 전역 테마 스타일 적용</li>
+    <li><strong>버튼 상태 동기화:</strong> 현재 선택된 테마에 해당하는 버튼에 시각적 강조 표시</li>
+    <li><strong>초기화 로직:</strong> 페이지 로드 시 쿠키에서 테마를 읽어와 자동으로 적용</li>
+  </ul>
+
+  @!component('page::lab/theme-switcher-example/_theme-switcher', {
+    themes
+  })
+</div>
+@end
+@end

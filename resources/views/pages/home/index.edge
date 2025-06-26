@@ -1,52 +1,59 @@
 @component('layout::app')
-  @slot('main')
-    <div class="prose-sm p-10">
-      <h1 class="font-bold">Nestjs MVC 실험실</h1>
-      <p>이것저것 테스트중</p>
+@slot('main')
+<div class="prose-sm p-10">
+  <h1 class="font-bold">Nestjs MVC 실험실</h1>
+  <p>이것저것 테스트중</p>
 
-      <!-- 모달 -->
-      <h2 class="font-bold">여기서 모달은 어떻게 만드나요.</h2>
-      <ul>
-        <li>
-          <a href="/lab/modal-example-01">01. 안좋은 예제 살펴보기</a>
-        </li>
-        <li>
-          <a href="/lab/modal-example-02">02. HTML 중심의 사고전환. Turbo Frame 맛보기</a>
-        </li>
-        <li>
-          <a href="/lab/modal-example-03">03. Turbo Frame, Stimulus 적절하게 사용해보기</a>
-        </li>
-      </ul>
+  <!-- 모달 -->
+  <h2 class="font-bold">여기서 모달은 어떻게 만드나요.</h2>
+  <ul>
+    <li>
+      <a href="/lab/modal-example-01">01. 안좋은 예제 살펴보기</a>
+    </li>
+    <li>
+      <a href="/lab/modal-example-02">02. HTML 중심의 사고전환. Turbo Frame 맛보기</a>
+    </li>
+    <li>
+      <a href="/lab/modal-example-03">03. Turbo Frame, Stimulus 적절하게 사용해보기</a>
+    </li>
+  </ul>
 
-      <!-- 플래시 -->
-      <h2 class="font-bold">작업에 대한 성공, 실패 피드백</h2>
-      <ul>
-        <li>
-          <a href="/lab/flash-example-01">01. 세션을 사용한 플레시 개념</a>
-        </li>
-        <li>
-          <a href="/lab/flash-example-02">02. 클라이언트 측 반응 추가</a>
-        </li>
-      </ul>
+  <!-- 플래시 -->
+  <h2 class="font-bold">작업에 대한 성공, 실패 피드백</h2>
+  <ul>
+    <li>
+      <a href="/lab/flash-example-01">01. 세션을 사용한 플레시 개념</a>
+    </li>
+    <li>
+      <a href="/lab/flash-example-02">02. 클라이언트 측 반응 추가</a>
+    </li>
+  </ul>
 
-      <!-- 이미지 -->
-      <h2 class="font-bold">이미지 업로드, 랜더링</h2>
-      <ul>
-        <li>
-          <a href="/lab/image-example-01">01. 이미지 업로더, 프리뷰 모범사례</a>
-        </li>
-        <li>
-          <a href="/lab/image-example-02">02. 이미지의 지배적 색상 이용하여 부드럽게 보여주기</a>
-        </li>
-      </ul>
+  <h2 class="font-bold">테마 변경</h2>
+  <ul>
+    <li>
+      <a href="/lab/theme-switcher-example">쿠키를 이용한 전역 상태와 stimulus 이용</a>
+    </li>
+  </ul>
 
-      <!-- 투두리스트 -->
-      <h2 class="font-bold">투두리스트</h2>
-      <ul>
-        <li>
-          <a href="/todos">CRUD 어떻게 처리하는지 확인 ㄱㄱ</a>
-        </li>
-      </ul>
-    </div>
-  @end
+  <!-- 이미지 -->
+  <h2 class="font-bold">이미지 업로드, 랜더링</h2>
+  <ul>
+    <li>
+      <a href="/lab/image-example-01">01. 이미지 업로더, 프리뷰 모범사례</a>
+    </li>
+    <li>
+      <a href="/lab/image-example-02">02. 이미지의 지배적 색상 이용하여 부드럽게 보여주기</a>
+    </li>
+  </ul>
+
+  <!-- 투두리스트 -->
+  <h2 class="font-bold">투두리스트</h2>
+  <ul>
+    <li>
+      <a href="/todos">CRUD 어떻게 처리하는지 확인 ㄱㄱ</a>
+    </li>
+  </ul>
+</div>
+@end
 @end

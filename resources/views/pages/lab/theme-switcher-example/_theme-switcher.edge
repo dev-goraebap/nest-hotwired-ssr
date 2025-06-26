@@ -1,0 +1,12 @@
+<div class="flex gap-2" data-controller="theme-switcher">
+  @each(themeItem in themes)
+    <button 
+      data-theme="{{ themeItem.type }}" 
+      data-action="theme-switcher#onChangeTheme"
+      data-theme-switcher-target="button"
+      class="flex flex-col gap-2 items-center p-3 rounded-xl min-w-[100px]
+      {{ themeItem.isActive ? 'border-primary border-2' : 'border border-base-300' }}">
+      {{ themeItem.name }}
+    </button>
+  @end
+</div>
