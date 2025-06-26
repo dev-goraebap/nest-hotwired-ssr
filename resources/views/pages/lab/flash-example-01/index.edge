@@ -5,19 +5,49 @@
 
   <p>
     서버에서 클라이언트로 1회성 메시지를 전달하는 기법으로, 리다이렉션 후에도 메시지가 유지됨<br />
-    이 예제는 Express 세션을 활용하여 Rails의 플래시 메시지와 유사한 기능을 구현<br/>
+    이 예제는 Express 세션을 활용하여 Rails의 플래시 메시지와 
+    
+    @!component('uikit::active-link', { 
+      url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-01/src/shared/edge-js/edge-js.view.ts#L65',
+      text: '유사한 기능을 구현'
+    })
+    <br/>
     플래시 메시지는 사용자 피드백을 제공하는 UX 요소로, 특히 폼 제출이나 데이터 처리 후<br/>
     사용자에게 작업 결과를 명확하게 알려줄 때 유용함<br/>
     프론트엔드 측에 알림박스나 토스트박스와 같음. 실행방식의 차이가 있을 뿐
   </p>
 
   <ul>
-    <li>1. <strong>세션 활용</strong>: 서버에서 플래시 메시지를 세션에 저장하여 페이지 간 상태를 유지</li>
-    <li>2. <strong>일회성 메시지</strong>: 메시지는 한 번 표시된 후 자동으로 세션에서 제거해야함</li>
-    <li>3. <strong>메시지 타입 구분</strong>: 'notice'(성공)와 'alert'(실패) 타입에 따라 다른 스타일로 표시<br />
+    <li>1. <strong>세션 활용</strong>: 아래 작업 성공 또는 실패 버튼 클릭시 서버에서 
+      
+      @!component('uikit::active-link', { 
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-01/src/controllers/lab/flash-example-01.controller.ts#L16',
+        text: '플래시 메시지를 세션에 저장하여'
+      })
+      
+      페이지 간 상태를 유지</li>
+    <li>2. <strong>일회성 메시지</strong>: 메시지는 한 번 표시된 후 자동으로 
+      @!component('uikit::active-link', { 
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/develop/src/shared/edge-js/edge-js.view.ts#L83',
+        text: '세션에서 제거해야함'
+      })
+    </li>
+    <li>3. <strong>메시지 타입 구분</strong>: 'notice'(성공)와 'alert'(실패) 타입에 따라 
+      @!component('uikit::active-link', { 
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-01/resources/views/pages/lab/flash-example-01/index.edge#L32',
+        text: '다른 스타일로 표시'
+      })
+      <br />
       notice, alert 명명은 레일즈의 관례를 그대로 가져옴.
     </li>
-    <li>4. <strong>Turbo 활용</strong>: data-turbo-method="post" 속성으로 링크 클릭 시 POST 요청이 전송됨.<br/>
+    <li>4. <strong>Turbo 활용</strong>: data-turbo-method="post" 속성으로 
+      
+      @!component('uikit::active-link', { 
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-01/resources/views/pages/lab/flash-example-01/index.edge#L43',
+        text: '링크 클릭 시 POST 요청이 전송됨.'
+      })
+      
+      <br/>
       이 예제에서는 버튼 클릭시 폼 제출이라는 상황을 가정함
     </li>
   </ul>
