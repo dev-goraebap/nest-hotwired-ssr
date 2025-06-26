@@ -5,23 +5,56 @@
 
   <p>
     이전 플래시 메시지 예제에서 표현된 메시지가 사라지지 않는 부분을 해결하려고 함<br />
-    SSR로 랜더링된 HTML에 플래시 UI를 제어하는 stimulus 컨트롤러가 연결되면<br/>
+    SSR로 랜더링된 HTML에 
+    
+    @!component('uikit::active-link', {  
+      url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-02/resources/javascripts/controllers/lab/flash-example-02/flash.controller.js#L3',
+      text: '플래시 UI를 제어하는 stimulus 컨트롤러',
+    })
+    
+    가 연결되면<br/>
     N초 뒤에 삭제하는 로직과, 닫기 버튼 클릭시 삭제하는 이벤트가 작동하게 하려고 함
   </p>
 
   <ul>
     <li>
-      이전 예제와 다르게 두 버튼들은 flash02 stimulus 컨트롤러에 연결되어있음<br/>
+      이전 예제와 다르게 두 버튼들은 
+      
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-02/resources/views/pages/lab/flash-example-02/index.edge#L40',
+        text: 'flash02 stimulus 컨트롤러'
+      })
+      
+      에 연결되어있음<br/>
       (페이지 소스코드에 HTML 조각이 같이 있지만, 이는 이해를 위한 것이지 서버측 컴포넌트들도 재사용성이 필요한 것들은 원래 분리해놈)
 
     </li>
     <li>
       stimulus 커넥션 라이프사이클훅이 실행되면 N초 뒤에 삭제되는 로직이 실행됨<br/>
-      성공버튼은 시간값을 따로 설정하지 않아서 3초 뒤에 삭제<br/>
-      실패버튼은 시간값을 설정했기 때문에 설정해둔 1초 뒤에 삭제
+      성공버튼은 시간값을 따로 설정하지 않아서 
+      
+
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-02/resources/javascripts/controllers/lab/flash-example-02/flash.controller.js#L11',
+        text: '3초 뒤에 삭제'
+      })
+      <br/>
+      실패버튼은 시간값을 설정했기 때문에 
+      
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-02/resources/views/pages/lab/flash-example-02/index.edge#L48',
+        text: '설정해둔 1초'
+      })
+      뒤에 삭제
     </li>
     <li>
-      또한 플래시박스 내부의 버튼들에 onClose 액션이벤트가 연결되어 클릭시 삭제도 됨
+      또한 플래시박스 내부의 버튼들에 
+      
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/flash-example-02/resources/javascripts/controllers/lab/flash-example-02/flash.controller.js#L19',
+        text: 'onClose 액션이벤트'
+      })
+      가 연결되어 클릭시 삭제도 됨
     </li>
   </ul>
 
