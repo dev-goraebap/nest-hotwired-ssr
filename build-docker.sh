@@ -62,6 +62,32 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     echo "🎉 모든 작업이 완료되었습니다!"
     echo "📋 빌드된 이미지: ${FULL_IMAGE_NAME}"
     echo "🌐 Docker Hub: https://hub.docker.com/r/${IMAGE_NAME}"
+    
+    # 로컬 이미지 정리 옵션
+    echo ""
+    echo "🧹 로컬 이미지를 정리하시겠습니까? (y/N)"
+    read -r cleanup_response
+    
+    if [[ "$cleanup_response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        echo "🧹 로컬 이미지 정리 중..."
+        
+        # 사용하지 않는 dangling 이미지 제거
+        if docker image prune -f; then
+            echo "✅ Dangling 이미지 정리 완료"
+        fi
+        
+        # 빌드 캐시 정리 (옵션)
+        echo "🗑️  빌드 캐시도 정리하시겠습니까? (y/N)"
+        read -r cache_response
+        
+        if [[ "$cache_response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            if docker builder prune -f; then
+                echo "✅ 빌드 캐시 정리 완료"
+            fi
+        fi
+        
+        echo "🧹 로컬 정리 작업 완료!"
+    fi
 else
     echo "📋 빌드만 완료되었습니다: ${FULL_IMAGE_NAME}"
 fi
