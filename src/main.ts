@@ -39,21 +39,16 @@ async function bootstrap() {
     lastModified: true,
     setHeaders: (res, path) => {
       // 파일 확장자별 캐시 정책
-      if (
-        path.endsWith('.ttf') ||
-        path.endsWith('.woff') ||
-        path.endsWith('.woff2')
-      ) {
+      if (path.endsWith('.woff2')) {
         // 폰트 파일: 1년
-        res.setHeader(
-          'Cache-Control',
-          `public, max-age=${cacheTime.oneYear}, immutable`,
-        );
+        res.setHeader('Cache-Control', `public, max-age=${cacheTime.oneYear}`);
       } else if (path.endsWith('.js') || path.endsWith('.css')) {
-        // JS/CSS 파일: 1년 (빌드 시 해시가 포함되므로)
+        // JS/CSS 파일: 1년 
+        // 빌드 시 개발 편의성을 위해 별도로 immutable 을 붙이진 않음.
+        // immutable을 사용하려면 css, js 파일 이름에 난수를 붙여야하는데 설정이 좀 더 귀찮아짐
         res.setHeader(
           'Cache-Control',
-          `public, max-age=${cacheTime.oneYear}, immutable`,
+          `public, max-age=${cacheTime.oneYear}`,
         );
       } else if (
         path.endsWith('.jpg') ||

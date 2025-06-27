@@ -5,45 +5,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title || "Nestjs MVC Is Coming" }}</title>
-
-  <!-- Critical CSS 인라인 (폰트만 먼저) -->
-  <style>
-    @font-face {
-      font-display: swap;
-      font-family: "OpenSans";
-      src: url("/public/fonts/OpenSans-Regular.ttf");
-      font-weight: 500;
-    }
-
-    html {
-      font-family: "OpenSans", sans-serif !important;
-    }
-  </style>
-
-  <!-- 리소스 프리로딩 -->
-  <link rel="preload" href="/public/builds/tailwind.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <link rel="preload" href="/public/fonts/OpenSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
-
-  <!-- CSS 비동기 로딩을 위한 폴백 -->
-  <noscript>
-    <link rel="stylesheet" href="/public/builds/tailwind.css">
-  </noscript>
-
-  <!-- 폰트 CSS는 지연 로딩 -->
-  <link rel="preload" href="/public/stylesheets/font.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript>
-    <link rel="stylesheet" href="/public/stylesheets/font.css" />
-  </noscript>
-
-  <!-- JavaScript는 defer로 지연 -->
-  <script src="/public/builds/app.js" defer></script>
-
-  <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon" />
-
   <!-- 페이지에 메타태그가 추가로 필요할 경우 슬롯을 통해 사용 -->
   @if ($slots.meta)
   {{{ await $slots.meta() }}}
   @endif
+
+  <!-- 스타일 리소스 -->
+  <link rel="stylesheet" href="/public/builds/tailwind.css">
+  <link rel="stylesheet" href="/public/stylesheets/font.css">
+
+  <!-- JavaScript는 defer로 지연 -->
+  <script src="/public/builds/app.js" defer></script>
+
+  <!-- 파비콘 -->
+  <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon" />
 </head>
 
 <body>
