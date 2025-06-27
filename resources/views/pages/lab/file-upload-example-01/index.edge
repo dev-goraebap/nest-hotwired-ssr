@@ -1,0 +1,27 @@
+@component('layout::app')
+@slot('main')
+<div class="prose-sm p-10">
+
+  @!component('uikit::back-button')
+
+  <h2 class="font-bold">파일 업로드: Active Storage 사용</h2>
+
+  @if(flash?.type === 'notice')
+  <div data-controller="flash-02" class="flex justify-between alert alert-success mb-4">
+    {{ flash.message }}
+    <button data-action="flash-02#onClose" class="btn btn-soft btn-sm btn-primary">닫기</button>
+  </div>
+  @elseif(flash?.type === 'alert')
+  <div data-controller="flash-02" data-flash-02-time-value="1000" class="flex justify-between alert alert-error mb-4">
+    {{ flash.message }}
+    <button data-action="flash-02#onClose" class="btn btn-soft btn-sm btn-error">닫기</button>
+  </div>
+  @end
+
+  <form action="/lab/file-upload-example-01" method="post" class="flex flex-col gap-4 max-w-xl">
+    <input type="file" class="file-input w-full" />
+    <button class="btn btn-primary btn-soft">업로드</button>
+  </form>
+</div>
+@end
+@end
