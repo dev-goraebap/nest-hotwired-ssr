@@ -5,6 +5,7 @@ import { FlashExample02Controller } from './controllers/lab/flash-example-02.con
 import { ModalExample01Controller } from './controllers/lab/modal-example-01.controller';
 import { ModalExample02Controller } from './controllers/lab/modal-example-02.controller';
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
+import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 import { EdgeJsModule } from './shared/edge-js';
 
 @Module({
@@ -17,7 +18,8 @@ import { EdgeJsModule } from './shared/edge-js';
     ModalExample02Controller,
     ModalExample03Controller,
     FlashExample01Controller,
-    FlashExample02Controller
+    FlashExample02Controller,
+    ThemeSwitcherExampleController
   ]
 })
 export class AppModule {}

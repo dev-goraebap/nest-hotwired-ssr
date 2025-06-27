@@ -1,0 +1,52 @@
+@component('layout::app')
+@slot('main')
+<div class="prose-sm p-10">
+
+  @!component('uikit::back-button')
+  
+  <h2 class="font-bold">테마 변경 기능: 쿠키를 이용한 전역 상태와 stimulus 이용</h2>
+
+  <ul>
+    <li><strong>SSR 테마 적용:</strong> 
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/theme-switcher-example/src/shared/edge-js/edge-js.view.ts#L102',
+        text: '서버에서 쿠키를 읽어 '
+      })
+      
+      현재 테마를 파악하고, 해당 테마로 
+    
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/theme-switcher-example/resources/views/pages/lab/theme-switcher-example/_theme-switcher.edge#L8',
+        text: '버튼 활성화 상태를 렌더링'
+      })
+    </li>
+    <li><strong>CSR 테마 전환:</strong> Stimulus 컨트롤러를 통해 클라이언트에서 버튼 상호작용 시
+      
+      @!component('uikit::active-link', {  
+        url: 'https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/theme-switcher-example/resources/javascripts/controllers/lab/theme-switcher-example/theme-switcher.controller.js#L6',
+        text: '실시간으로 테마 변경'
+      })
+      <ul>
+        <li><strong>쿠키 저장:</strong> 선택한 테마를 쿠키에 저장하여 페이지 새로고침이나 재방문 시에도 테마 유지</li>
+        <li><strong>HTML 데이터 속성:</strong> <code>data-theme</code> 속성을 HTML 루트 요소에 적용하여 전역 테마 스타일 적용</li>
+        <li><strong>버튼 상태 동기화:</strong> 현재 선택된 테마에 해당하는 버튼에 시각적 강조 표시</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>
+    프론트엔드 프레임워크를 사용하면 전역 상태 관리를 위해 싱글톤 인스턴스, window 객체, 또는 로컬스토리지를 사용함.<br/>
+    이 프로젝트도 그런 방식으로 테마 상태를 관리할 수 있지만, SSR을 기본으로 하는 환경에서는 문제가 있음<br/>
+    JavaScript가 로드되어 테마 상태를 설정하기까지 시간차가 발생하며, 이로 인해 테마 상태의 불일치가 생김<br/>
+    (ex: 페이지가 기본 테마로 먼저 렌더링됨 -> 자바스크립트가 로드되어 로컬스토리지에서 사용자의 실제 테마로 설정) <br/><br/>
+    
+    따라서 상태의 최초 제공은 서버 측에서 해야 하며, 쿠키를 통해 서버가 페이지를 렌더링하는 시점에<br/>
+    올바른 테마로 초기 UI를 제공할 수 있음. 이후 클라이언트 측 상호작용은 Stimulus 컨트롤러가 처리
+  </p>
+
+  @!component('page::lab/theme-switcher-example/_theme-switcher', {
+    themes
+  })
+</div>
+@end
+@end
