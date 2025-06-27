@@ -37,6 +37,21 @@
               타입: {{ item.blob.contentType }} |
               업로드: {{ item.attachment.createdAt.toLocaleDateString() }}
             </p>
+            <p class="text-xs text-gray-500 mt-1">
+              키: {{ item.blob.key }} | 
+              체크섬: {{ item.blob.checksum.substring(0, 8) }}... | 
+              서비스: {{ item.blob.serviceName }}
+            </p>
+            @if(Object.keys(item.blob.metadata).length > 0)
+            <div class="mt-2">
+              <p class="text-xs font-medium text-gray-600">메타데이터:</p>
+              <div class="text-xs text-gray-500 bg-gray-100 p-2 rounded mt-1">
+                @each((value, key) in item.blob.metadata)
+                <div><strong>{{ key }}:</strong> {{ typeof value === 'object' ? JSON.stringify(value) : value }}</div>
+                @end
+              </div>
+            </div>
+            @end
           </div>
           <div class="flex gap-2">
             @if(item.blob.isImage())
