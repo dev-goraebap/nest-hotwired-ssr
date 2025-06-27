@@ -10,10 +10,12 @@ import { ModalExample03Controller } from './controllers/lab/modal-example-03.con
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 
 import { EdgeJsModule } from './shared/edge-js';
+import { ActiveStorageModule } from './shared/active-storage';
 
 @Module({
   imports: [
-    EdgeJsModule.forRootAsync()
+    EdgeJsModule.forRootAsync(),
+    ActiveStorageModule
   ],
   controllers: [
     HomeController,
