@@ -2,9 +2,18 @@ version: '3.8'
 
 services:
   nestjs-mvc-is-coming:
+    image: devgoraebap/nestjs-mvc-is-coming:${APP_VERSION:-latest}
+    container_name: nestjs-mvc-is-coming
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
     restart: unless-stopped
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    name: my-network
+    external: true
