@@ -1,23 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko" data-theme="{{ theme }}">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title || "Nestjs MVC Is Coming" }}</title>
 
-  <!-- 에셋파이프라인을 통해 빌드되는 자산 파일들 -->
-  <script src="/public/builds/app.js"></script>
-  <link rel="stylesheet" href="/public/builds/tailwind.css">
+  <!-- Critical CSS 인라인 (폰트만 먼저) -->
+  <style>
+    @font-face {
+      font-display: swap;
+      font-family: "OpenSans";
+      src: url("/public/fonts/OpenSans-Regular.ttf");
+      font-weight: 500;
+    }
 
-  <!-- 일반 자산 파일들 -->
-  <link rel="stylesheet" href="/public/stylesheets/font.css">
-  <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon">
+    html {
+      font-family: "OpenSans", sans-serif !important;
+    }
+  </style>
+
+  <!-- 리소스 프리로딩 -->
+  <link rel="preload" href="/public/builds/tailwind.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <link rel="preload" href="/public/fonts/OpenSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
+
+  <!-- CSS 비동기 로딩을 위한 폴백 -->
+  <noscript>
+    <link rel="stylesheet" href="/public/builds/tailwind.css">
+  </noscript>
+
+  <!-- 폰트 CSS는 지연 로딩 -->
+  <link rel="preload" href="/public/stylesheets/font.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="/public/stylesheets/font.css" />
+  </noscript>
+
+  <!-- JavaScript는 defer로 지연 -->
+  <script src="/public/builds/app.js" defer></script>
+
+  <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon" />
 
   <!-- 페이지에 메타태그가 추가로 필요할 경우 슬롯을 통해 사용 -->
   @if ($slots.meta)
-    {{{ await $slots.meta() }}}
+  {{{ await $slots.meta() }}}
   @endif
 </head>
+
 <body>
   <div class="flex flex-col h-screen">
     <div class="navbar bg-base-200 text-base-content">
@@ -29,17 +57,20 @@
     <div class="grow">
       {{{ await $slots.main() }}}
     </div>
-    
+
     <footer class="footer sm:footer-horizontal footer-center bg-base-200 text-base-content p-4">
       <aside class="flex gap-4">
         <p>Happy coding! 🧀</p>
         <a href="https://github.com/dev-goraebap/nestjs-mvc-is-coming" target="_blank">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-          </svg>      
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+          </svg>
         </a>
       </aside>
     </footer>
   </div>
 </body>
+
 </html>
