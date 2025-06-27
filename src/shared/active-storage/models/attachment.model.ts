@@ -49,6 +49,15 @@ export class AttachmentModel implements IAttachment {
   }
 
   /**
+   * 일반 객체로부터 AttachmentModel 인스턴스 생성
+   * @param data IAttachment 형태의 일반 객체
+   * @returns AttachmentModel 인스턴스
+   */
+  static from(data: IAttachment): AttachmentModel {
+    return new AttachmentModel(data);
+  }
+
+  /**
    * 특정 레코드의 소유인지 확인
    * @param recordType 모델명
    * @param recordId 레코드 ID

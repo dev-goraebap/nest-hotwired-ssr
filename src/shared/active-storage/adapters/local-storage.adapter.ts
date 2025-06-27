@@ -1,9 +1,10 @@
-import { IStorageAdapter } from '../interfaces/storage-adapter.interface';
-import * as fs from 'fs/promises';
-import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { createReadStream, createWriteStream } from 'fs';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { pipeline } from 'stream/promises';
+
+import { IStorageAdapter } from '../interfaces/storage-adapter.interface';
 
 /**
  * 로컬 파일 시스템 기반 Storage Adapter 구현체
@@ -22,14 +23,11 @@ export class LocalStorageAdapter implements IStorageAdapter {
   private rootPath: string;
   private baseUrl: string;
 
-  constructor(
-    rootPath?: string,
-    baseUrl?: string
-  ) {
+  constructor() {
     // 기본값: 프로젝트 루트의 storage/uploads
-    this.rootPath = rootPath || path.join(process.cwd(), 'storage', 'uploads');
+    this.rootPath = path.join(process.cwd(), 'storage', 'uploads');
     // 기본값: /uploads (Express static 서빙을 위한)
-    this.baseUrl = baseUrl || '/uploads';
+    this.baseUrl = '/uploads';
     
     this.ensureRootDirectory();
   }

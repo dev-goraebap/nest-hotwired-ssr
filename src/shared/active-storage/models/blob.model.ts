@@ -60,6 +60,15 @@ export class BlobModel implements IBlob {
   }
 
   /**
+   * 일반 객체로부터 BlobModel 인스턴스 생성
+   * @param data IBlob 형태의 일반 객체
+   * @returns BlobModel 인스턴스
+   */
+  static from(data: IBlob): BlobModel {
+    return new BlobModel(data);
+  }
+
+  /**
    * Rails 스타일 스토리지 키 생성
    * @returns 생성된 키 (28자 랜덤 문자열)
    */

@@ -115,24 +115,27 @@ export class AttachmentService {
    * @param recordType 모델명
    * @param recordId 레코드 ID
    * @param name attachment 이름 (선택사항)
-   * @returns 첨부파일들과 blob 정보
+   * @returns 첨부파일들과 blob 정보 (모델 인스턴스)
    */
   async findAttachments(
     recordType: string,
     recordId: string,
     name?: string
-  ): Promise<Array<{ attachment: IAttachment; blob: IBlob }>> {
+  ): Promise<Array<{ attachment: AttachmentModel; blob: BlobModel }>> {
     const attachments = await this.repository.findAttachmentsByRecord(
       recordType,
       recordId,
       name
     );
 
-    const results: Array<{ attachment: IAttachment; blob: IBlob }> = [];
+    const results: Array<{ attachment: AttachmentModel; blob: BlobModel }> = [];
     for (const attachment of attachments) {
       const blob = await this.repository.findBlobById(attachment.blobId);
       if (blob) {
-        results.push({ attachment, blob });
+        results.push({ 
+          attachment: AttachmentModel.from(attachment), 
+          blob: BlobModel.from(blob) 
+        });
       }
     }
 
@@ -150,7 +153,7 @@ export class AttachmentService {
     recordType: string,
     recordId: string,
     name: string
-  ): Promise<{ attachment: IAttachment; blob: IBlob } | null> {
+  ): Promise<{ attachment: AttachmentModel; blob: BlobModel } | null> {
     const results = await this.findAttachments(recordType, recordId, name);
     return results.length > 0 ? results[0] : null;
   }
@@ -166,7 +169,7 @@ export class AttachmentService {
     recordType: string,
     recordId: string,
     name: string
-  ): Promise<Array<{ attachment: IAttachment; blob: IBlob }>> {
+  ): Promise<Array<{ attachment: AttachmentModel; blob: BlobModel }>> {
     return this.findAttachments(recordType, recordId, name);
   }
 
