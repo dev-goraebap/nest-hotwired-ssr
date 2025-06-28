@@ -9,13 +9,15 @@ import { ModalExample02Controller } from './controllers/lab/modal-example-02.con
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 
-import { EdgeJsModule } from './shared/edge-js';
 import { ActiveStorageModule } from './shared/active-storage';
+import { DatabaseModule } from './shared/database';
+import { EdgeJsModule } from './shared/edge-js';
 
 @Module({
   imports: [
     EdgeJsModule.forRootAsync(),
-    ActiveStorageModule
+    ActiveStorageModule,
+    DatabaseModule
   ],
   controllers: [
     HomeController,
