@@ -35,7 +35,7 @@
             <p class="text-sm text-gray-600">
               크기: {{ item.blob.getHumanFileSize() }} | 
               타입: {{ item.blob.contentType }} |
-              업로드: {{ item.attachment.createdAt.toLocaleDateString() }}
+              업로드: {{ item.createdAt.toLocaleDateString() }}
             </p>
             <p class="text-xs text-gray-500 mt-1">
               키: {{ item.blob.key }} | 
