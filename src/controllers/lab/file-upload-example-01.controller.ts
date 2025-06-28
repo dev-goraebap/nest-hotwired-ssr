@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
@@ -12,11 +19,14 @@ export class FileUploadExampleController {
   @Get()
   async index(@View() view: EdgeJsView, @Res() res: Response) {
     // 업로드된 파일 목록 조회 (이제 실제 모델 인스턴스 반환)
-    const attachments = await this.activeStorage.findAttachments('FileUploadExample', '1', 'documents');
-    
+    const attachments = await this.activeStorage.findAttachments(
+      'file-upload-test-01',
+      'file',
+    );
+
     const template = await view.render(
       'page::lab/file-upload-example-01/index',
-      { attachments }
+      { attachments },
     );
     return res.send(template);
   }
@@ -25,8 +35,8 @@ export class FileUploadExampleController {
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @UploadedFile() file: Express.Multer.File,
-    @View() view: EdgeJsView, 
-    @Res() res: Response
+    @View() view: EdgeJsView,
+    @Res() res: Response,
   ) {
     try {
       if (!file) {
@@ -36,21 +46,23 @@ export class FileUploadExampleController {
 
       // Active Storage를 사용하여 파일 첨부
       const attachment = await this.activeStorage.attach(
-        'FileUploadExample', // recordType
-        '1',                 // recordId (예시용 고정값)
-        file,               // 업로드된 파일
-        'documents',        // name
-        'multiple'          // 다중 파일 허용
+        file, // 업로드된 파일
+        'file-upload-test-01', // recordType
+        '0000', // recordId (예시용 고정값)
+        'file', // name
       );
 
       console.log('파일 업로드 성공:', {
         attachmentId: attachment.id,
         filename: file.originalname,
         size: file.size,
-        mimetype: file.mimetype
+        mimetype: file.mimetype,
       });
 
-      view.setFlash('notice', `파일 "${file.originalname}"이 성공적으로 업로드되었습니다!`);
+      view.setFlash(
+        'notice',
+        `파일 "${file.originalname}"이 성공적으로 업로드되었습니다!`,
+      );
       return res.redirect('/lab/file-upload-example-01');
     } catch (error) {
       console.error('파일 업로드 오류:', error);
