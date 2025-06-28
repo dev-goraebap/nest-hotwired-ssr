@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { IAttachment } from '../interfaces/attachment.interface';
-import { IBlob } from '../interfaces/blob.interface';
+import { AttachmentData } from '../interfaces/attachment.types';
+import { BlobData } from '../interfaces/blob.types';
 import { IAttachmentRepository } from '../interfaces/repository.interface';
 
 /**
@@ -12,8 +12,8 @@ import { IAttachmentRepository } from '../interfaces/repository.interface';
  */
 @Injectable()
 export class MemoryAttachmentRepository implements IAttachmentRepository {
-  private blobs: Map<string, IBlob> = new Map();
-  private attachments: Map<string, IAttachment> = new Map();
+  private blobs: Map<string, BlobData> = new Map();
+  private attachments: Map<string, AttachmentData> = new Map();
 
   constructor() {
     console.log('MemoryAttachmentRepository initialized - 메모리 기반 저장소 (개발용)');
@@ -22,7 +22,7 @@ export class MemoryAttachmentRepository implements IAttachmentRepository {
   /**
    * Blob 저장
    */
-  async saveBlob(blob: IBlob): Promise<IBlob> {
+  async saveBlob(blob: BlobData): Promise<BlobData> {
     this.blobs.set(blob.id, blob);
     return blob;
   }
@@ -30,14 +30,14 @@ export class MemoryAttachmentRepository implements IAttachmentRepository {
   /**
    * Blob 조회 (ID로)
    */
-  async findBlobById(id: string): Promise<IBlob | null> {
+  async findBlobById(id: string): Promise<BlobData | null> {
     return this.blobs.get(id) || null;
   }
 
   /**
    * Blob 조회 (체크섬으로)
    */
-  async findBlobByChecksum(checksum: string): Promise<IBlob | null> {
+  async findBlobByChecksum(checksum: string): Promise<BlobData | null> {
     for (const blob of this.blobs.values()) {
       if (blob.checksum === checksum) {
         return blob;
@@ -56,7 +56,7 @@ export class MemoryAttachmentRepository implements IAttachmentRepository {
   /**
    * Attachment 저장
    */
-  async saveAttachment(attachment: IAttachment): Promise<IAttachment> {
+  async saveAttachment(attachment: AttachmentData): Promise<AttachmentData> {
     this.attachments.set(attachment.id, attachment);
     return attachment;
   }
@@ -64,8 +64,8 @@ export class MemoryAttachmentRepository implements IAttachmentRepository {
   /**
    * Attachment 조회 (레코드별)
    */
-  async findAttachmentsByRecord(recordType: string, recordId: string, name?: string): Promise<IAttachment[]> {
-    const results: IAttachment[] = [];
+  async findAttachmentsByRecord(recordType: string, recordId: string, name?: string): Promise<AttachmentData[]> {
+    const results: AttachmentData[] = [];
     
     for (const attachment of this.attachments.values()) {
       if (attachment.recordType === recordType && 
@@ -81,7 +81,7 @@ export class MemoryAttachmentRepository implements IAttachmentRepository {
   /**
    * Attachment 조회 (ID로)
    */
-  async findAttachmentById(id: string): Promise<IAttachment | null> {
+  async findAttachmentById(id: string): Promise<AttachmentData | null> {
     return this.attachments.get(id) || null;
   }
 
@@ -95,7 +95,7 @@ export class MemoryAttachmentRepository implements IAttachmentRepository {
   /**
    * Attachment와 연결된 Blob 조회
    */
-  async findAttachmentWithBlob(attachmentId: string): Promise<{attachment: IAttachment, blob: IBlob} | null> {
+  async findAttachmentWithBlob(attachmentId: string): Promise<{attachment: AttachmentData, blob: BlobData} | null> {
     const attachment = this.attachments.get(attachmentId);
     if (!attachment) {
       return null;

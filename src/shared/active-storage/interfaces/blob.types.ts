@@ -1,7 +1,7 @@
 /**
- * Blob 인터페이스
+ * Blob 타입
  * 
- * 실제 파일의 메타데이터를 저장하는 인터페이스
+ * 실제 파일의 메타데이터를 저장하는 데이터 구조
  * 
  * @example
  * {
@@ -12,7 +12,7 @@
  *   checksum: 'a1b2c3d4e5f6...'
  * }
  */
-export interface IBlob {
+export type BlobData = {
   id: string;
   key: string; // 스토리지키(파일경로) - Rails 스타일 경로 구조
   filename: string; // 원본파일명
@@ -22,4 +22,4 @@ export interface IBlob {
   byteSize: number; // 파일크기 (바이트)
   checksum: string; // MD5 체크섬 (파일 무결성 검증용)
   createdAt: Date;
-}
+};

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { IAttachment } from '../interfaces/attachment.interface';
-import { IBlob } from '../interfaces/blob.interface';
+import { AttachmentData } from '../interfaces/attachment.types';
+import { BlobData } from '../interfaces/blob.types';
 import { IAttachmentRepository } from '../interfaces/repository.interface';
 import { IStorageAdapter } from '../interfaces/storage-adapter.interface';
 import { AttachmentModel } from '../models/attachment.model';
@@ -56,7 +56,7 @@ export class AttachmentService {
     );
 
     const existingBlob = await this.repository.findBlobByChecksum(blob.checksum);
-    let savedBlob: IBlob;
+    let savedBlob: BlobData;
 
     if (existingBlob) {
       // 중복 파일인 경우 기존 blob 재사용

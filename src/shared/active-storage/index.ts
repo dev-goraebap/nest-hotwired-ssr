@@ -1,6 +1,8 @@
-// 인터페이스
-export { IAttachment } from './interfaces/attachment.interface';
-export { IBlob } from './interfaces/blob.interface';
+// 타입
+export { AttachmentData } from './interfaces/attachment.types';
+export { BlobData } from './interfaces/blob.types';
+
+// 인터페이스 (행동 정의)
 export { IAttachmentRepository } from './interfaces/repository.interface';
 export { IStorageAdapter } from './interfaces/storage-adapter.interface';
 

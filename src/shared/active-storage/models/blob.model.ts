@@ -1,25 +1,26 @@
-import { IBlob } from '../interfaces/blob.interface';
+import { BlobData } from '../interfaces/blob.types';
 import { randomUUID } from 'crypto';
 import * as crypto from 'crypto';
 
 /**
  * Blob Model 클래스
  *
- * IBlob 인터페이스를 구현하는 구체적인 클래스
+ * BlobData 타입을 구현하는 구체적인 클래스
  * 실제 파일의 메타데이터를 나타내며, 파일 관련 비즈니스 로직을 포함
  */
-export class BlobModel implements IBlob {
-  id: string;
-  key: string;
-  filename: string;
-  contentType: string;
-  metadata: Record<string, any>;
-  serviceName: string;
-  byteSize: number;
-  checksum: string;
-  createdAt: Date;
+export class BlobModel implements BlobData {
+  readonly id: string;
+  readonly key: string;
+  readonly filename: string;
+  readonly contentType: string;
+  readonly serviceName: string;
+  readonly byteSize: number;
+  readonly checksum: string;
+  readonly createdAt: Date;
 
-  constructor(data: Partial<IBlob>) {
+  metadata: Record<string, any>;
+
+  constructor(data: Partial<BlobData>) {
     this.id = data.id || randomUUID();
     this.key = data.key || this.generateKey();
     this.filename = data.filename || 'untitled';
@@ -43,10 +44,10 @@ export class BlobModel implements IBlob {
     file: Buffer,
     filename: string,
     contentType: string,
-    serviceName: string = 'local'
+    serviceName: string = 'local',
   ): BlobModel {
     const checksum = crypto.createHash('md5').update(file).digest('hex');
-    
+
     return new BlobModel({
       filename,
       contentType,
@@ -54,8 +55,8 @@ export class BlobModel implements IBlob {
       byteSize: file.length,
       checksum,
       metadata: {
-        analyzed: false
-      }
+        analyzed: false,
+      },
     });
   }
 
@@ -64,7 +65,7 @@ export class BlobModel implements IBlob {
    * @param data IBlob 형태의 일반 객체
    * @returns BlobModel 인스턴스
    */
-  static from(data: IBlob): BlobModel {
+  static from(data: BlobData): BlobModel {
     return new BlobModel(data);
   }
 
@@ -73,7 +74,10 @@ export class BlobModel implements IBlob {
    * @returns 생성된 키 (28자 랜덤 문자열)
    */
   private generateKey(): string {
-    return randomUUID().replace(/-/g, '') + randomUUID().replace(/-/g, '').substring(0, 4);
+    return (
+      randomUUID().replace(/-/g, '') +
+      randomUUID().replace(/-/g, '').substring(0, 4)
+    );
   }
 
   /**
@@ -113,9 +117,11 @@ export class BlobModel implements IBlob {
    * @returns 텍스트 여부
    */
   isText(): boolean {
-    return this.contentType.startsWith('text/') || 
-          this.contentType === 'application/json' ||
-          this.contentType === 'application/xml';
+    return (
+      this.contentType.startsWith('text/') ||
+      this.contentType === 'application/json' ||
+      this.contentType === 'application/xml'
+    );
   }
 
   /**
@@ -150,7 +156,10 @@ export class BlobModel implements IBlob {
    * @returns 체크섬 일치 여부
    */
   verifyChecksum(fileBuffer: Buffer): boolean {
-    const calculatedChecksum = crypto.createHash('md5').update(fileBuffer).digest('hex');
+    const calculatedChecksum = crypto
+      .createHash('md5')
+      .update(fileBuffer)
+      .digest('hex');
     return this.checksum === calculatedChecksum;
   }
 
@@ -163,7 +172,7 @@ export class BlobModel implements IBlob {
       ...this.metadata,
       ...analysisData,
       analyzed: true,
-      analyzedAt: new Date().toISOString()
+      analyzedAt: new Date().toISOString(),
     };
   }
 
@@ -179,7 +188,7 @@ export class BlobModel implements IBlob {
    * Plain object로 변환
    * @returns IBlob 형태의 객체
    */
-  toJSON(): IBlob {
+  toJSON(): BlobData {
     return {
       id: this.id,
       key: this.key,
@@ -189,7 +198,7 @@ export class BlobModel implements IBlob {
       serviceName: this.serviceName,
       byteSize: this.byteSize,
       checksum: this.checksum,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
     };
   }
 

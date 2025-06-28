@@ -1,22 +1,23 @@
-import { IAttachment } from '../interfaces/attachment.interface';
+import { AttachmentData } from '../interfaces/attachment.types';
 import { randomUUID } from 'crypto';
 
 /**
  * Attachment Model 클래스
  *
- * IAttachment 인터페이스를 구현하는 구체적인 클래스
+ * AttachmentData 타입을 구현하는 구체적인 클래스
  * 파일과 모델 간의 관계를 나타내며, 비즈니스 로직을 포함
  */
-export class AttachmentModel implements IAttachment {
-  id: string;
-  name: string;
-  recordType: string;
-  recordId: string;
-  blobId: string;
-  attachmentType: 'single' | 'multiple';
-  createdAt: Date;
+export class AttachmentModel implements AttachmentData {
+  readonly id: string;
+  readonly recordType: string;
+  readonly recordId: string;
+  readonly blobId: string;
+  readonly createdAt: Date;
 
-  constructor(data: Partial<IAttachment>) {
+  name: string;
+  attachmentType: 'single' | 'multiple';
+
+  constructor(data: Partial<AttachmentData>) {
     this.id = data.id || randomUUID();
     this.name = data.name || 'default';
     this.recordType = data.recordType || '';
@@ -53,7 +54,7 @@ export class AttachmentModel implements IAttachment {
    * @param data IAttachment 형태의 일반 객체
    * @returns AttachmentModel 인스턴스
    */
-  static from(data: IAttachment): AttachmentModel {
+  static from(data: AttachmentData): AttachmentModel {
     return new AttachmentModel(data);
   }
 
@@ -95,7 +96,7 @@ export class AttachmentModel implements IAttachment {
    * Plain object로 변환
    * @returns IAttachment 형태의 객체
    */
-  toJSON(): IAttachment {
+  toJSON(): AttachmentData {
     return {
       id: this.id,
       name: this.name,

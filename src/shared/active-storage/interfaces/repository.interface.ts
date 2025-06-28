@@ -1,5 +1,5 @@
-import { IAttachment } from './attachment.interface';
-import { IBlob } from './blob.interface';
+import { AttachmentData } from './attachment.types';
+import { BlobData } from './blob.types';
 
 /**
  * Repository 인터페이스
@@ -20,24 +20,24 @@ import { IBlob } from './blob.interface';
  */
 export interface IAttachmentRepository {
   // Blob 관련 메서드
-  saveBlob(blob: IBlob): Promise<IBlob>;
-  findBlobById(id: string): Promise<IBlob | null>;
-  findBlobByChecksum(checksum: string): Promise<IBlob | null>;
+  saveBlob(blob: BlobData): Promise<BlobData>;
+  findBlobById(id: string): Promise<BlobData | null>;
+  findBlobByChecksum(checksum: string): Promise<BlobData | null>;
   deleteBlob(id: string): Promise<void>;
 
   // Attachment 관련 메서드  
-  saveAttachment(attachment: IAttachment): Promise<IAttachment>;
+  saveAttachment(attachment: AttachmentData): Promise<AttachmentData>;
   findAttachmentsByRecord(
     recordType: string, 
     recordId: string, 
     name?: string
-  ): Promise<IAttachment[]>;
-  findAttachmentById(id: string): Promise<IAttachment | null>;
+  ): Promise<AttachmentData[]>;
+  findAttachmentById(id: string): Promise<AttachmentData | null>;
   deleteAttachment(id: string): Promise<void>;
 
   // 관계 조회 메서드
   findAttachmentWithBlob(attachmentId: string): Promise<{
-    attachment: IAttachment;
-    blob: IBlob;
+    attachment: AttachmentData;
+    blob: BlobData;
   } | null>;
 }
