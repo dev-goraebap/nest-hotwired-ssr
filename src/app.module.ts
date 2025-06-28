@@ -16,7 +16,7 @@ import { EdgeJsModule } from './shared/edge-js';
 @Module({
   imports: [
     EdgeJsModule.forRootAsync(),
-    ActiveStorageModule,
+    ActiveStorageModule.forRoot(),
     DatabaseModule
   ],
   controllers: [
