@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# .env 파일에서 APP_VERSION 읽어오기
-if [ -f .env ]; then
-    export $(grep -v '^#' .env | xargs)
-else
-    echo "❌ .env 파일을 찾을 수 없습니다!"
-    exit 1
-fi
+# package.json에서 버전 읽어오기
+VERSION=$(node -p "require('./package.json').version")
 
 # 변수 설정
 IMAGE_NAME="devgoraebap/nestjs-mvc-is-coming"

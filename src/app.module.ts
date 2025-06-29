@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { HomeController } from './controllers/home.controller';
 import { FileUploadExampleController } from './controllers/lab/file-upload-example-01.controller';
@@ -9,15 +10,18 @@ import { ModalExample02Controller } from './controllers/lab/modal-example-02.con
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 
-import { ActiveStorageModule } from './shared/active-storage';
-import { DatabaseModule } from './shared/database';
+import { ConfigModule, TypeOrmConfig } from './config';
 import { EdgeJsModule } from './shared/edge-js';
+import { TypeormActiveStorageModule } from './shared/typeorm-active-storage';
 
 @Module({
   imports: [
+    ConfigModule,
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfig,
+    }),
+    TypeormActiveStorageModule.forRoot(),
     EdgeJsModule.forRootAsync(),
-    ActiveStorageModule.forRoot(),
-    DatabaseModule
   ],
   controllers: [
     HomeController,
@@ -27,7 +31,7 @@ import { EdgeJsModule } from './shared/edge-js';
     FlashExample01Controller,
     FlashExample02Controller,
     ThemeSwitcherExampleController,
-    FileUploadExampleController
-  ]
+    FileUploadExampleController,
+  ],
 })
 export class AppModule {}
