@@ -1,5 +1,6 @@
 {
   "name": "nestjs-mvc-is-coming",
+  "version": "0.7.3",
   "author": "dev.goraebap",
   "private": true,
   "license": "UNLICENSED",
@@ -11,16 +12,20 @@
     "start:dev": "nest start --watch",
     "start:dev:all": "concurrently \"npm run start:dev\" \"npm run resources:build:watch\"",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main"
+    "start:prod": "node dist/main",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "@types/cookie-parser": "^1.4.9",
     "compression": "^1.8.0",
     "cookie-parser": "^1.4.7",
+    "cross-env": "^7.0.3",
     "edge.js": "^6.2.1",
     "express-session": "^1.18.1",
     "multer": "^2.0.1",
