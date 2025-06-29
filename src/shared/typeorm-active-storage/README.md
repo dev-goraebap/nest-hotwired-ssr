@@ -16,7 +16,7 @@ npm install --save-dev @types/express @types/multer
 
 여러 시행착오 끝에, 본 모듈은 TypeORM에 자연스럽게 의존하는 구조로 설계되었습니다.
 초기에는 "파일 관리 모듈은 데이터베이스에 의존적이면 안 된다"는 생각으로,
-메모리 기반 테스트 환경을 지원하고자 서비스 레이어, 모델, 어댑터, 리포지토리 모두를 인터페이스 기반으로 구현해 자유도를 높이려 했습니다. -> (이전 방식의 소스코드 링크)<br/>
+메모리 기반 테스트 환경을 지원하고자 서비스 레이어, 모델, 어댑터, 리포지토리 모두를 인터페이스 기반으로 구현해 자유도를 높이려 했습니다. -> [이전 방식의 소스코드 링크](https://github.com/dev-goraebap/nestjs-mvc-is-coming/tree/feat/active-storage/src/shared/active-storage)<br/>
 하지만 실제로는 설계 자체가 TypeORM을 염두에 두고 작성되어,
 의존성을 분리하더라도 TypeORM이 아닌 환경에서는 사용성이 크게 떨어진다는 결론에 이르렀습니다.
 따라서 이 모듈은 TypeORM 사용을 기본 전제로 합니다.
