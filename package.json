@@ -9,10 +9,9 @@
     "resources:build:watch": "cd resources && npm run build:watch",
     "setup": "npm install && cd resources && npm install",
     "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:dev:all": "concurrently \"npm run start:dev\" \"npm run resources:build:watch\"",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:dev": "cross-env NODE_ENV=development nest start --watch",
+    "start:dev:all": "cross-env NODE_ENV=development concurrently \"npm run start:dev\" \"npm run resources:build:watch\"",
+    "start:prod": "cross-env NODE_ENV=production node dist/main",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
