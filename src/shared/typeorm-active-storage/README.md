@@ -26,6 +26,3 @@ npm install --save-dev @types/express @types/multer
 
 추가로, StoragePort를 구현하는 StorageAdapter(S3, GCP 등)도
 차후 지원할 계획입니다.
-
-더 명확하고 읽기 쉬운 문장으로 다듬었습니다.
-오타, 문맥 오류, 불필요한 반복을 제거하고 핵심만 남겼습니다.
