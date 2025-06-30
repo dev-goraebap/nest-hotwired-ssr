@@ -44,6 +44,9 @@ COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/resources/assets ./resources/assets
 COPY --from=builder --chown=nestjs:nodejs /app/resources/views ./resources/views
 
+# storage 폴더 생성 및 권한 부여
+RUN mkdir -p ./storage && chown -R nestjs:nodejs ./storage
+
 # 사용자 전환
 USER nestjs
 
