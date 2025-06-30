@@ -53,6 +53,7 @@ export class FileUploadExampleController {
         'file-upload-test-01', // recordType
         '0000', // recordId (예시용 고정값)
         'file', // name
+        'append'
       );
 
       console.log('파일 업로드 성공:', {
