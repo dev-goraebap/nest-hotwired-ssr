@@ -13,6 +13,7 @@ import { ModalExample03Controller } from './controllers/lab/modal-example-03.con
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 
 import { EdgeInNestConfig } from 'src/config/edge-in-nest.config';
+import { TypeormActiveStorageConfig } from 'src/config/typeorm-active-storage.config';
 import { TypeOrmConfig } from 'src/config/typeorm.config';
 import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
@@ -26,7 +27,9 @@ import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfig,
     }),
-    TypeormActiveStorageModule.forRoot(),
+    TypeormActiveStorageModule.forRootAsync({
+      useClass: TypeormActiveStorageConfig,
+    }),
     EdgeInNestModule.forRootAsync({
       useClass: EdgeInNestConfig,
     }),

@@ -1,21 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
+import { TYPEORM_ACTIVE_STORAGE_OPTIONS, TypeormActiveStorageOptions } from '../../options.factory';
 import { Utils } from '../../utils';
 import { StoragePort } from '../ports/storage.port';
 
 @Injectable()
 export class LocalStorageAdapter implements StoragePort {
-  private rootPath: string;
-  private baseUrl: string;
 
-  constructor() {
-    // 기본값: 프로젝트 루트의 storage/uploads
-    this.rootPath = path.join(process.cwd(), 'storage', 'uploads');
-    // 기본값: /uploads (Express static 서빙을 위한)
-    this.baseUrl = '/uploads';
-
+  constructor(
+    @Inject(TYPEORM_ACTIVE_STORAGE_OPTIONS)
+    private readonly options: TypeormActiveStorageOptions
+  ) {
     this.ensureRootDirectory();
   }
 
@@ -24,7 +21,7 @@ export class LocalStorageAdapter implements StoragePort {
   }
 
   async store(key: string, data: Buffer): Promise<string> {
-    const filePath = Utils.getFilePath(this.rootPath, key);
+    const filePath = Utils.getFilePath(this.options.storageRootPath, key);
     const dirPath = path.dirname(filePath);
 
     // 디렉토리 생성
@@ -42,12 +39,12 @@ export class LocalStorageAdapter implements StoragePort {
 
   async delete(key: string): Promise<void> {
     try {
-      const filePath = Utils.getFilePath(this.rootPath, key);
+      const filePath = Utils.getFilePath(this.options.storageRootPath, key);
       await fs.unlink(filePath);
 
       // 폴더 정리: 파일 삭제 후 빈 폴더라면 상위 폴더까지 재귀적으로 삭제
       let dir = path.dirname(filePath);
-      while (dir !== this.rootPath) {
+      while (dir !== this.options.storageRootPath) {
         const files = await fs.readdir(dir);
         if (files.length === 0) {
           await fs.rmdir(dir);
@@ -70,7 +67,7 @@ export class LocalStorageAdapter implements StoragePort {
    */
   private async ensureRootDirectory(): Promise<void> {
     try {
-      await fs.mkdir(this.rootPath, { recursive: true });
+      await fs.mkdir(this.options.storageRootPath, { recursive: true });
     } catch (error) {
       console.error('Storage root directory creation failed:', error);
     }
