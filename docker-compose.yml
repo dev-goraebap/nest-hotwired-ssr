@@ -6,6 +6,8 @@ services:
     container_name: nestjs-mvc-is-coming
     ports:
       - "3000:3000"
+    volumes:
+      - ./storage:/app/storage
     environment:
       - NODE_ENV=production
       - PORT=3000
