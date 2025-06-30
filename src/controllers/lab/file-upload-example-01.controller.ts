@@ -18,14 +18,11 @@ export class FileUploadExampleController {
 
   @Get()
   async index(@View() view: EdgeJsView, @Res() res: Response) {
-    // 업로드된 파일 목록 조회 (이제 실제 모델 인스턴스 반환)
     const attachments = await this.activeStorage.findAttachmentsByRecord(
       'file-upload-test-01',
       '0000',
       'file',
     );
-
-    console.log(attachments);
 
     const template = await view.render(
       'page::lab/file-upload-example-01/index',
@@ -41,12 +38,12 @@ export class FileUploadExampleController {
     @View() view: EdgeJsView,
     @Res() res: Response,
   ) {
+    if (!file) {
+      view.setFlash('alert', '파일을 선택해주세요.');
+      return res.redirect('/lab/file-upload-example-01');
+    }
+    
     try {
-      if (!file) {
-        view.setFlash('alert', '파일을 선택해주세요.');
-        return res.redirect('/lab/file-upload-example-01');
-      }
-
       // Active Storage를 사용하여 파일 첨부
       const attachment = await this.activeStorage.attach(
         file, // 업로드된 파일
