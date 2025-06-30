@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# package.json에서 버전 읽어오기
-VERSION=$(node -p "require('./package.json').version")
-
-# 변수 설정
+# package.json에서 버전 읽어오기 (APP_VERSION이 있으면 그걸, 없으면 package.json에서 읽기)
 IMAGE_NAME="devgoraebap/nestjs-mvc-is-coming"
-VERSION=${APP_VERSION:-"latest"}
+VERSION=${APP_VERSION:-$(node -p "require('./package.json').version")}
 FULL_IMAGE_NAME="${IMAGE_NAME}:${VERSION}"
 
 echo "🚀 Docker 이미지 빌드 및 푸시 시작..."
