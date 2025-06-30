@@ -1,4 +1,4 @@
-@component('layout::app')
+@component('layouts::app')
 @slot('main')
 <div class="prose-sm p-10">
 
@@ -44,7 +44,7 @@
     올바른 테마로 초기 UI를 제공할 수 있음. 이후 클라이언트 측 상호작용은 Stimulus 컨트롤러가 처리
   </p>
 
-  @!component('page::lab/theme-switcher-example/_theme-switcher', {
+  @!component('pages::lab/theme-switcher-example/_theme-switcher', {
     themes
   })
 </div>
