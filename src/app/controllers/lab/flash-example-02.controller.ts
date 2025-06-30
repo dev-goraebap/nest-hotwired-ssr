@@ -6,7 +6,7 @@ import { EdgeJsView, View } from 'src/shared/edge-js';
 export class FlashExample02Controller {
   @Get()
   async index(@View() view: EdgeJsView, @Res() res: Response) {
-    const template = await view.render('page::lab/flash-example-02/index');
+    const template = await view.render('pages::lab/flash-example-02/index');
     return res.send(template);
   }
 

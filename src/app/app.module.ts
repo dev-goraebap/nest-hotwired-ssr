@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 
 import { HomeController } from './controllers/home.controller';
 import { FileUploadExampleController } from './controllers/lab/file-upload-example-01.controller';
@@ -10,18 +12,24 @@ import { ModalExample02Controller } from './controllers/lab/modal-example-02.con
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 
-import { ConfigModule, TypeOrmConfig } from './config';
-import { EdgeJsModule } from './shared/edge-js';
-import { TypeormActiveStorageModule } from './shared/typeorm-active-storage';
+import { EdgeTemplateConfig } from 'src/config/edge-template.config';
+import { TypeOrmConfig } from 'src/config/typeorm.config';
+import { EdgeJsModule } from 'src/shared/edge-js';
+import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: join(process.cwd(), `.env.${process.env.NODE_ENV}.local`),
+    }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfig,
     }),
     TypeormActiveStorageModule.forRoot(),
-    EdgeJsModule.forRootAsync(),
+    EdgeJsModule.forRootAsync({
+      useClass: EdgeTemplateConfig,
+    }),
   ],
   controllers: [
     HomeController,

@@ -7,7 +7,7 @@ import { EdgeJsView, View } from 'src/shared/edge-js';
 export class ModalExample01Controller {
   @Get()
   async index(@View() view: EdgeJsView, @Res() res: Response) {
-    const template = await view.render('page::lab/modal-example-01/index');
+    const template = await view.render('pages::lab/modal-example-01/index');
     return res.send(template);
   }
 

@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as session from 'express-session';
 import { join } from 'path';
 
-import { AppModule } from './app.module';
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -43,13 +43,10 @@ async function bootstrap() {
         // 폰트 파일: 1년
         res.setHeader('Cache-Control', `public, max-age=${cacheTime.oneYear}`);
       } else if (path.endsWith('.js') || path.endsWith('.css')) {
-        // JS/CSS 파일: 1년 
+        // JS/CSS 파일: 1년
         // 빌드 시 개발 편의성을 위해 별도로 immutable 을 붙이진 않음.
         // immutable을 사용하려면 css, js 파일 이름에 난수를 붙여야하는데 설정이 좀 더 귀찮아짐
-        res.setHeader(
-          'Cache-Control',
-          `public, max-age=${cacheTime.oneYear}`,
-        );
+        res.setHeader('Cache-Control', `public, max-age=${cacheTime.oneYear}`);
       } else if (
         path.endsWith('.jpg') ||
         path.endsWith('.jpeg') ||

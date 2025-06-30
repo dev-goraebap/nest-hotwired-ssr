@@ -28,7 +28,7 @@ export class FileUploadExampleController {
     console.log(attachments);
 
     const template = await view.render(
-      'page::lab/file-upload-example-01/index',
+      'pages::lab/file-upload-example-01/index',
       { attachments },
     );
     return res.send(template);
