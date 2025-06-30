@@ -1,9 +1,9 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { EdgeJsView } from './edge-js.view';
+import { EdgeView } from './edge.view';
 
 /**
- * EdgeJs 미들웨어
+ * Edge 미들웨어
  * 
  * 이 미들웨어는 모든 요청에 EdgeJsView 인스턴스를 연결합니다.
  * 요청 객체(req)에 'view' 속성으로 EdgeJsView 인스턴스를 추가하여
@@ -20,15 +20,15 @@ import { EdgeJsView } from './edge-js.view';
  * 해당 미들웨어 생성자도 요청마다 호출되길래 찾아본 내용.. 좀 더 정리가 필요
  */
 @Injectable()
-export class EdgeJsMiddleware implements NestMiddleware {
-  private readonly logger = new Logger(EdgeJsMiddleware.name);
+export class EdgeMiddleware implements NestMiddleware {
+  private readonly logger = new Logger(EdgeMiddleware.name);
 
-  constructor(private readonly edgeJsView: EdgeJsView) {
+  constructor(private readonly edgeView: EdgeView) {
     this.logger.debug('init EdgeJsMiddleware');
   }
 
   use(req: Request, res: Response, next: (error?: any) => void) {
-    req['view'] = this.edgeJsView;
+    req['view'] = this.edgeView;
     next();
   }
 }

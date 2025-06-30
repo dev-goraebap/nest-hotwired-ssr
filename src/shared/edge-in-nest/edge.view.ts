@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
-import { EdgeJsRegistry } from './edge-js.registry';
+import { EdgeRegistry } from './edge.registry';
 
 /**
  * EdgeJs 뷰 서비스
@@ -12,16 +12,19 @@ import { EdgeJsRegistry } from './edge-js.registry';
  * 요청 컨텍스트에 접근하여 세션 기반의 플래시 메시지와 쿠키 기반 테마 기능을 지원합니다.
  */
 @Injectable({ scope: Scope.REQUEST })
-export class EdgeJsView {
-  private readonly logger = new Logger(EdgeJsView.name);
+export class EdgeView {
+  private readonly logger = new Logger(EdgeView.name);
   private readonly requestScopedEdge: any; // 요청 스코프 렌더러 인스턴스
 
-  constructor(@Inject(REQUEST) private readonly request: Request) {
+  constructor(
+    @Inject(REQUEST) private readonly request: Request,
+    private readonly edgeJsRegistry: EdgeRegistry,
+  ) {
     // EdgeJsRegistry에서 기본 Edge 인스턴스를 가져와,
     // 이로부터 요청별로 독립적인 새 렌더러 인스턴스를 생성합니다.
     // 기본 인스턴스의 모든 설정 (마운트 경로 등) 은 상속됨
     this.logger.debug('요청별 edge renderer 생성');
-    this.requestScopedEdge = EdgeJsRegistry.getInstance().createRenderer();
+    this.requestScopedEdge = this.edgeJsRegistry.getInstance().createRenderer();
 
     // 요청별 데이터를 이 독립적인 렌더러 인스턴스에 share 합니다.
     // 이 데이터는 현재 요청 내에서 이 렌더러를 통해 렌더링되는 모든 템플릿에
