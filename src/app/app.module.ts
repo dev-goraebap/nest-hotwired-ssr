@@ -12,9 +12,9 @@ import { ModalExample02Controller } from './controllers/lab/modal-example-02.con
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 
-import { EdgeTemplateConfig } from 'src/config/edge-template.config';
+import { EdgeInNestConfig } from 'src/config/edge-in-nest.config';
 import { TypeOrmConfig } from 'src/config/typeorm.config';
-import { EdgeJsModule } from 'src/shared/edge-js';
+import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
 @Module({
@@ -27,8 +27,8 @@ import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
       useClass: TypeOrmConfig,
     }),
     TypeormActiveStorageModule.forRoot(),
-    EdgeJsModule.forRootAsync({
-      useClass: EdgeTemplateConfig,
+    EdgeInNestModule.forRootAsync({
+      useClass: EdgeInNestConfig,
     }),
   ],
   controllers: [

@@ -1,18 +1,18 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { EdgeJsView, View } from 'src/shared/edge-js';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/modal-example-02' })
 export class ModalExample02Controller {
   @Get()
-  async index(@View() view: EdgeJsView, @Res() res: Response) {
+  async index(@View() view: EdgeView, @Res() res: Response) {
     const template = await view.render('pages::lab/modal-example-02/index');
     return res.send(template);
   }
 
   @Get('content')
-  async content(@View() view: EdgeJsView, @Res() res: Response) {
+  async content(@View() view: EdgeView, @Res() res: Response) {
     const data = {
       title: 'hello world',
       content:
@@ -26,7 +26,7 @@ export class ModalExample02Controller {
   }
 
   @Get('lazy-content')
-  async lazyContent(@View() view: EdgeJsView, @Res() res: Response) {
+  async lazyContent(@View() view: EdgeView, @Res() res: Response) {
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve(null);

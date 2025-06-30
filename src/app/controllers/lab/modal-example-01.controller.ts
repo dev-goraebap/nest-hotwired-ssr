@@ -1,12 +1,12 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { EdgeJsView, View } from 'src/shared/edge-js';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/modal-example-01' })
 export class ModalExample01Controller {
   @Get()
-  async index(@View() view: EdgeJsView, @Res() res: Response) {
+  async index(@View() view: EdgeView, @Res() res: Response) {
     const template = await view.render('pages::lab/modal-example-01/index');
     return res.send(template);
   }

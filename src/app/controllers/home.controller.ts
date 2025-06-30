@@ -1,13 +1,13 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { EdgeJsView, View } from 'src/shared/edge-js';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: '' })
 export class HomeController {
   @Get()
   async index(
-    @View() view: EdgeJsView,
+    @View() view: EdgeView,
     @Res() res: Response,
     @Query('message') message?: string,
   ) {

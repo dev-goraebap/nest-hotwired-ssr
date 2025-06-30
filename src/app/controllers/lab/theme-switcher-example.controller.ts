@@ -1,6 +1,6 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { EdgeJsView, View } from 'src/shared/edge-js';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/theme-switcher-example' })
 export class ThemeSwitcherExampleController {
@@ -15,7 +15,7 @@ export class ThemeSwitcherExampleController {
   ];
 
   @Get()
-  async index(@View() view: EdgeJsView, @Res() res: Response) {
+  async index(@View() view: EdgeView, @Res() res: Response) {
     const currentTheme = view.getTheme();
 
     const themesWithActive = this.themes.map((theme) => ({
