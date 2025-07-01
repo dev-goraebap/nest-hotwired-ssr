@@ -201,6 +201,31 @@ export class ActiveStorageService {
   }
 
   /**
+   * Blob의 메타데이터를 병합/업데이트합니다.
+   *
+   * @param blob        업데이트할 BlobEntity 인스턴스 (metadata는 readonly)
+   * @param newMetadata 추가/병합할 메타데이터 객체
+   *
+   * @description
+   * - 기존 blob.metadata와 newMetadata를 병합하여 DB에 저장합니다.
+   * - analyzed 상태를 true로 자동 세팅합니다.
+   * - metadata가 readonly이므로 인스턴스에는 반영하지 않습니다.
+   * - 필요시 blob.reload() 등으로 재조회하여 동기화하세요.
+   */
+  async updateBlobMetadata(
+    blob: BlobEntity,
+    newMetadata: Record<string, any>,
+  ): Promise<void> {
+    const mergedMetadata: Record<string, any> = {
+      ...blob.metadata,
+      ...newMetadata,
+      analyzed: true,
+    };
+    await BlobEntity.update(blob.id, { metadata: mergedMetadata });
+    // blob.metadata = mergedMetadata; // metadata가 readonly이므로 할당 불가
+  }
+
+  /**
    * 특정 첨부파일 삭제
    *
    * @param attachmentId 삭제할 첨부파일의 고유 ID
