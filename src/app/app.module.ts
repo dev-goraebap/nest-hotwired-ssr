@@ -4,9 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
 import { HomeController } from './controllers/home.controller';
-import { FileUploadExampleController } from './controllers/lab/file-upload-example-01.controller';
+import { FileUploadExample01Controller } from './controllers/lab/file-upload-example-01.controller';
 import { FlashExample01Controller } from './controllers/lab/flash-example-01.controller';
 import { FlashExample02Controller } from './controllers/lab/flash-example-02.controller';
+import { FileUploadExample02Controller } from './controllers/lab/file-upload-example-02.controller';
 import { ModalExample01Controller } from './controllers/lab/modal-example-01.controller';
 import { ModalExample02Controller } from './controllers/lab/modal-example-02.controller';
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
@@ -17,6 +18,8 @@ import { TypeormActiveStorageConfig } from 'src/config/typeorm-active-storage.co
 import { TypeOrmConfig } from 'src/config/typeorm.config';
 import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
+import { GoogleVisionModule } from 'src/shared/google-vision';
+import { GoogleVisionConfig } from 'src/config/google-vision.config';
 
 @Module({
   imports: [
@@ -33,6 +36,9 @@ import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
     EdgeInNestModule.forRootAsync({
       useClass: EdgeInNestConfig,
     }),
+    GoogleVisionModule.forRootAsync({
+      useClass: GoogleVisionConfig,
+    }),
   ],
   controllers: [
     HomeController,
@@ -42,7 +48,8 @@ import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
     FlashExample01Controller,
     FlashExample02Controller,
     ThemeSwitcherExampleController,
-    FileUploadExampleController,
+    FileUploadExample01Controller,
+    FileUploadExample02Controller,
   ],
 })
 export class AppModule {}

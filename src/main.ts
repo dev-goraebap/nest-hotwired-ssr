@@ -63,6 +63,18 @@ async function bootstrap() {
     },
   });
 
+  // /uploads 경로로 storage/uploads 폴더를 서비스
+  app.useStaticAssets(join(process.cwd(), 'storage', 'uploads'), {
+    prefix: '/uploads',
+    maxAge: cacheTime.oneMonth * 1000, // 예: 30일 캐시
+    etag: true,
+    lastModified: true,
+    setHeaders: (res, path) => {
+      // 필요시 파일 확장자별 캐시 정책 추가 가능
+      res.setHeader('Cache-Control', `public, max-age=${cacheTime.oneMonth}`);
+    },
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
