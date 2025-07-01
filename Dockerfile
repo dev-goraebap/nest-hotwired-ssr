@@ -43,6 +43,7 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/resources/assets ./resources/assets
 COPY --from=builder --chown=nestjs:nodejs /app/resources/views ./resources/views
+COPY --from=builder --chown=nestjs:nodejs /app/google-vision.json ./google-vision.json
 
 # storage 폴더 생성 및 권한 부여
 RUN mkdir -p ./storage && chown -R nestjs:nodejs ./storage
