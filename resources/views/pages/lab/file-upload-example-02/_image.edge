@@ -1,0 +1,14 @@
+<div
+  data-controller="image-loader"
+  data-image-loader-target="container"
+  class="relative overflow-hidden transition-colors duration-700 flex items-center justify-center {{ width ?? 'w-full' }} {{ height ?? 'h-full' }}"
+  style="background-color: {{ dominantColor ?? '#f0f0f0' }};"
+>
+  <img
+    data-image-loader-target="image"
+    src="{{ url }}"
+    loading="lazy"
+    class="w-full h-full transition-opacity duration-500 opacity-0"
+    alt="{{ alt ?? '' }}"
+  >
+</div>
