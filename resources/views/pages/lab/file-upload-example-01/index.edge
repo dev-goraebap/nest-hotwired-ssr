@@ -22,67 +22,16 @@
   </ul>
 
 
-  @if(flash?.type === 'notice')
-  <div data-controller="flash-02" class="flex justify-between alert alert-success mb-4">
-    {{ flash.message }}
-    <button data-action="flash-02#onClose" class="btn btn-soft btn-sm btn-primary">닫기</button>
-  </div>
-  @elseif(flash?.type === 'alert')
-  <div data-controller="flash-02" data-flash-02-time-value="1000" class="flex justify-between alert alert-error mb-4">
-    {{ flash.message }}
-    <button data-action="flash-02#onClose" class="btn btn-soft btn-sm btn-error">닫기</button>
-  </div>
-  @end
+  @!component('uikit::flash')
 
-  <form action="/lab/file-upload-example-01" method="post" enctype="multipart/form-data"
-    class="flex flex-col gap-4 max-w-xl">
-    <input type="file" name="file" class="file-input w-full" required />
-    <button type="submit" class="btn btn-primary btn-soft">업로드</button>
-  </form>
+  @!component('pages::lab/file-upload-example-01/_form')
 
   @if(attachments && attachments.length > 0)
   <div class="mt-8 max-w-xl">
     <h3 class="font-semibold mb-4">업로드된 파일 목록 ({{ attachments.length }}개)</h3>
     <div class="grid gap-4">
       @each(item in attachments)
-      <div class="border rounded-lg p-4 bg-gray-50">
-        <div class="flex items-center justify-between">
-          <div class="flex-1">
-            <p class="font-medium">{{ item.blob.filename }}</p>
-            <p class="text-sm text-gray-600">
-              크기: {{ item.blob.getHumanFileSize() }} |
-              타입: {{ item.blob.contentType }} |
-              업로드: {{ item.createdAt.toLocaleDateString() }}
-            </p>
-            <p class="text-xs text-gray-500 mt-1">
-              키: {{ item.blob.key }} |
-              체크섬: {{ item.blob.checksum.substring(0, 8) }}... |
-              서비스: {{ item.blob.serviceName }}
-            </p>
-            @if(Object.keys(item.blob.metadata).length > 0)
-            <div class="mt-2">
-              <p class="text-xs font-medium text-gray-600">메타데이터:</p>
-              <div class="text-xs text-gray-500 bg-gray-100 p-2 rounded mt-1">
-                @each((value, key) in item.blob.metadata)
-                <div><strong>{{ key }}:</strong> {{ typeof value === 'object' ? JSON.stringify(value) : value }}</div>
-                @end
-              </div>
-            </div>
-            @end
-          </div>
-          <div class="flex gap-2">
-            @if(item.blob.isImage())
-            <span class="badge badge-success">이미지</span>
-            @elseif(item.blob.isVideo())
-            <span class="badge badge-info">비디오</span>
-            @elseif(item.blob.isAudio())
-            <span class="badge badge-warning">오디오</span>
-            @else
-            <span class="badge badge-neutral">문서</span>
-            @end
-          </div>
-        </div>
-      </div>
+      @!component('pages::lab/file-upload-example-01/_item', { item })
       @end
     </div>
   </div>

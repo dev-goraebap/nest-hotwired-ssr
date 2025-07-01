@@ -13,7 +13,7 @@ import { EdgeView, View } from 'src/shared/edge-in-nest';
 import { ActiveStorageService } from 'src/shared/typeorm-active-storage';
 
 @Controller({ path: 'lab/file-upload-example-01' })
-export class FileUploadExampleController {
+export class FileUploadExample01Controller {
   constructor(private readonly activeStorage: ActiveStorageService) {}
 
   @Get()
@@ -24,8 +24,6 @@ export class FileUploadExampleController {
       '0000',
       'file',
     );
-
-    console.log(attachments);
 
     const template = await view.render(
       'pages::lab/file-upload-example-01/index',

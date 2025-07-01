@@ -1,0 +1,11 @@
+@if(flash?.type === 'notice')
+<div data-controller="flash-02" class="flex justify-between alert alert-success mb-4">
+  {{ flash.message }}
+  <button data-action="flash-02#onClose" class="btn btn-soft btn-sm btn-primary">닫기</button>
+</div>
+@elseif(flash?.type === 'alert')
+<div data-controller="flash-02" data-flash-02-time-value="1000" class="flex justify-between alert alert-error mb-4">
+  {{ flash.message }}
+  <button data-action="flash-02#onClose" class="btn btn-soft btn-sm btn-error">닫기</button>
+</div>
+@end
