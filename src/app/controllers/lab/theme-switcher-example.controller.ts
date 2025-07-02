@@ -1,5 +1,5 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get } from '@nestjs/common';
+
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/theme-switcher-example' })
@@ -15,7 +15,7 @@ export class ThemeSwitcherExampleController {
   ];
 
   @Get()
-  async index(@View() view: EdgeView, @Res() res: Response) {
+  async index(@View() view: EdgeView) {
     const currentTheme = view.getTheme();
 
     const themesWithActive = this.themes.map((theme) => ({
@@ -23,12 +23,8 @@ export class ThemeSwitcherExampleController {
       isActive: theme.type === currentTheme,
     }));
 
-    const template = await view.render(
-      'pages/lab/theme-switcher-example/index',
-      {
-        themes: themesWithActive,
-      },
-    );
-    return res.send(template);
+    return await view.render('pages/lab/theme-switcher-example/index', {
+      themes: themesWithActive,
+    });
   }
 }

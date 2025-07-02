@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
+
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/flash-example-02' })
 export class FlashExample02Controller {
   @Get()
-  async index(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages/lab/flash-example-02/index');
-    return res.send(template);
+  async index(@View() view: EdgeView) {
+    return await view.render('pages/lab/flash-example-02/index');
   }
 
   @Post('success')

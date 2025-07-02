@@ -6,9 +6,8 @@ import { EdgeView, View } from 'src/shared/edge-in-nest';
 @Controller({ path: 'lab/flash-example-01' })
 export class FlashExample01Controller {
   @Get()
-  async index(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages/lab/flash-example-01/index');
-    return res.send(template);
+  async index(@View() view: EdgeView) {
+    return await view.render('pages/lab/flash-example-01/index');
   }
 
   @Post('success')

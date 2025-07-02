@@ -1,24 +1,20 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get } from '@nestjs/common';
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'documents' })
 export class DocumentsController {
   @Get()
-  async index(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages/documents/index');
-    return res.send(template);
+  async index(@View() view: EdgeView) {
+    return await view.render('pages/documents/index');
   }
 
   @Get('new')
-  async new(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages/documents/new');
-    return res.send(template);
+  async new(@View() view: EdgeView) {
+    return await view.render('pages/documents/new');
   }
 
   @Get(':id/edit')
-  async edit(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages/documents/edit');
-    return res.send(template);
+  async edit(@View() view: EdgeView) {
+    return await view.render('pages/documents/edit');
   }
 }

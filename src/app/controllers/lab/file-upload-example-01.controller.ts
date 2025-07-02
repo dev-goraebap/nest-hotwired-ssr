@@ -21,7 +21,7 @@ export class FileUploadExample01Controller {
   constructor(private readonly activeStorage: ActiveStorageService) {}
 
   @Get()
-  async index(@View() view: EdgeView, @Res() res: Response) {
+  async index(@View() view: EdgeView) {
     // 업로드된 파일 목록 조회 (이제 실제 모델 인스턴스 반환)
     const attachments = await this.activeStorage.findAttachmentsByRecord(
       'file-upload-test-01',
@@ -29,11 +29,10 @@ export class FileUploadExample01Controller {
       'file',
     );
 
-    const template = await view.render(
+    return await view.render(
       'pages/lab/file-upload-example-01/index',
       { attachments },
     );
-    return res.send(template);
   }
 
   @Post()
