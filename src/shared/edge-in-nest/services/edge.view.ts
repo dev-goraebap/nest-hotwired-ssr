@@ -26,6 +26,12 @@ export class EdgeView {
     this.logger.debug('요청별 edge renderer 생성');
     this.requestScopedEdge = this.edgeJsRegistry.getInstance().createRenderer();
 
+    // CSRF 토큰을 Edge 렌더러에 share
+    if (request.session && request.session['csrfToken']) {
+      const csrfToken = request.session['csrfToken'];
+      this.requestScopedEdge.share({ csrfToken });
+    }
+
     // 요청별 데이터를 이 독립적인 렌더러 인스턴스에 share 합니다.
     // 이 데이터는 현재 요청 내에서 이 렌더러를 통해 렌더링되는 모든 템플릿에
     // 전역적으로 (이 요청 내에서만) 사용 가능합니다.
