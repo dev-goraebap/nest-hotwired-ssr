@@ -11,7 +11,7 @@ export class HomeController {
     @Res() res: Response,
     @Query('message') message?: string,
   ) {
-    const template = await view.render('pages::home/index', {
+    const template = await view.render('home/index', {
       message: message || 'hello world',
     });
     return res.send(template);

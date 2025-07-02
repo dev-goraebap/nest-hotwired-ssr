@@ -29,7 +29,7 @@ export class FileUploadExample02Controller {
     );
 
     const template = await view.render(
-      'pages::lab/file-upload-example-02/index',
+      'pages/lab/file-upload-example-02/index',
       {
         attachments,
       },

@@ -9,7 +9,11 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import {
+  CrsfProtectedInterceptor,
+  EdgeView,
+  View,
+} from 'src/shared/edge-in-nest';
 import { ActiveStorageService } from 'src/shared/typeorm-active-storage';
 
 @Controller({ path: 'lab/file-upload-example-01' })
@@ -26,14 +30,14 @@ export class FileUploadExample01Controller {
     );
 
     const template = await view.render(
-      'pages::lab/file-upload-example-01/index',
+      'pages/lab/file-upload-example-01/index',
       { attachments },
     );
     return res.send(template);
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file'), CrsfProtectedInterceptor)
   async create(
     @UploadedFile() file: Express.Multer.File,
     @View() view: EdgeView,
@@ -51,7 +55,7 @@ export class FileUploadExample01Controller {
         'file-upload-test-01', // recordType
         '0000', // recordId (예시용 고정값)
         'file', // name
-        'append'
+        'append',
       );
 
       console.log('파일 업로드 성공:', {

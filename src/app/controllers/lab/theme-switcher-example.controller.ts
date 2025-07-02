@@ -24,7 +24,7 @@ export class ThemeSwitcherExampleController {
     }));
 
     const template = await view.render(
-      'pages::lab/theme-switcher-example/index',
+      'pages/lab/theme-switcher-example/index',
       {
         themes: themesWithActive,
       },

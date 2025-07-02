@@ -7,7 +7,7 @@ import { EdgeView, View } from 'src/shared/edge-in-nest';
 export class ModalExample03Controller {
   @Get()
   async index(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages::lab/modal-example-03/index');
+    const template = await view.render('pages/lab/modal-example-03/index');
     return res.send(template);
   }
 
@@ -19,7 +19,7 @@ export class ModalExample03Controller {
         'Ea mollit consectetur qui duis laborum irure. Sunt elit ex irure duis non irure irure aute aliquip consectetur elit commodo tempor. Duis eiusmod est nulla incididunt in excepteur ad eu ea exercitation.',
     };
     const template = await view.renderOnlyTurboRequest(
-      'pages::lab/modal-example-03/_content',
+      'pages/lab/modal-example-03/_content',
       data,
     );
     return res.send(template);
