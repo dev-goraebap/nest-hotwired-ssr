@@ -1,32 +1,32 @@
-@component('layouts::app')
-@slot('main')
-<div class="prose-sm p-10">
+@layout.app()
+  @slot('main')
+  <div class="prose-sm p-10">
 
-  @!component('uikit::back-button')
+    @!uikit.backButton()
 
-  <h2 class="font-bold">이미지 업로드</h2>
+    <h2 class="font-bold">이미지 업로드</h2>
 
-  @!component('uikit::flash')
+    @!uikit.flash()
 
-  @!component('pages::lab/file-upload-example-02/_form')
+    @!component('pages/lab/file-upload-example-02/_form')
 
-  @if(attachments && attachments.length > 0)
-  <div class="flex flex-wrap gap-2 mt-10">
-    @each(item in attachments)
-      @!component('pages::lab/file-upload-example-02/_image', {
-        url: `/uploads/${item.blob.getFilePath()}`,
-        dominantColor: item.blob?.metadata?.dominantColor,
-        width: 'w-24',
-        height: 'h-24',
-        alt: '썸네일'
-      })
+    @if(attachments && attachments.length > 0)
+      <div class="flex flex-wrap gap-2 mt-10">
+        @each(item in attachments)
+          @!component('pages/lab/file-upload-example-02/_image', {
+            url: `/uploads/${item.blob.getFilePath()}`,
+            dominantColor: item.blob?.metadata?.dominantColor,
+            width: 'w-24',
+            height: 'h-24',
+            alt: '썸네일'
+          })
+        @end
+      </div>
+    @else
+      <div class="mt-8 text-center text-gray-500">
+        <p>아직 업로드된 파일이 없습니다.</p>
+      </div>
     @end
   </div>
-  @else
-  <div class="mt-8 text-center text-gray-500">
-    <p>아직 업로드된 파일이 없습니다.</p>
-  </div>
   @end
-</div>
-@end
 @end

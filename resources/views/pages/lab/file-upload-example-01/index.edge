@@ -1,45 +1,42 @@
-@component('layouts::app')
-@slot('main')
-<div class="prose-sm p-10">
+@layout.app()
+  @slot('main')
+    <div class="prose-sm p-10">
 
-  @!component('uikit::back-button')
+      @!uikit.backButton()
 
-  <h2 class="font-bold">파일 업로드: TypeOrm Active Storage 만들기</h2>
-  <p>
-    Ruby on Rails 의 Active Storage에 좋은 개발 경험이 있어서 nestjs+TypeOrm 방식으로 구현함 <br />
-    Post, User등의 별도의 엔티티에 'profile', 'thumbnail' 등의 이미지 파일을 첨부하는게 기본적인 사용방법이지만<br />
-    이번 예제에서는 기본 형태의 업로드가 어떻게 이뤄지는지 살펴보기<br />
-  </p>
+      <h2 class="font-bold">파일 업로드: TypeOrm Active Storage 만들기</h2>
+      <p>
+        Ruby on Rails 의 Active Storage에 좋은 개발 경험이 있어서 nestjs+TypeOrm 방식으로 구현함 <br />
+        Post, User등의 별도의 엔티티에 'profile', 'thumbnail' 등의 이미지 파일을 첨부하는게 기본적인 사용방법이지만<br />
+        이번 예제에서는 기본 형태의 업로드가 어떻게 이뤄지는지 살펴보기<br />
+      </p>
 
-  <ul class="mb-4 list-disc pl-5 text-sm text-gray-700">
-    <li>폼에서 파일을 선택해 업로드 요청을 보냅니다.</li>
-    <li>컨트롤러에서 <code>Express.Multer.File</code> 객체로 파일을 전달받습니다.</li>
-    <li>ActiveStorageService의 <code>attach</code> 메서드를 호출해 파일을 저장하고, 메타데이터(Blob)와 첨부(Attachment) 정보를 생성합니다.</li>
-    <li>이 예제의 기본 동작은 <code>replace</code> 모드이므로, 같은 분류(name)로 여러 번 업로드하면 항상 마지막 파일 하나만 남게 됩니다.</li>
-    <li>저장된 첨부파일 목록을 조회하여 뷰에 전달합니다.</li>
-    <li>뷰에서는 첨부파일의 이름, 크기, 타입, 업로드 일시 등 정보를 표시합니다.</li>
-    <li>필요시 Blob의 메타데이터, 파일 유형(이미지/문서 등)도 함께 출력할 수 있습니다.</li>
-  </ul>
+      <ul class="mb-4 list-disc pl-5 text-sm text-gray-700">
+        <li>폼에서 파일을 선택해 업로드 요청을 보냅니다.</li>
+        <li>컨트롤러에서 <code>Express.Multer.File</code> 객체로 파일을 전달받습니다.</li>
+        <li>ActiveStorageService의 <code>attach</code> 메서드를 호출해 파일을 저장하고, 메타데이터(Blob)와 첨부(Attachment) 정보를 생성합니다.</li>
+        <li>이 예제의 기본 동작은 <code>replace</code> 모드이므로, 같은 분류(name)로 여러 번 업로드하면 항상 마지막 파일 하나만 남게 됩니다.</li>
+        <li>저장된 첨부파일 목록을 조회하여 뷰에 전달합니다.</li>
+        <li>뷰에서는 첨부파일의 이름, 크기, 타입, 업로드 일시 등 정보를 표시합니다.</li>
+        <li>필요시 Blob의 메타데이터, 파일 유형(이미지/문서 등)도 함께 출력할 수 있습니다.</li>
+      </ul>
 
+      @!component('pages/lab/file-upload-example-01/_form')
 
-  @!component('uikit::flash')
-
-  @!component('pages::lab/file-upload-example-01/_form')
-
-  @if(attachments && attachments.length > 0)
-  <div class="mt-8 max-w-xl">
-    <h3 class="font-semibold mb-4">업로드된 파일 목록 ({{ attachments.length }}개)</h3>
-    <div class="grid gap-4">
-      @each(item in attachments)
-      @!component('pages::lab/file-upload-example-01/_item', { item })
+      @if(attachments && attachments.length > 0)
+        <div class="mt-8 max-w-xl">
+          <h3 class="font-semibold mb-4">업로드된 파일 목록 ({{ attachments.length }}개)</h3>
+          <div class="grid gap-4">
+            @each(item in attachments)
+              @!component('pages/lab/file-upload-example-01/_item', { item })
+            @end
+          </div>
+        </div>
+      @else
+        <div class="mt-8 text-center text-gray-500">
+          <p>아직 업로드된 파일이 없습니다.</p>
+        </div>
       @end
     </div>
-  </div>
-  @else
-  <div class="mt-8 text-center text-gray-500">
-    <p>아직 업로드된 파일이 없습니다.</p>
-  </div>
   @end
-</div>
-@end
 @end

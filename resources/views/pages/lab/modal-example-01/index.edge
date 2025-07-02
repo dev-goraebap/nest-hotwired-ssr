@@ -1,27 +1,27 @@
-@component('layouts::app')
+@layout.app()
   @slot('main')
   <div data-controller="modal-01" data-modal-01-url-value="/lab/modal-example-01/content" class="prose-sm p-10">
 
 
-    @!component('uikit::back-button')
+    @!uikit.backButton()
 
     <h2 class="font-bold">모달 1편: 안좋은 예제 살펴보기</h2>
     <ul>
       <li>1. 해당 페이지 컨텐츠를 감싸는
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-01/resources/views/pages/lab/modal-example-01/index.edge#L4",
           text: "예제용 modal-01 컨트롤러"
         })
         연결</li>
       <li>2. 모달 UI는 미리 마크업해둠
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-01/resources/views/pages/lab/modal-example-01/index.edge#L33",
           text: "(hidden) 클래스를 통해 숨겨놓기"
         })
       </li>
       <li>
         3. 버튼을 클릭하면 modal-01 컨트롤러의
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-01/resources/javascripts/controllers/lab/modal-example-01/modal.controller.js#L10",
           text: " onOpen 액션 호출"
         })

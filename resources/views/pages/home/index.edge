@@ -1,8 +1,8 @@
-@component('layouts::app')
-@slot('main')
-<div class="prose-sm p-10">
-  <h1 class="font-bold">Nestjs MVC 실험실</h1>
-  <p>이것저것 테스트중</p>
-</div>
-@end
+@layout.app()
+  @slot('main')
+    <div class="prose-sm p-10">
+      <h1 class="font-bold">Nestjs MVC 실험실</h1>
+      <p>이것저것 테스트중</p>
+    </div>
+  @end
 @end

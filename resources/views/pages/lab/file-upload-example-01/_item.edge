@@ -13,25 +13,25 @@
         서비스: {{ item.blob.serviceName }}
       </p>
       @if(Object.keys(item.blob.metadata).length > 0)
-      <div class="mt-2">
-        <p class="text-xs font-medium text-gray-600">메타데이터:</p>
-        <div class="text-xs text-gray-500 bg-gray-100 p-2 rounded mt-1">
-          @each((value, key) in item.blob.metadata)
-          <div><strong>{{ key }}:</strong> {{ typeof value === 'object' ? JSON.stringify(value) : value }}</div>
-          @end
+        <div class="mt-2">
+          <p class="text-xs font-medium text-gray-600">메타데이터:</p>
+          <div class="text-xs text-gray-500 bg-gray-100 p-2 rounded mt-1">
+            @each((value, key) in item.blob.metadata)
+              <div><strong>{{ key }}:</strong> {{ typeof value === 'object' ? JSON.stringify(value) : value }}</div>
+            @end
+          </div>
         </div>
-      </div>
       @end
     </div>
     <div class="flex gap-2">
       @if(item.blob.isImage())
-      <span class="badge badge-success">이미지</span>
+        <span class="badge badge-success">이미지</span>
       @elseif(item.blob.isVideo())
-      <span class="badge badge-info">비디오</span>
+        <span class="badge badge-info">비디오</span>
       @elseif(item.blob.isAudio())
-      <span class="badge badge-warning">오디오</span>
+        <span class="badge badge-warning">오디오</span>
       @else
-      <span class="badge badge-neutral">문서</span>
+        <span class="badge badge-neutral">문서</span>
       @end
     </div>
   </div>

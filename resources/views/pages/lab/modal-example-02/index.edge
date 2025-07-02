@@ -1,7 +1,7 @@
-@component('layouts::app')
+@layout.app()
   @slot('main')
   <div class="prose-sm p-10">
-    @!component('uikit::back-button')
+    @!uikit.backButton()
 
     <h2 class="font-bold">모달 2편: HTML 중심의 사고전환. Turbo Frame 맛보기</h2>
     <p>
@@ -18,13 +18,13 @@
       <li>
         3. 원래 href 요청은 동기적인 페이지 요청이지만, 태그에 
         
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/index.edge#L53",
           text: "data-turbo-frame"
         })
         이라는 속성을 명시했음<br/>
         modalFrame 이 속성값인데, 아래 언급해놓은 
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/index.edge#L65",
           text: "turbo-frame"
         })
@@ -36,17 +36,17 @@
       </li>
       <li>
         5. 
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/src/controllers/lab/modal-example-02.controller.ts#L19",
           text: "서버"
         })
         에서 _content 라는 html 조각을 가져오게 되는데,       
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/_content.edge",
           text: "해당 html 조각은"
         })
 
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/_modal-layout.edge",
           text: "modal layout html"
         })
@@ -56,7 +56,7 @@
       <li>
         6. 모달을 닫을 때도 close 요청을 서버로 하게 되는데 
         
-        @!component('uikit::active-link', {
+        @!uikit.activeLink({
           url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/src/controllers/lab/modal-example-02.controller.ts#L39",
           text: "보다시피 빈껍대기의 turbo-frame#modalFrame을"
         })

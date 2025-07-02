@@ -7,7 +7,7 @@
   <title>{{ title || "Nestjs MVC Is Coming" }}</title>
   <!-- 페이지에 메타태그가 추가로 필요할 경우 슬롯을 통해 사용 -->
   @if ($slots.meta)
-  {{{ await $slots.meta() }}}
+    {{{ await $slots.meta() }}}
   @endif
 
   <!-- 스타일 리소스 -->
