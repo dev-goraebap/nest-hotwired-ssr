@@ -26,6 +26,7 @@
     "compression": "^1.8.0",
     "cookie-parser": "^1.4.7",
     "cross-env": "^7.0.3",
+    "csrf-csrf": "^4.0.3",
     "edge.js": "^6.2.1",
     "express-session": "^1.18.1",
     "multer": "^2.0.1",
