@@ -28,6 +28,7 @@
     "cross-env": "^7.0.3",
     "edge.js": "^6.2.1",
     "express-session": "^1.18.1",
+    "marked": "^16.0.0",
     "multer": "^2.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
