@@ -1,13 +1,16 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 
+import { getMarkdownHtml } from 'src/app/helpers/markdown';
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/modal-example-01' })
 export class ModalExample01Controller {
   @Get()
   async index(@View() view: EdgeView, @Res() res: Response) {
-    const template = await view.render('pages/lab/modal-example-01/index');
+    const template = await view.render('pages/lab/modal-example-01/index', {
+      markdownHtml: getMarkdownHtml('lab/modal-example-01'),
+    });
     return res.send(template);
   }
 

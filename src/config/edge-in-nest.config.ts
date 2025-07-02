@@ -17,7 +17,8 @@ export class EdgeInNestConfig implements EdgeInNestOptionsFactory {
     return {
       baseViewPath: join(process.cwd(), 'resources', 'views'),
       disks: [],
-      cache: process.env.NODE_ENV === 'production',
+      // cache: process.env.NODE_ENV === 'production',
+      cache: false,
     };
   }
 }

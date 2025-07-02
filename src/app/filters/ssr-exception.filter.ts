@@ -7,47 +7,43 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-@Catch()
+@Catch(HttpException)
 export class SsrExceptionFilter implements ExceptionFilter {
-  catch(exception: any, host: ArgumentsHost) {
+  async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const req = ctx.getRequest<Request>();
     const res = ctx.getResponse<Response>();
 
-    // 403 에러인 경우 커스텀 페이지 렌더링
-    if (
-      exception instanceof HttpException &&
-      exception.getStatus() === HttpStatus.FORBIDDEN
-    ) {
-      // EdgeView가 req['view']에 있다고 가정
-      if (req['view']) {
-        req['view']
-          .render('errors/403', {})
-          .then((html: string) => res.status(403).send(html))
-          .catch(() => res.status(403).send('Forbidden'));
-      } else {
-        res.status(403).send('Forbidden');
-      }
-      return;
+    const status = exception.getStatus();
+
+    if (status === HttpStatus.FORBIDDEN) {
+      return this.renderError(req, res, 'errors/403', 403, 'Forbidden');
     }
 
-    if (
-      exception instanceof HttpException &&
-      exception.getStatus() === HttpStatus.NOT_FOUND
-    ) {
-      // EdgeView가 req['view']에 있다고 가정
-      if (req['view']) {
-        req['view']
-          .render('pages/errors/404', {})
-          .then((html: string) => res.status(404).send(html))
-          .catch(() => res.status(404).send('Not Found'));
-      } else {
-        res.status(404).send('Not Found');
-      }
-      return;
+    if (status === HttpStatus.NOT_FOUND) {
+      return this.renderError(req, res, 'pages/errors/404', 404, 'Not Found');
     }
 
-    // 그 외 에러는 기본 처리
-    res.status(500).send('Internal Server Error');
+    // 기타 에러
+    return this.renderError(req, res, 'pages/errors/500', 500, 'Not Found');
+  }
+
+  private async renderError(
+    req: Request,
+    res: Response,
+    template: string,
+    status: number,
+    fallback: string,
+  ) {
+    if (req['view']) {
+      try {
+        const html = await req['view'].render(template, {});
+        res.status(status).send(html);
+      } catch {
+        res.status(status).send(fallback);
+      }
+    } else {
+      res.status(status).send(fallback);
+    }
   }
 }

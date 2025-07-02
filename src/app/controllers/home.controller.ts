@@ -2,6 +2,7 @@ import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 
 import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { getMarkdownHtml } from '../helpers/markdown';
 
 @Controller({ path: '' })
 export class HomeController {
@@ -11,8 +12,10 @@ export class HomeController {
     @Res() res: Response,
     @Query('message') message?: string,
   ) {
-    const template = await view.render('home/index', {
+    const markdownHtml = getMarkdownHtml('home');
+    const template = await view.render('pages/home/index', {
       message: message || 'hello world',
+      markdownHtml,
     });
     return res.send(template);
   }
