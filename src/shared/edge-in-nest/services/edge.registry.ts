@@ -4,7 +4,7 @@ import { join } from 'path';
 import {
   EDGE_IN_NEST_OPTIONS,
   EdgeInNestOptions,
-} from './interfaces/edge-in-nest-options';
+} from '../interfaces/edge-in-nest-options';
 
 /**
  * Edge.js 라이브러리를 NestJS 애플리케이션에서 사용하기 위한 레지스트리입니다.
@@ -41,8 +41,11 @@ export class EdgeRegistry {
 
       // edge.js 인스턴스 생성
       this.edge = EdgeConstructor.create({
-        cache: this.options.cache
+        cache: this.options.cache,
       });
+
+      // 루트 마운트
+      this.edge.mount(this.options.baseViewPath);
 
       // 디스크 마운트
       for (let disk of this.options.disks) {

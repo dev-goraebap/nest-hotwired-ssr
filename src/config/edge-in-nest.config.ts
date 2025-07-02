@@ -16,7 +16,7 @@ export class EdgeInNestConfig implements EdgeInNestOptionsFactory {
   create(): Promise<EdgeInNestOptions> | EdgeInNestOptions {
     return {
       baseViewPath: join(process.cwd(), 'resources', 'views'),
-      disks: ['pages', 'layouts', 'uikit'],
+      disks: [],
       cache: process.env.NODE_ENV === 'production',
     };
   }

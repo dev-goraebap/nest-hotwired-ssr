@@ -7,9 +7,9 @@ import {
   Type,
 } from '@nestjs/common';
 
-import { EdgeMiddleware } from './edge.middleware';
-import { EdgeRegistry } from './edge.registry';
-import { EdgeView } from './edge.view';
+import { EdgeMiddleware } from './middlewares/edge.middleware';
+import { EdgeRegistry } from './services/edge.registry';
+import { EdgeView } from './services/edge.view';
 import { EDGE_IN_NEST_OPTIONS } from './interfaces/edge-in-nest-options';
 import { EdgeInNestOptionsFactory } from './interfaces/edge-in-nest-options-factory';
 
