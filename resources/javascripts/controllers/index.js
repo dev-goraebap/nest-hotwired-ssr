@@ -1,4 +1,5 @@
 import { application } from './application';
+import { DocumentFormController } from './documents/form.controller';
 import { ImageLoaderController } from './lab/file-upload-example/image-loader.controller';
 import { FlashController as Flash02Controller } from './lab/flash-example-02/flash.controller';
 import { ModalController as Modal01Controller } from './lab/modal-example-01/modal.controller';
@@ -12,3 +13,4 @@ application.register('flash-02', Flash02Controller);
 application.register('theme-switcher', ThemeSwitcherController);
 application.register('image-loader', ImageLoaderController);
 application.register('tiny-mce', TinyMceController);
+application.register('document-form', DocumentFormController);

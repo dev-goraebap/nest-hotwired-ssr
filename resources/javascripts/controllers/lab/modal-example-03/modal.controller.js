@@ -7,6 +7,7 @@ export class ModalController extends Controller {
     const template = this.modalTemplateTarget.content.cloneNode(true);
     this.element.appendChild(template);
     const url = this.#getUrl(e);
+    console.log(url);
     this.#render(url);
   }
   
@@ -23,6 +24,7 @@ export class ModalController extends Controller {
 
   #render(url) {
     const modalContentFrame = document.getElementById('modalContentFrame');
+    console.log(modalContentFrame);
     modalContentFrame.src = url;
   }
 

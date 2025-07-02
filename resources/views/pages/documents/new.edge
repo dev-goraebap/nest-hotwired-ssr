@@ -1,9 +1,23 @@
 @layout.editor()
-  <form action="" class="flex flex-col gap-4 h-full">
-    <input type="text" class="bg-white border-none w-full text-2xl focus:outline-0" placeholder="제목을 입력해 주세요..." />
+  <form action="/documents" method="post" data-controller="modal-03 document-form" class="flex flex-col gap-4 h-full">
+    <button type="button" data-url="/categories" data-action="modal-03#onOpen" class="btn btn-soft btn-primary">
+      카테고리 선택
+    </button>
+
+    <input type="text" class="hidden" name="_csrf" value="{{ csrfToken }}">
+
+    <input type="text" name="title" class="bg-white border-none w-full text-2xl focus:outline-0"
+      placeholder="제목을 입력해 주세요..." />
+    <textarea name="content" id="content_hidden" class="hidden"></textarea>
 
     <div data-controller="tiny-mce" id="tinyMceEditor" class="grow"></div>
 
     <button class="btn btn-soft btn-success">생성</button>
+
+    <template data-document-form-target="categoryIdTemplate">
+      <input type="text" name="categoryId" class="hidden">
+    </template>
+
+    @!uikit.modal()
   </form>
 @end

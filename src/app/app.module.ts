@@ -11,6 +11,7 @@ import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { GoogleVisionModule } from 'src/shared/google-vision';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
+import { CategoriesController } from './controllers/categories.controller';
 import { DocumentsController } from './controllers/documents.controller';
 import { HomeController } from './controllers/home.controller';
 import { FileUploadExample01Controller } from './controllers/lab/file-upload-example-01.controller';
@@ -21,6 +22,10 @@ import { ModalExample01Controller } from './controllers/lab/modal-example-01.con
 import { ModalExample02Controller } from './controllers/lab/modal-example-02.controller';
 import { ModalExample03Controller } from './controllers/lab/modal-example-03.controller';
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
+import { CategoryEntity } from './entities/category.entity';
+import { DocumentEntity } from './entities/document.entity';
+import { CategoriesService } from './services/categories.service';
+import { DocumentsService } from './services/documents.service';
 
 @Module({
   imports: [
@@ -40,6 +45,10 @@ import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher
     GoogleVisionModule.forRootAsync({
       useClass: GoogleVisionConfig,
     }),
+    TypeOrmModule.forFeature([
+      DocumentEntity,
+      CategoryEntity
+    ])
   ],
   controllers: [
     HomeController,
@@ -52,6 +61,11 @@ import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher
     FileUploadExample01Controller,
     FileUploadExample02Controller,
     DocumentsController,
+    CategoriesController
   ],
+  providers: [
+    CategoriesService,
+    DocumentsService
+  ]
 })
 export class AppModule {}

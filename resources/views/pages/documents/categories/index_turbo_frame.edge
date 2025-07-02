@@ -1,0 +1,29 @@
+<turbo-frame id="modalContentFrame">
+  <div class="flex flex-col gap-4">
+    <form action="/categories" method="post" class="flex flex-col gap-2">
+      <h3 class="text-md font-bold">카테고리 생성</h3>
+      <div class="flex gap-4">
+        <input type="text" name="name" class="input w-full">
+        <button class="btn btn-soft btn-success">생성</button>
+      </div>
+    </form>
+
+    <div class="flex flex-col gap-2">
+      @each(category in categories)
+        <div class="flex justify-between items-center border-t border-base-300 p-4">
+          <span>{{ category.name}}</span>
+          <div class="flex gap-2">
+            <button
+              data-id="{{category.id}}"
+              data-action="document-form#selectCategory modal-03#onClose" 
+              type="button" 
+              class="btn btn-soft btn-info">
+              선택
+            </button>
+            <a href="/categories/{{category.id}}" data-turbo-method="delete" class="btn btn-soft btn-error">삭제</a>
+          </div>
+        </div>
+      @end
+    </div>
+  </div>
+</turbo-frame>

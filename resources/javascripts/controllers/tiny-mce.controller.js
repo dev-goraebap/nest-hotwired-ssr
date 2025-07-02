@@ -34,7 +34,7 @@ export class TinyMceController extends Controller {
       skin: 'oxide',
       setup: function (editor) {
         editor.on('change', function () {
-          const hiddenField = document.getElementById('policy_content_hidden');
+          const hiddenField = document.getElementById('content_hidden');
           if (hiddenField) hiddenField.value = editor.getContent();
         });
         editor.on('init', function () {

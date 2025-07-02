@@ -1,0 +1,31 @@
+<!-- HTML에 이미 존재하지만, js 를 통해 clone으로 만들어 특정 dom에 주입하기 전까지 보이지 않음 -->
+<template data-modal-03-target="modalTemplate">
+  <!-- 모달 오버레이 -->
+  <div 
+    data-modal-03-target="modalOverlay" 
+    class="flex justify-center items-center fixed inset-0 bg-black/80 z-50">
+
+    <!-- 모달 컨텐츠 -->
+    <div class="w-full h-full md:w-[600px] md:h-auto md:rounded-xl bg-base-100">
+      <div class="flex justify-end p-4">
+        <!-- 닫기버튼 -->
+        <button data-action="modal-03#onClose">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-4">
+        <!-- 서버에서 동적으로 변경될 html 영역 -->
+        <turbo-frame id="modalContentFrame">
+          <!-- 다른 컨텐츠로 변경되기 전까지 보일 로딩 효과 -->
+          <div class="flex justify-center">
+            <div class="loading"></div>
+          </div>
+        </turbo-frame>
+      </div>
+    </div>
+  </div>
+</template>
+
