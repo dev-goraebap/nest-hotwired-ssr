@@ -2,10 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
 import * as session from 'express-session';
 import { join } from 'path';
 
 import { AppModule } from './app/app.module';
+import { SsrExceptionFilter } from './app/filters/ssr-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,6 +18,10 @@ async function bootstrap() {
   // 쿠키 파서 미들웨어 설정
   app.use(cookieParser());
 
+  app.use(express.json({ limit: '10mb' })); // JSON 파싱 (용량 제한 등 커스텀)
+  app.use(express.urlencoded()); // 폼 파싱
+
+  // 세션 설정
   app.use(
     session({
       secret: 'hello-world',
@@ -31,6 +37,8 @@ async function bootstrap() {
     oneMonth: 2592000, // 30일 (초)
     oneWeek: 604800, // 1주일 (초)
   };
+
+  app.useGlobalFilters(new SsrExceptionFilter());
 
   app.useStaticAssets(join(process.cwd(), 'resources', 'assets'), {
     prefix: '/public',
