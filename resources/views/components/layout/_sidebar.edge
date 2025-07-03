@@ -14,6 +14,23 @@
       </li>
     </ul>
 
+    @each(category in categories)
+      <h3 class="font-bold">{{category.name}}</h3>
+      <ul>
+        @if(!category?.documents?.length)
+          <li>
+            <a href="#">문서 없음</a>
+          </li>
+        @end
+
+        @each(document in category?.documents)
+          <li>
+            <a href="{{document.slug}}">{{document.title}}</a>
+          </li>
+        @end
+      </ul>
+    @end
+
     <!-- 모달 -->
     <h3 class="font-bold">여기서 모달은 어떻게 만드나요.</h3>
     <ul>

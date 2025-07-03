@@ -13,6 +13,7 @@ export class TinyMceController extends Controller {
   initEditor() {
     tinymce.init({
       selector: '#tinyMceEditor',
+      // 핵심 플러그인만 로드하여 초기화 속도 향상
       plugins: [
         'anchor',
         'autolink',
@@ -23,20 +24,27 @@ export class TinyMceController extends Controller {
         'media',
         'table',
         'emoticons',
+        'code', // 소스코드 보기 플러그인 추가
       ],
+      // 간소화된 툴바
       toolbar:
-        'undo redo | blocks | bold italic | link image media table | numlist bullist | emoticons | removeformat',
+        'undo redo | blocks | bold italic | link image media table | numlist bullist | emoticons | removeformat | code', // code 버튼 추가
+      // 로딩 성능 개선을 위한 설정
+      skin: 'oxide',
       resize: true,
       min_height: 300,
       statusbar: false,
       menubar: false,
       branding: false,
-      skin: 'oxide',
+      // 성능 개선을 위한 설정
       setup: function (editor) {
         editor.on('change', function () {
+          // hidden 필드에 내용 동기화
           const hiddenField = document.getElementById('content_hidden');
           if (hiddenField) hiddenField.value = editor.getContent();
         });
+
+        // 초기화 완료 시 이벤트
         editor.on('init', function () {
           console.log('TinyMCE 초기화 완료');
         });

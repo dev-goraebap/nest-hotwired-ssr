@@ -11,6 +11,7 @@ import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { GoogleVisionModule } from 'src/shared/google-vision';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { CategoriesController } from './controllers/categories.controller';
 import { DocumentsController } from './controllers/documents.controller';
 import { HomeController } from './controllers/home.controller';
@@ -24,6 +25,8 @@ import { ModalExample03Controller } from './controllers/lab/modal-example-03.con
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 import { CategoryEntity } from './entities/category.entity';
 import { DocumentEntity } from './entities/document.entity';
+import { SsrExceptionFilter } from './filters/ssr-exception.filter';
+import { GlobalStatesInterceptor } from './interceptors/global-states.interceptor';
 import { CategoriesService } from './services/categories.service';
 import { DocumentsService } from './services/documents.service';
 
@@ -45,10 +48,7 @@ import { DocumentsService } from './services/documents.service';
     GoogleVisionModule.forRootAsync({
       useClass: GoogleVisionConfig,
     }),
-    TypeOrmModule.forFeature([
-      DocumentEntity,
-      CategoryEntity
-    ])
+    TypeOrmModule.forFeature([DocumentEntity, CategoryEntity]),
   ],
   controllers: [
     HomeController,
@@ -61,11 +61,19 @@ import { DocumentsService } from './services/documents.service';
     FileUploadExample01Controller,
     FileUploadExample02Controller,
     DocumentsController,
-    CategoriesController
+    CategoriesController,
   ],
   providers: [
     CategoriesService,
-    DocumentsService
-  ]
+    DocumentsService,
+    {
+      provide: APP_FILTER,
+      useClass: SsrExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: GlobalStatesInterceptor
+    },
+  ],
 })
 export class AppModule {}

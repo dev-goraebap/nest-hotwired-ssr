@@ -1,23 +1,47 @@
 @layout.editor()
-  <form action="/documents" method="post" data-controller="modal-03 document-form" class="flex flex-col gap-4 h-full">
-    <button type="button" data-url="/categories" data-action="modal-03#onOpen" class="btn btn-soft btn-primary">
-      카테고리 선택
-    </button>
+<form action="/documents" method="post" data-controller="modal-03 document-form" class="h-full">
+  @!uikit.flash()
+  <input type="text" class="hidden" name="_csrf" value="{{ csrfToken }}">
 
-    <input type="text" class="hidden" name="_csrf" value="{{ csrfToken }}">
+  <div class="flex w-full h-full">
+    <div class="grow flex flex-col gap-4 h-full border-x border-base-300 bg-base-100">
+      <input 
+        name="title" 
+        class="border-none focus:outline-0 font-bold text-2xl p-4" 
+        placeholder="제목을 입력하세요.."/>
+      <div data-controller="tiny-mce" id="tinyMceEditor" class="grow"></div>
+      <textarea name="content" id="content_hidden" class="hidden"></textarea>
+    </div>
 
-    <input type="text" name="title" class="bg-white border-none w-full text-2xl focus:outline-0"
-      placeholder="제목을 입력해 주세요..." />
-    <textarea name="content" id="content_hidden" class="hidden"></textarea>
+    <div class="flex flex-col justify-between gap-4 h-full w-sm p-4">
+      <div class="flex flex-col gap-2">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-sm">카테고리</legend>
+          <button type="button" data-url="/categories" data-action="modal-03#onOpen" class="btn btn-soft btn-primary">
+            카테고리 선택
+          </button>
+        </fieldset>
+        <div data-document-form-target="categoryContainer"></div>
 
-    <div data-controller="tiny-mce" id="tinyMceEditor" class="grow"></div>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-sm">슬러그</legend>
+          <input type="text" name="slug" class="input w-full" placeholder="고유한 slug(url)을 만들어주세요" />
+        </fieldset>
 
-    <button class="btn btn-soft btn-success">생성</button>
+      </div>
 
-    <template data-document-form-target="categoryIdTemplate">
-      <input type="text" name="categoryId" class="hidden">
-    </template>
+      <div class="flex justify-between gap-4">
+        <a href="/" class="flex-1/2 btn btn-soft btn-warning">작업 취소</a>
+        <button class="flex-1/2 btn btn-soft btn-success">생성</button>
+      </div>
+    </div>
+  </div>
 
-    @!uikit.modal()
-  </form>
+  <template data-document-form-target="categoryIdTemplate">
+    <input type="text" name="categoryId" class="hidden">
+    <div class="badge badge-accent"></div>
+  </template>
+
+  @!uikit.modal()
+</form>
 @end

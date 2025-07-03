@@ -13,6 +13,22 @@ export class CategoriesService {
     });
   }
 
+  async getSidebarCategories() {
+    const results = await CategoryEntity.createQueryBuilder('category')
+      .leftJoinAndSelect('category.documents', 'document')
+      .select([
+        'category.id',
+        'category.name',
+        'document.id',
+        'document.title',
+        'document.slug',
+      ])
+      .orderBy('category.rank', 'ASC')
+      .addOrderBy('category.createdAt', 'DESC')
+      .getMany();
+    return results;
+  }
+
   async create(name: string) {
     let category = await CategoryEntity.findOne({ where: { name } });
     if (category) {

@@ -7,12 +7,12 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Res,
+  Res
 } from '@nestjs/common';
 
+import { Response } from 'express';
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 import { CategoriesService } from '../services/categories.service';
-import { Response } from 'express';
 
 @Controller({ path: 'categories' })
 export class CategoriesController {

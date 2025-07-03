@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
+import { randomBytes } from 'crypto';
 import { EdgeRegistry } from './edge.registry';
 
 /**
@@ -26,11 +27,7 @@ export class EdgeView {
     this.logger.debug('요청별 edge renderer 생성');
     this.requestScopedEdge = this.edgeJsRegistry.getInstance().createRenderer();
 
-    // CSRF 토큰을 Edge 렌더러에 share
-    if (request.session && request.session['csrfToken']) {
-      const csrfToken = request.session['csrfToken'];
-      this.requestScopedEdge.share({ csrfToken });
-    }
+    this.setCsrf();
 
     // 요청별 데이터를 이 독립적인 렌더러 인스턴스에 share 합니다.
     // 이 데이터는 현재 요청 내에서 이 렌더러를 통해 렌더링되는 모든 템플릿에
@@ -61,6 +58,10 @@ export class EdgeView {
       this.logger.error(err);
       throw err;
     }
+  }
+
+  async share(state: Record<string, any>) {
+    this.requestScopedEdge.share(state);
   }
 
   /**
@@ -122,5 +123,30 @@ export class EdgeView {
     }
 
     return theme;
+  }
+
+  private setCsrf() {
+    // 1. 세션에 CSRF 토큰이 없으면 생성
+    if (!this.request.session) {
+      throw new Error(
+        'Session middleware must be registered before EdgeMiddleware',
+      );
+    }
+    console.log(this.request.url);
+    console.log(this.request.originalUrl);
+    console.log(this.request.baseUrl);
+    console.log(this.request.body);
+    console.log(this.request.headers);
+    console.log(this.request.session);
+    if (!this.request.session['csrfToken']) {
+      const csrfToken = randomBytes(32).toString('hex');
+      this.logger.debug('새로운 csrfToken 토큰 발급: ' + csrfToken);
+      this.request.session['csrfToken'] = csrfToken;
+      this.requestScopedEdge.share({ csrfToken });
+    } else {
+      const csrfToken = this.request.session['csrfToken'];
+      this.logger.debug(`기존세션에 저장된 csrfToken 사용: ${csrfToken}`);
+      this.requestScopedEdge.share({ csrfToken });
+    }
   }
 }

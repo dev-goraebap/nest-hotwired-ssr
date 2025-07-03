@@ -15,7 +15,10 @@ export class DocumentEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
-  @Column()
+  @Column({ unique: true })
+  readonly slug: string;
+
+  @Column({ unique: true })
   readonly title: string;
 
   @Column({ type: 'text' })
@@ -27,7 +30,10 @@ export class DocumentEntity extends BaseEntity {
   @UpdateDateColumn()
   readonly updatedAt: Date;
 
-  @ManyToOne(() => CategoryEntity, (e) => e.documents)
+  @ManyToOne(() => CategoryEntity, (e) => e.documents, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
   readonly category: CategoryEntity;
 }

@@ -1,19 +1,31 @@
-import { Body, Controller, Get, Post, Res, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Res,
+  UseInterceptors
+} from '@nestjs/common';
 import { Response } from 'express';
 
-import { CrsfProtectedInterceptor, EdgeView, View } from 'src/shared/edge-in-nest';
+import {
+  CrsfProtectedInterceptor,
+  EdgeView,
+  View,
+} from 'src/shared/edge-in-nest';
+
 import { DocumentsService } from '../services/documents.service';
 
 @Controller({ path: 'documents' })
 export class DocumentsController {
-
-  constructor(
-    private readonly documentsService: DocumentsService
-  ) {}
+  constructor(private readonly documentsService: DocumentsService) {}
 
   @Get()
   async index(@View() view: EdgeView) {
-    return await view.render('pages/documents/index');
+    const documents = await this.documentsService.index();
+    return await view.render('pages/documents/index', {
+      documents,
+    });
   }
 
   @Get('new')

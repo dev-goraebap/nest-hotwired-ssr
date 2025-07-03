@@ -26,7 +26,8 @@ export class CrsfProtectedInterceptor implements NestInterceptor {
 
     this.logger.debug(JSON.stringify(req.body));
     const token = req.body?._csrf || req.headers['x-csrf-token'];
-    this.logger.debug(JSON.stringify(token));
+    this.logger.debug(`BODY: ${token}`);
+    this.logger.debug(`SESSION: ${req.session['csrfToken']}`);
 
     // 작업요청에 crsf 토큰이 일치하지 않으면 403 처리 
     if (token !== req.session['csrfToken']) {

@@ -1,6 +1,25 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, cupcake, lemonade, valentine, retro, caramellatte;
+  themes:
+    light --default,
+    dark --prefersdark,
+    cupcake,
+    lemonade,
+    valentine,
+    retro,
+    caramellatte;
+}
+
+/* TinyMCE 에디터 테두리 제거 */
+.tox.tox-tinymce {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.tox.tox-tinymce:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
