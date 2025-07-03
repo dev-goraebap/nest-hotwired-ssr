@@ -13,8 +13,6 @@ export class EdgeMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: (error?: any) => void) {
     // 2. EdgeView에 csrfToken 전달 (템플릿에서 사용 가능)
 
-    console.log(req.session);
-
     req['view'] = this.edgeView;
     next();
   }
