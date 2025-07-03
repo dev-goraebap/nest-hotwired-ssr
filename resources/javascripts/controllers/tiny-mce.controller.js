@@ -10,6 +10,10 @@ export class TinyMceController extends Controller {
     this.initEditor();
   }
 
+  disconnect() {
+    tinymce.remove();
+  }
+
   initEditor() {
     tinymce.init({
       selector: '#tinyMceEditor',

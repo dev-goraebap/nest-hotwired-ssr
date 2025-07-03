@@ -15,21 +15,15 @@ export class DocumentFormController extends Controller {
       return;
     }
 
-    // 기존 카테고리 input이 있으면 먼저 제거
-    const oldInput = this.element.querySelector('input[name="categoryId"]');
-    if (oldInput) oldInput.remove();
-
-    // 기존 카테고리 이름 badge가 있으면 제거
-    const oldBadge = this.element.querySelector('.badge');
-    if (oldBadge) oldBadge.remove();
+    this.categoryContainerTarget.innerHTML = '';
 
     // 템플릿 복제 및 값 주입
     const template = this.categoryIdTemplateTarget.content.cloneNode(true);
-    const input = template.querySelector('input[name="categoryId"]');
-    if (input) input.value = id;
-
-    // 카테고리 이름 badge 생성 및 추가
+    const categoryIdInput = template.querySelector('input[name="document[category][id]"]');
+    const categoryNameInput = template.querySelector('input[name="document[category][name]"]');
     const badge = template.querySelector('.badge');
+    if (categoryIdInput) categoryIdInput.value = id;
+    if (categoryNameInput) categoryNameInput.value = name;
     if (badge) badge.textContent = name;
 
     this.categoryContainerTarget.appendChild(template);
