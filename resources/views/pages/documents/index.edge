@@ -1,3 +1,27 @@
 @layout.app()
   <h2>문서 목록</h2>
+
+  @!uikit.flash() 
+
+  <div class="flex flex-col gap-2">
+    @each(document in documents)
+      <div class="flex justify-between items-center border p-4 rounded-xl">
+        <div class="flex gap-1">
+          <span>#{{ document?.category?.name ?? '카테고리' }}</span>
+          /
+          <a href="{{document.slug}}">{{document.title}}</a>
+        </div>
+        <div class="flex gap-2">
+          <a href="/documents/{{document.id}}/edit" class="text-warning">수정</a>
+          <a 
+            href="/documents/{{document.id}}" 
+            data-turbo-method="delete" 
+            data-turbo-confirm="정말 삭제하시겠습니까?"
+            class="text-error">
+            삭제
+          </a>
+        </div>
+      </div>
+    @end
+  </div>
 @end

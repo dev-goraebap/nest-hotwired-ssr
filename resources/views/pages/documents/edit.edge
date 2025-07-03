@@ -1,3 +1,6 @@
-@layout.app()
-  <h2>문서 수정</h2>
+@layout.editor()
+  @!component('pages/documents/_form', { 
+    document: flash?.data?.document ?? document,
+    isEdit: true 
+  })
 @end
