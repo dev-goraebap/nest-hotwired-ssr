@@ -6,6 +6,7 @@ import * as express from 'express';
 import * as session from 'express-session';
 import { join } from 'path';
 
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -18,7 +19,7 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.use(express.json({ limit: '10mb' })); // JSON 파싱 (용량 제한 등 커스텀)
-  app.use(express.urlencoded()); // 폼 파싱
+  app.use(express.urlencoded({ extended: true })); // 폼 파싱
 
   app.use(
     session({
@@ -32,6 +33,13 @@ async function bootstrap() {
         secure: false, // 개발환경은 false, https 환경은 true
         path: '/', // 전체 경로에 대해 쿠키 적용
       },
+    }),
+  );
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
     }),
   );
 

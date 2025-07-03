@@ -14,6 +14,7 @@ import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { CategoriesController } from './controllers/categories.controller';
 import { DocumentsController } from './controllers/documents.controller';
+import { ErrorsController } from './controllers/errors.controller';
 import { HomeController } from './controllers/home.controller';
 import { FileUploadExample01Controller } from './controllers/lab/file-upload-example-01.controller';
 import { FileUploadExample02Controller } from './controllers/lab/file-upload-example-02.controller';
@@ -62,6 +63,7 @@ import { DocumentsService } from './services/documents.service';
     FileUploadExample02Controller,
     DocumentsController,
     CategoriesController,
+    ErrorsController
   ],
   providers: [
     CategoriesService,
