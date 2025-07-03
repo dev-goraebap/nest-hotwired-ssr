@@ -24,7 +24,6 @@ export class CrsfProtectedInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    this.logger.debug(JSON.stringify(req.body));
     const token = req.body?._csrf || req.headers['x-csrf-token'];
     this.logger.debug(`BODY: ${token}`);
     this.logger.debug(`SESSION: ${req.session['csrfToken']}`);
