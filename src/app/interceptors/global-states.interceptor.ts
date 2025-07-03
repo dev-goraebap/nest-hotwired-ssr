@@ -6,10 +6,11 @@ import {
   Logger,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { EdgeView } from 'src/shared/edge-in-nest';
 import { CategoriesService } from '../services/categories.service';
+import { Request } from 'express';
 
 @Injectable()
 export class GlobalStatesInterceptor implements NestInterceptor {
@@ -38,6 +39,10 @@ export class GlobalStatesInterceptor implements NestInterceptor {
     const categories = await this.categoriesService.getSidebarCategories();
     req['view'].share({ categories });
 
-    return next.handle();
+    return next.handle().pipe(
+      tap(() => {
+        delete req.session['flash'];
+      })
+    );
   }
 }
