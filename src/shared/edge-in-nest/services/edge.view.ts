@@ -81,13 +81,17 @@ export class EdgeView {
   /**
    * 플래시 메시지 설정
    */
-  setFlash(type: 'notice' | 'alert', message: string) {
+  setFlash(
+    type: 'notice' | 'alert',
+    message: string,
+    data: Record<string, any> = {},
+  ) {
     if (!this.request.session) {
       this.logger.warn('세션이 활성화되지 않았습니다.');
       return;
     }
 
-    this.request.session['flash'] = { type, message };
+    this.request.session['flash'] = { type, message, data };
   }
 
   /**
@@ -99,8 +103,11 @@ export class EdgeView {
     }
 
     const flash = this.request.session['flash'];
-    delete this.request.session['flash'];
-    return flash;
+    return {
+      type: flash?.type,
+      message: flash?.message,
+      data: flash?.data,
+    };
   }
 
   /**
@@ -132,12 +139,12 @@ export class EdgeView {
         'Session middleware must be registered before EdgeMiddleware',
       );
     }
-    console.log(this.request.url);
-    console.log(this.request.originalUrl);
-    console.log(this.request.baseUrl);
-    console.log(this.request.body);
-    console.log(this.request.headers);
-    console.log(this.request.session);
+    // console.log(this.request.url);
+    // console.log(this.request.originalUrl);
+    // console.log(this.request.baseUrl);
+    // console.log(this.request.body);
+    // console.log(this.request.headers);
+    // console.log(this.request.session);
     if (!this.request.session['csrfToken']) {
       const csrfToken = randomBytes(32).toString('hex');
       this.logger.debug('새로운 csrfToken 토큰 발급: ' + csrfToken);
