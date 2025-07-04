@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title || "Nestjs MVC Is Coming" }}</title>
   <meta name="description" content="NestJS MVC 실험실 - TypeORM, Edge.js, 파일 업로드, CSRF, SSR, 실전 예제와 개발 환경 제공" />
+  <meta name="csrf-token" content="{{ csrfToken }}">
   <!-- 페이지에 메타태그가 추가로 필요할 경우 슬롯을 통해 사용 -->
   @if ($slots.meta)
   {{{ await $slots.meta() }}}

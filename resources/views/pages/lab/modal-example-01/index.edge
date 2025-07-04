@@ -1,7 +1,7 @@
 @layout.app()
   @slot('main')
     <div data-controller="modal-01" data-modal-01-url-value="/lab/modal-example-01/content">
-      {{{ markdownHtml }}}
+      {{{ document.content }}}
 
       <button data-action="modal-01#onOpen" class="btn btn-soft btn-primary">모달 띄우기</button>
 

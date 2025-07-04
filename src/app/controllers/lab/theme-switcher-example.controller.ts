@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { DocumentsService } from 'src/app/services/documents.service';
 
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
@@ -14,6 +15,8 @@ export class ThemeSwitcherExampleController {
     { type: 'caramellatte', name: '카라멜 라떼' },
   ];
 
+  constructor(private readonly documentsService: DocumentsService) {}
+
   @Get()
   async index(@View() view: EdgeView) {
     const currentTheme = view.getTheme();
@@ -23,8 +26,12 @@ export class ThemeSwitcherExampleController {
       isActive: theme.type === currentTheme,
     }));
 
+    const document = await this.documentsService.getBySlug(
+      '/lab/theme-switcher-example',
+    );
     return await view.render('pages/lab/theme-switcher-example/index', {
       themes: themesWithActive,
+      document,
     });
   }
 }

@@ -9,34 +9,35 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
-import {
-  CrsfProtectedInterceptor,
-  EdgeView,
-  View,
-} from 'src/shared/edge-in-nest';
+import { DocumentsService } from 'src/app/services/documents.service';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 import { ActiveStorageService } from 'src/shared/typeorm-active-storage';
 
 @Controller({ path: 'lab/file-upload-example-01' })
 export class FileUploadExample01Controller {
-  constructor(private readonly activeStorage: ActiveStorageService) {}
+  constructor(
+    private readonly activeStorage: ActiveStorageService,
+    private readonly documentsService: DocumentsService,
+  ) {}
 
   @Get()
   async index(@View() view: EdgeView) {
-    // 업로드된 파일 목록 조회 (이제 실제 모델 인스턴스 반환)
+    const document = await this.documentsService.getBySlug(
+      '/lab/file-upload-example-01',
+    );
     const attachments = await this.activeStorage.findAttachmentsByRecord(
       'file-upload-test-01',
       '0000',
       'file',
     );
-
-    return await view.render(
-      'pages/lab/file-upload-example-01/index',
-      { attachments },
-    );
+    return await view.render('pages/lab/file-upload-example-01/index', {
+      attachments,
+      document,
+    });
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'), CrsfProtectedInterceptor)
+  @UseInterceptors(FileInterceptor('file'))
   async create(
     @UploadedFile() file: Express.Multer.File,
     @View() view: EdgeView,

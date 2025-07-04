@@ -1,13 +1,19 @@
 import { Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 
+import { DocumentsService } from 'src/app/services/documents.service';
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/flash-example-02' })
 export class FlashExample02Controller {
+  constructor(private readonly documentsService: DocumentsService) {}
+
   @Get()
   async index(@View() view: EdgeView) {
-    return await view.render('pages/lab/flash-example-02/index');
+    const document = await this.documentsService.getBySlug(
+      '/lab/flash-example-02',
+    );
+    return await view.render('pages/lab/flash-example-02/index', { document });
   }
 
   @Post('success')

@@ -2,9 +2,6 @@
 @let(method = isEdit ? 'put' : 'post')
 @let(buttonText = isEdit ? '수정' : '생성')
 
-{{inspect(action)}}
-{{inspect(method)}}
-
 <form 
   action="{{action}}"
   method="{{method}}"
@@ -12,16 +9,11 @@
   class="h-full">
   
   @!uikit.flash()
-  <input type="text" class="hidden" name="_csrf" value="{{ csrfToken }}">
   <input type="text" class="hidden" name="document[id]" value="{{ document?.id ?? '' }}">
 
   <div class="flex w-full h-full">
     <div class="grow flex flex-col gap-4 h-full border-x border-base-300 bg-base-100">
-      <input 
-        name="document[title]"
-        class="border-none focus:outline-0 font-bold text-4xl p-4" 
-        placeholder="제목을 입력하세요.."
-        value="{{document?.title ?? ''}}"/>
+      <input name="document[title]" class="hidden" value="{{document?.title ?? ''}}"/>
       <div data-controller="tiny-mce" id="tinyMceEditor" class="grow">
         {{{document?.content ?? ''}}}
       </div>

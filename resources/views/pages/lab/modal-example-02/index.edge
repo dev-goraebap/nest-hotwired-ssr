@@ -1,81 +1,6 @@
 @layout.app()
   @slot('main')
-  <div class="prose prose-sm p-10">
-    @!uikit.backButton()
-
-    <h2 class="font-bold">모달 2편: HTML 중심의 사고전환. Turbo Frame 맛보기</h2>
-    <p>
-      이전 예제와는 반대로 클라이언트측 javascript 없이 서버사이드 랜더링으로 처리하는 예제를 다룸<br/>
-      정확히는 hitwired/turbo가 페이지 요청을 가로채서 ajax를 요청하긴 함
-    </p>
-
-    <ul>
-      <li>1. 모달 띄우기 버튼은 UI만 버튼이고 앵커태그로 작동됨</li>
-      <li>
-        2. 클릭시 서버에 모달 컨텐츠를 요청하게됨. 중요한건 프론트&백을 나누던 개발방식이 아니라는 점을 인지해야함<br/>
-        json 형식이 아닌 html을 요청함.
-      </li>
-      <li>
-        3. 원래 href 요청은 동기적인 페이지 요청이지만, 태그에 
-        
-        @!uikit.activeLink({
-          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/index.edge#L53",
-          text: "data-turbo-frame"
-        })
-        이라는 속성을 명시했음<br/>
-        modalFrame 이 속성값인데, 아래 언급해놓은 
-        @!uikit.activeLink({
-          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/index.edge#L65",
-          text: "turbo-frame"
-        })
-        태그의 id도 modalFrame임
-      </li>
-      <li>
-        4. 이 경우 비동기로 요청하게 되고 받아온 html 덩어리에 똑같은 태그 turbo-frame#turboFrame<br/>
-        가 있다면 두 태그를 교체한다고 생각하면 됨
-      </li>
-      <li>
-        5. 
-        @!uikit.activeLink({
-          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/src/controllers/lab/modal-example-02.controller.ts#L19",
-          text: "서버"
-        })
-        에서 _content 라는 html 조각을 가져오게 되는데,       
-        @!uikit.activeLink({
-          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/_content.edge",
-          text: "해당 html 조각은"
-        })
-
-        @!uikit.activeLink({
-          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/resources/views/pages/lab/modal-example-02/_modal-layout.edge",
-          text: "modal layout html"
-        })
-        에 감싸이고 있음<br/>
-        결과적으로 모달UI가 나타나는 것 처럼 보임
-      </li>
-      <li>
-        6. 모달을 닫을 때도 close 요청을 서버로 하게 되는데 
-        
-        @!uikit.activeLink({
-          url:"https://github.com/dev-goraebap/nestjs-mvc-is-coming/blob/feat/modal-example-02/src/controllers/lab/modal-example-02.controller.ts#L39",
-          text: "보다시피 빈껍대기의 turbo-frame#modalFrame을"
-        })
-        
-        보내서 프레임을 교체하게되니 모달이 닫히는것처럼 보임(controller에서 문자열로 태그를 사용한건 귀찮아서 그런것도 있지만, 실제로 저렇게 사용이 가능하단 것도 알 수 있음)<br/>
-        가능하면 template은 html 파일(템플릿 파일)에 작성하고 가져오는게 좋음
-      </li>
-    </ul>
-
-    <p>
-      이번 예제의 핵심은 모달에 관련된 UI가 미리 마크업되어있고, 서버에서 사용하는 template engine을 통해 미리 만들어진 html을 제공하게됨.
-      완전한 SSR이지만 요즘 현대 개발의 즉각적인 반응성 또한 기대할 수 있음. 하지만-
-      <br/>
-      <br/>
-      이번 예제는 turbo-frame 찍먹 + html 중심의 사고에 대해 설명하기 위해서 극단적인 예를 보여준 케이스. modal 레이아웃까지 서버사이드에서 데이터와 동시에 제공하다보니<br/>
-      데이터의 조회가 오래걸리게 될 경우 모달 자체가 늦게뜬다는 치명적인 단점이 있음. 조금 느린 모달 띄우기 버튼 클릭시 채감가능
-      <br/>
-      (물론 turbo에서 이런 부분까지 고려해서 버튼에 마우스를 호버한 시점에 이미 패칭중이기 때문에 올려놓고 좀 기다렸다가 클릭하면 바로 뜨겠지만, 이건 원하는 방향이 아니니 신경쓰지 않기)
-    </p>
+    {{{ document?.content }}}
 
     <div class="flex gap-4">
       <a
@@ -93,6 +18,5 @@
     </div>
 
     <turbo-frame id="modalFrame"></turbo-frame>
-  </div>
   @end
 @end

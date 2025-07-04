@@ -1,8 +1,6 @@
 @layout.app()
   @slot('main')
-    @!uikit.backButton()
-
-    {{ markdownHtml }}
+    {{{ document?.content }}}
 
     @!component('pages/lab/file-upload-example-01/_form')
 

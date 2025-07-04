@@ -1,12 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
 
+import { DocumentsService } from 'src/app/services/documents.service';
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/modal-example-03' })
 export class ModalExample03Controller {
+  constructor(private readonly documentsService: DocumentsService) {}
+
   @Get()
   async index(@View() view: EdgeView) {
-    return await view.render('pages/lab/modal-example-03/index');
+    const document = await this.documentsService.getBySlug(
+      '/lab/modal-example-03',
+    );
+    return await view.render('pages/lab/modal-example-03/index', { document });
   }
 
   @Get('content')

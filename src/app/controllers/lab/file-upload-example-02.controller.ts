@@ -9,7 +9,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
-import { CrsfProtectedInterceptor, EdgeView, View } from 'src/shared/edge-in-nest';
+import { DocumentsService } from 'src/app/services/documents.service';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 import { GoogleVisionService } from 'src/shared/google-vision';
 import { ActiveStorageService } from 'src/shared/typeorm-active-storage';
 
@@ -18,23 +19,27 @@ export class FileUploadExample02Controller {
   constructor(
     private readonly googleVision: GoogleVisionService,
     private readonly activeStorage: ActiveStorageService,
+    private readonly documentsService: DocumentsService,
   ) {}
 
   @Get()
   async index(@View() view: EdgeView) {
+    const document = await this.documentsService.getBySlug(
+      '/lab/file-upload-example-02',
+    );
     const attachments = await this.activeStorage.findAttachmentsByRecord(
       'file-upload-example-02',
       '0000',
       'image',
     );
-
     return await view.render('pages/lab/file-upload-example-02/index', {
       attachments,
+      document,
     });
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('file'), CrsfProtectedInterceptor)
+  @UseInterceptors(FileInterceptor('file'))
   async create(
     @UploadedFile() file: Express.Multer.File,
     @View() view: EdgeView,

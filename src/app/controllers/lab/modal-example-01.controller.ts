@@ -1,14 +1,20 @@
 import { Controller, Get } from '@nestjs/common';
 
 import { getMarkdownHtml } from 'src/app/helpers/markdown';
+import { DocumentsService } from 'src/app/services/documents.service';
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 @Controller({ path: 'lab/modal-example-01' })
 export class ModalExample01Controller {
+  constructor(private readonly documentsService: DocumentsService) {}
+
   @Get()
   async index(@View() view: EdgeView) {
+    const document = await this.documentsService.getBySlug(
+      '/lab/modal-example-01',
+    );
     return await view.render('pages/lab/modal-example-01/index', {
-      markdownHtml: getMarkdownHtml('lab/modal-example-01'),
+      document,
     });
   }
 
