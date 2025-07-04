@@ -1,27 +1,26 @@
-import { defineConfig } from 'vite';
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
     tailwindcss({
-      content: [
-        './views/**/*.edge',
-        './javascripts/**/*.js',
-      ],
+      content: ['./views/**/*.edge', './src/**/*.js'],
     }),
   ],
   build: {
-    outDir: 'assets/builds',
+    manifest: true,
+    outDir: 'public/builds',
     rollupOptions: {
       input: {
-        app: resolve(__dirname, 'javascripts/app.js'),
-        tailwind: resolve(__dirname, 'stylesheets/tailwind.css')
+        app: resolve(__dirname, 'src/app.js'),
+        tailwind: resolve(__dirname, 'src/tailwind.css'),
       },
       output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]',
+        // 해시가 포함된 파일명으로 변경
+        entryFileNames: '[name]-[hash].js',
+        chunkFileNames: '[name]-[hash].js',
+        assetFileNames: '[name]-[hash].[ext]',
       },
     },
   },
@@ -30,4 +29,5 @@ export default defineConfig({
       usePolling: true,
     },
   },
+  publicDir: false,
 });

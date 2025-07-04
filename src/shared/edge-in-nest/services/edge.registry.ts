@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Edge } from 'edge.js';
 import { join } from 'path';
+import { assetHelperFactory } from '../helpers/asset';
 import {
   EDGE_IN_NEST_OPTIONS,
   EdgeInNestOptions,
@@ -50,6 +51,12 @@ export class EdgeRegistry {
       // 디스크 마운트
       for (let disk of this.options.disks) {
         this.edge.mount(disk, join(this.options.baseViewPath, disk));
+      }
+
+      // asset 헬퍼 등록
+      if (this.options.assets) {
+        const assetHelper = assetHelperFactory(this.options.assets);
+        this.edge.global('asset', assetHelper);
       }
 
       this.logger.debug(`Edge.js 경로 초기화: ${this.options.baseViewPath}`);

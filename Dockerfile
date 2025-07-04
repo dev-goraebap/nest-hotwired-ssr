@@ -19,9 +19,6 @@ RUN cd resources && npm ci && npm cache clean --force
 # 소스 코드 복사
 COPY . .
 
-# resources 빌드 (CSS, JS 등)
-RUN cd resources && npm run build
-
 # NestJS 애플리케이션 빌드
 RUN npm run build
 
@@ -41,7 +38,7 @@ RUN npm ci --only=production && npm cache clean --force
 
 # 필요한 파일들만 복사
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/resources/assets ./resources/assets
+COPY --from=builder --chown=nestjs:nodejs /app/resources/public ./resources/public
 COPY --from=builder --chown=nestjs:nodejs /app/resources/views ./resources/views
 COPY --from=builder --chown=nestjs:nodejs /app/google-vision.json ./google-vision.json
 COPY --from=builder --chown=nestjs:nodejs /app/README.md ./README.md
