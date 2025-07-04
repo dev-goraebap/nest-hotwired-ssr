@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CategoryEntity } from '../entities/category.entity';
 import { DocumentEntity } from '../entities/document.entity';
@@ -11,6 +15,16 @@ export class DocumentsService {
         category: true,
       },
     });
+  }
+
+  async getBySlug(slug: string) {
+    const result = await DocumentEntity.findOne({
+      where: { slug },
+    });
+    if (!result) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
+    }
+    return result;
   }
 
   async create(dto: any) {
@@ -76,7 +90,7 @@ export class DocumentsService {
       const hasSlug = await DocumentEntity.exists({ where: { slug } });
       if (hasSlug) throw new BadRequestException('사용중인 슬러그 입니다');
     }
-    
+
     document = DocumentEntity.create({
       ...document,
       title,

@@ -8,13 +8,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Res,
-  UseInterceptors,
+  Res
 } from '@nestjs/common';
 import { Response } from 'express';
 
 import {
-  CrsfProtectedInterceptor,
   EdgeView,
   View,
 } from 'src/shared/edge-in-nest';
@@ -40,7 +38,6 @@ export class DocumentsController {
   }
 
   @Post()
-  @UseInterceptors(CrsfProtectedInterceptor)
   async create(@Body() dto: any, @View() view: EdgeView, @Res() res: Response) {
     await this.documentsService.create(dto?.document);
     view.setFlash('notice', '게시물이 작성되었습니다.');
@@ -62,7 +59,6 @@ export class DocumentsController {
   }
 
   @Put(':id')
-  @UseInterceptors(CrsfProtectedInterceptor)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: any,
