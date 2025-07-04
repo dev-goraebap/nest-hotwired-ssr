@@ -24,24 +24,16 @@ export class EdgeView {
     // EdgeJsRegistry에서 기본 Edge 인스턴스를 가져와,
     // 이로부터 요청별로 독립적인 새 렌더러 인스턴스를 생성합니다.
     // 기본 인스턴스의 모든 설정 (마운트 경로 등) 은 상속됨
-    this.logger.debug('요청별 edge renderer 생성');
     this.requestScopedEdge = this.edgeJsRegistry.getInstance().createRenderer();
 
-    this.setCsrf();
+    this.initCsrfToken();
 
     // 요청별 데이터를 이 독립적인 렌더러 인스턴스에 share 합니다.
     // 이 데이터는 현재 요청 내에서 이 렌더러를 통해 렌더링되는 모든 템플릿에
     // 전역적으로 (이 요청 내에서만) 사용 가능합니다.
     const flash = this.getFlash();
     if (flash) {
-      this.logger.debug('플래시 메시지 요청됨');
       this.requestScopedEdge.share({ flash });
-    }
-
-    const theme = this.getTheme();
-    if (theme) {
-      this.logger.debug('테마 요청됨');
-      this.requestScopedEdge.share({ theme });
     }
   }
 
@@ -110,29 +102,7 @@ export class EdgeView {
     };
   }
 
-  /**
-   * 쿠키에서 테마 정보 가져오기
-   * @description
-   * - cookie-parser 설정이 되어있지 않으면 쿠키를 읽을 수 없습니다.
-   * - 쿠키에서 theme 값을 가져올 수 없으면 lemonade가 기본값입니다.
-   */
-  getTheme(): string {
-    const defaultTheme = 'lemonade';
-    const cookies = this.request.cookies;
-    if (!cookies) {
-      this.logger.warn('쿠키가 활성화되지 않았습니다.');
-      return defaultTheme;
-    }
-
-    const theme = cookies?.theme;
-    if (!theme) {
-      return defaultTheme;
-    }
-
-    return theme;
-  }
-
-  private setCsrf() {
+  private initCsrfToken() {
     if (!this.request.session) {
       throw new Error(
         'Session middleware must be registered before EdgeMiddleware',
