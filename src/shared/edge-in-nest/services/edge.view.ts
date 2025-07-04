@@ -35,6 +35,11 @@ export class EdgeView {
     if (flash) {
       this.requestScopedEdge.share({ flash });
     }
+
+    // 현재 요청 URL을 기반으로 링크 활성화 여부를 판단하는 헬퍼 함수 등록
+    this.requestScopedEdge.share({
+      isActiveLink: this.getIsActiveLinkHelper(),
+    });
   }
 
   /**
@@ -128,5 +133,35 @@ export class EdgeView {
         'CSRF 토큰이 세션에 없지만, 터보 요청이므로 새로 발급하지 않습니다.',
       );
     }
+  }
+
+  /**
+   * 현재 요청 URL을 기반으로 링크 활성화 여부를 판단하는 헬퍼 함수를 반환합니다.
+   * 이 함수는 Edge 템플릿에서 `isActiveLink(url, exactMatch)` 형태로 사용됩니다.
+   */
+  private getIsActiveLinkHelper() {
+    return (linkUrl: string, exactMatch: boolean = false): boolean => {
+      const currentPath = this.request.path; // 쿼리 스트링을 제외한 경로 (예: /documents/new, /documents)
+
+      if (exactMatch) {
+        return currentPath === linkUrl;
+      }
+
+      // 루트 경로('/')는 정확히 루트일 때만 일치
+      if (linkUrl === '/') {
+        return currentPath === '/';
+      }
+
+      // 부분 일치: 현재 경로가 linkUrl로 시작하고, 그 다음 문자가 '/'이거나 현재 경로 길이가 linkUrl 길이와 같을 때
+      // 예: linkUrl='/documents'
+      //     currentPath='/documents' -> true
+      //     currentPath='/documents/new' -> true
+      //     currentPath='/documentary' -> false
+      return (
+        currentPath.startsWith(linkUrl) &&
+        (currentPath.length === linkUrl.length ||
+          currentPath[linkUrl.length] === '/')
+      );
+    };
   }
 }
