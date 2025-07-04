@@ -19,6 +19,17 @@ export class EdgeInNestConfig implements EdgeInNestOptionsFactory {
       disks: [],
       // cache: process.env.NODE_ENV === 'production',
       cache: false,
+      assets: {
+        manifest: join(
+          process.cwd(),
+          'resources',
+          'assets',
+          'builds',
+          '.vite',
+          'manifest.json',
+        ),
+        assetsBaseUrl: '/public/builds',
+      },
     };
   }
 }
