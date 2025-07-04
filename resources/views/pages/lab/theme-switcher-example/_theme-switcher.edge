@@ -1,12 +1,14 @@
-<div class="flex gap-2" data-controller="theme-switcher">
+<div class="flex gap-2">
   @each(themeItem in themes)
-    <button 
-      data-theme="{{ themeItem.type }}" 
-      data-action="theme-switcher#onChangeTheme"
-      data-theme-switcher-target="button"
-      class="flex flex-col gap-2 items-center p-3 rounded-xl min-w-[100px]
-      {{ themeItem.isActive ? 'border-primary border-2' : 'border border-base-300' }}">
-      {{ themeItem.name }}
-    </button>
+    <form method="POST" action="/lab/theme-switcher-example" data-controller="theme-switcher" data-action="submit->theme-switcher#beforeSubmit">
+      <input type="hidden" name="theme" value="{{ themeItem.type }}">
+      <button
+        type="submit"
+        data-theme="{{ themeItem.type }}"
+        class="flex flex-col gap-2 items-center p-3 rounded-xl min-w-[100px]
+        {{ themeItem.isActive ? 'border-primary border-2' : 'border border-base-300' }}">
+        {{ themeItem.name }}
+      </button>
+    </form>
   @end
 </div>
