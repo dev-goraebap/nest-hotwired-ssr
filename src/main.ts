@@ -15,6 +15,14 @@ async function bootstrap() {
   // Gzip 압축 활성화
   app.use(compression());
 
+  // .well-known 경로에 대한 요청 처리 (크롬 개발자 도구 관련)
+  app.use((req, res, next) => {
+    if (req.url.startsWith('/.well-known')) {
+      return res.status(204).send();
+    }
+    next();
+  });
+
   // 쿠키 파서 미들웨어 설정
   app.use(cookieParser());
 
@@ -23,12 +31,13 @@ async function bootstrap() {
 
   app.use(
     session({
-      name: 'connect.sid', // 또는 원하는 고유 이름
+      name: 'connect.sid',
       secret: 'hello-world',
       resave: false,
       saveUninitialized: false,
+      rolling: true,
       cookie: {
-        maxAge: 60000,
+        maxAge: 86400000,
         sameSite: 'lax', // same-origin 요청에 쿠키 항상 포함
         secure: false, // 개발환경은 false, https 환경은 true
         path: '/', // 전체 경로에 대해 쿠키 적용
