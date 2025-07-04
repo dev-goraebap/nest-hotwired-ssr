@@ -7,16 +7,18 @@ import {
   Type,
 } from '@nestjs/common';
 
+import { APP_FILTER } from '@nestjs/core';
+import { SsrExceptionFilter } from './filters/ssr-execption.filter';
+import { EDGE_IN_NEST_OPTIONS } from './interfaces/edge-in-nest-options';
+import { EdgeInNestOptionsFactory } from './interfaces/edge-in-nest-options-factory';
 import { EdgeMiddleware } from './middlewares/edge.middleware';
 import { EdgeRegistry } from './services/edge.registry';
 import { EdgeView } from './services/edge.view';
-import { EDGE_IN_NEST_OPTIONS } from './interfaces/edge-in-nest-options';
-import { EdgeInNestOptionsFactory } from './interfaces/edge-in-nest-options-factory';
 
-@Module({}) // <- 데코레이터 생략해도 되지만 모듈이라는 걸 강조할려고 내비둠
+@Module({})
 export class EdgeInNestModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(EdgeMiddleware).forRoutes('*');
+    consumer.apply(EdgeMiddleware).exclude('/api/*').forRoutes('*');
   }
 
   static forRootAsync(options: {
@@ -38,6 +40,10 @@ export class EdgeInNestModule implements NestModule {
         optionsProvider,
         EdgeRegistry,
         EdgeView,
+        {
+          provide: APP_FILTER,
+          useClass: SsrExceptionFilter,
+        },
       ],
       global: true,
     };

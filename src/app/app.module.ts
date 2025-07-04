@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
@@ -11,7 +12,6 @@ import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { GoogleVisionModule } from 'src/shared/google-vision';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { CategoriesController } from './controllers/categories.controller';
 import { DocumentsController } from './controllers/documents.controller';
 import { ErrorsController } from './controllers/errors.controller';
@@ -26,7 +26,6 @@ import { ModalExample03Controller } from './controllers/lab/modal-example-03.con
 import { ThemeSwitcherExampleController } from './controllers/lab/theme-switcher-example.controller';
 import { CategoryEntity } from './entities/category.entity';
 import { DocumentEntity } from './entities/document.entity';
-import { SsrExceptionFilter } from './filters/ssr-exception.filter';
 import { GlobalStatesInterceptor } from './interceptors/global-states.interceptor';
 import { CategoriesService } from './services/categories.service';
 import { DocumentsService } from './services/documents.service';
@@ -68,10 +67,6 @@ import { DocumentsService } from './services/documents.service';
   providers: [
     CategoriesService,
     DocumentsService,
-    {
-      provide: APP_FILTER,
-      useClass: SsrExceptionFilter,
-    },
     {
       provide: APP_INTERCEPTOR,
       useClass: GlobalStatesInterceptor

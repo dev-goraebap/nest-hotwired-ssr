@@ -133,27 +133,30 @@ export class EdgeView {
   }
 
   private setCsrf() {
-    // 1. 세션에 CSRF 토큰이 없으면 생성
     if (!this.request.session) {
       throw new Error(
         'Session middleware must be registered before EdgeMiddleware',
       );
     }
-    // console.log(this.request.url);
-    // console.log(this.request.originalUrl);
-    // console.log(this.request.baseUrl);
-    // console.log(this.request.body);
-    // console.log(this.request.headers);
-    // console.log(this.request.session);
-    if (!this.request.session['csrfToken']) {
+
+    const isTurboRequest = !!this.request.headers['x-turbo-request-id'];
+
+    // 1. 세션에 CSRF 토큰이 없으면 생성 (터보 요청이 아닐 경우에만)
+    if (!this.request.session['csrfToken'] && !isTurboRequest) {
       const csrfToken = randomBytes(32).toString('hex');
       this.logger.debug('새로운 csrfToken 토큰 발급: ' + csrfToken);
       this.request.session['csrfToken'] = csrfToken;
+    }
+
+    // 2. 뷰에 CSRF 토큰 공유
+    const csrfToken = this.request.session['csrfToken'];
+    if (csrfToken) {
+      this.logger.debug(`CSRF 토큰 사용: ${csrfToken}`);
       this.requestScopedEdge.share({ csrfToken });
-    } else {
-      const csrfToken = this.request.session['csrfToken'];
-      this.logger.debug(`기존세션에 저장된 csrfToken 사용: ${csrfToken}`);
-      this.requestScopedEdge.share({ csrfToken });
+    } else if (isTurboRequest) {
+      this.logger.warn(
+        'CSRF 토큰이 세션에 없지만, 터보 요청이므로 새로 발급하지 않습니다.',
+      );
     }
   }
 }
