@@ -25,6 +25,7 @@ export class CategoriesService {
       ])
       .orderBy('category.rank', 'ASC')
       .addOrderBy('category.createdAt', 'DESC')
+      .addOrderBy('document.createdAt', 'ASC')
       .getMany();
     return results;
   }
