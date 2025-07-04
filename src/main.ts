@@ -59,7 +59,7 @@ async function bootstrap() {
     oneWeek: 604800, // 1주일 (초)
   };
 
-  app.useStaticAssets(join(process.cwd(), 'resources', 'assets'), {
+  app.useStaticAssets(join(process.cwd(), 'resources', 'public'), {
     prefix: '/public',
     maxAge: cacheTime.oneYear * 1000, // 밀리초로 변환
     etag: true,

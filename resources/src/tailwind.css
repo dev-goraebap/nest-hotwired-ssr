@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-motion";
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark,
+    cupcake,
+    lemonade,
+    valentine,
+    retro,
+    caramellatte;
+}

@@ -23,7 +23,7 @@ export class EdgeInNestConfig implements EdgeInNestOptionsFactory {
         manifest: join(
           process.cwd(),
           'resources',
-          'assets',
+          'public',
           'builds',
           '.vite',
           'manifest.json',
