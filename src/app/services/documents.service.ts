@@ -17,6 +17,19 @@ export class DocumentsService {
     });
   }
 
+  async getById(id: number) {
+    const result = await DocumentEntity.findOne({
+      where: { id },
+      relations: {
+        category: true,
+      },
+    });
+    if (!result) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
+    }
+    return result;
+  }
+
   async getBySlug(slug: string) {
     const result = await DocumentEntity.findOne({
       where: { slug },

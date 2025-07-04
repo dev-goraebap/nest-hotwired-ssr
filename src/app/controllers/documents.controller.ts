@@ -8,14 +8,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Res
+  Res,
 } from '@nestjs/common';
 import { Response } from 'express';
 
-import {
-  EdgeView,
-  View,
-} from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'src/shared/edge-in-nest';
 
 import { DocumentEntity } from '../entities/document.entity';
 import { DocumentsService } from '../services/documents.service';
@@ -37,6 +34,12 @@ export class DocumentsController {
     return await view.render('pages/documents/new');
   }
 
+  @Get(':id')
+  async show(@Param('id', ParseIntPipe) id: number, @View() view: EdgeView) {
+    const document = await this.documentsService.getById(id);
+    return view.render('pages/documents/show', { document });
+  }
+
   @Post()
   async create(@Body() dto: any, @View() view: EdgeView, @Res() res: Response) {
     await this.documentsService.create(dto?.document);
@@ -46,15 +49,7 @@ export class DocumentsController {
 
   @Get(':id/edit')
   async edit(@Param('id', ParseIntPipe) id: number, @View() view: EdgeView) {
-    const document = await DocumentEntity.findOne({
-      where: { id },
-      relations: {
-        category: true,
-      },
-    });
-    if (!document) {
-      throw new NotFoundException('문서를 찾을 수 없습니다.');
-    }
+    const document = await this.documentsService.getById(id);
     return await view.render('pages/documents/edit', { document });
   }
 
