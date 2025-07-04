@@ -3,7 +3,14 @@ import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [tailwindcss()],
+  plugins: [
+    tailwindcss({
+      content: [
+        './views/**/*.edge',
+        './javascripts/**/*.js',
+      ],
+    }),
+  ],
   build: {
     outDir: 'assets/builds',
     rollupOptions: {
