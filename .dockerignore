@@ -7,7 +7,7 @@ yarn-error.log*
 # 빌드 결과물
 dist
 build
-resources/assets/builds
+resources/public/builds
 
 # 로그
 logs
