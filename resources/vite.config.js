@@ -12,6 +12,8 @@ export default defineConfig({
     }),
   ],
   build: {
+    // manifest.json 파일 생성
+    manifest: true,
     outDir: 'assets/builds',
     rollupOptions: {
       input: {
@@ -19,9 +21,10 @@ export default defineConfig({
         tailwind: resolve(__dirname, 'stylesheets/tailwind.css')
       },
       output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]',
+        // 해시가 포함된 파일명으로 변경
+        entryFileNames: '[name]-[hash].js',
+        chunkFileNames: '[name]-[hash].js',
+        assetFileNames: '[name]-[hash].[ext]',
       },
     },
   },
