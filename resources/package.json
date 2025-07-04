@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:watch": "vite build --watch"
+    "build": "vite build"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
