@@ -47,5 +47,5 @@ Dockerfile
 docker-compose*.yml
 
 # 기타
-README.md
-*.md
+# README.md
+# *.md
