@@ -5,12 +5,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
-    "resources:build:watch": "cd resources && npm run build:watch",
+    "build": "nest build && cd resources && npm run build",
     "setup": "npm install && cd resources && npm install",
     "start": "nest start",
-    "start:dev": "cross-env NODE_ENV=development nest start --watch",
-    "start:dev:all": "cross-env NODE_ENV=development concurrently \"npm run start:dev\" \"npm run resources:build:watch\"",
+    "start:dev": "cross-env NODE_ENV=development concurrently \"nest start --watch\" \"cd resources && npm run dev\"",
     "start:prod": "cross-env NODE_ENV=production node dist/main",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch"
