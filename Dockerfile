@@ -19,9 +19,6 @@ RUN cd resources && npm ci && npm cache clean --force
 # 소스 코드 복사
 COPY . .
 
-# resources 빌드 (CSS, JS 등)
-RUN cd resources && npm run build
-
 # NestJS 애플리케이션 빌드
 RUN npm run build
 
