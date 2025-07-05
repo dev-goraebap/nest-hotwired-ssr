@@ -12,6 +12,8 @@ import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { GoogleVisionModule } from 'src/shared/google-vision';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
+import { AdminController } from './controllers/admin.controller';
+import { AdminDocumentsController } from './controllers/admin/documents.controller';
 import { CategoriesController } from './controllers/categories.controller';
 import { DocumentsController } from './controllers/documents.controller';
 import { ErrorsController } from './controllers/errors.controller';
@@ -62,7 +64,9 @@ import { DocumentsService } from './services/documents.service';
     FileUploadExample02Controller,
     DocumentsController,
     CategoriesController,
-    ErrorsController
+    ErrorsController,
+    AdminController,
+    AdminDocumentsController
   ],
   providers: [
     CategoriesService,

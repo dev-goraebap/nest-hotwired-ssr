@@ -1,37 +1,40 @@
+@let(adminMode = admin ?? false)
+
 <nav
   class="flex h-full border-r border-base-300 sticky top-0 overflow-y-auto bg-gradient-to-b from-base-200 to-base-300">
   <div class="prose prose-sm p-10">
     <h1 class="font-extrabold">NestJs Is Coming</h1>
     <a href="/" class="{{ isActiveLink('/', true) && 'text-blue-500' }}">Home</a>
 
-    <!-- 문서 -->
-    <h3 class="font-bold">문서</h3>
-    <ul>
-      <li>
-        <a href="/documents" class="{{ isActiveLink('/documents', true) && 'text-blue-500' }}">문서 목록</a>
-      </li>
-      <li>
-        <a href="/documents/new" class="{{ isActiveLink('/documents/new', true) && 'text-blue-500' }}">문서 생성</a>
-      </li>
-    </ul>
-
-    @each(category in categories)
-      <h3 class="font-bold">{{category.name}}</h3>
+    @if(adminMode)
+      <h3 class="font-bold">관리</h3>
       <ul>
-        @if(!category?.documents?.length)
-          <li>
-            <a href="#">문서 없음</a>
-          </li>
-        @end
-
-        @each(document in category?.documents)
-          <li>
-            <a href="{{document.getUrl()}}" class="{{ isActiveLink(document.getUrl()) && 'text-blue-500' }}">
-              {{document.title}}
-            </a>
-          </li>
-        @end
+        <li>
+          <a href="/admin/documents" class="{{ isActiveLink('/admin/documents', true) && 'text-blue-500' }}">문서 관리</a>
+        </li>
+        <li>
+          <a href="/admin/categories" class="{{ isActiveLink('/admin/categories', true) && 'text-blue-500' }}">카테고리 관리</a>
+        </li>
       </ul>
+    @else
+      @each(category in categories)
+        <h3 class="font-bold">{{category.name}}</h3>
+        <ul>
+          @if(!category?.documents?.length)
+            <li>
+              <a href="#">문서 없음</a>
+            </li>
+          @end
+
+          @each(document in category?.documents)
+            <li>
+              <a href="{{document.getUrl()}}" class="{{ isActiveLink(document.getUrl()) && 'text-blue-500' }}">
+                {{document.title}}
+              </a>
+            </li>
+          @end
+        </ul>
+      @end
     @end
   </div>
 </nav>

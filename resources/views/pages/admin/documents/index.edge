@@ -1,0 +1,42 @@
+@layout.admin()
+<div class="flex justify-between items-center">
+  <h2>문서 목록</h2>
+  <a href="/admin/documents/new" class="btn btn-primary">문서 생성</a>
+</div>
+
+@!uikit.flash()
+
+<div class="overflow-x-auto">
+  <table class="table table-zebra">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th></th>
+        <th>카테고리</th>
+        <th>제목</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row 1 -->
+
+      @each(document in documents)
+      <tr>
+        <th>1</th>
+        <td>{{document?.category?.name ?? ''}}</td>
+        <td>{{document.title}}</td>
+        <td>
+          <div class="flex gap-2">
+            <a href="/admin/documents/{{document.id}}/edit" class="text-warning">수정</a>
+            <a href="/admin/documents/{{document.id}}" data-turbo-method="delete" data-turbo-confirm="정말 삭제하시겠습니까?"
+              class="text-error">
+              삭제
+            </a>
+          </div>
+        </td>
+      </tr>
+      @end
+    </tbody>
+  </table>
+</div>
+@end
