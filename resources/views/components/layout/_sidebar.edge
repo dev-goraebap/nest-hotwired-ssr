@@ -26,7 +26,7 @@
 
         @each(document in category?.documents)
           <li>
-            <a href="{{document.slug}}" class="{{ isActiveLink(document.slug) && 'text-blue-500' }}">
+            <a href="{{document.getUrl()}}" class="{{ isActiveLink(document.getUrl()) && 'text-blue-500' }}">
               {{document.title}}
             </a>
           </li>

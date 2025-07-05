@@ -13,7 +13,7 @@ export class ModalExample02Controller {
   @Get()
   async index(@View() view: EdgeView) {
     const document = await this.documentsService.getBySlug(
-      '/lab/modal-example-02',
+      'lab/modal-example-02',
     );
     return await view.render('pages/lab/modal-example-02/index', { document });
   }

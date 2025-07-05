@@ -11,7 +11,7 @@ export class FlashExample02Controller {
   @Get()
   async index(@View() view: EdgeView) {
     const document = await this.documentsService.getBySlug(
-      '/lab/flash-example-02',
+      'lab/flash-example-02',
     );
     return await view.render('pages/lab/flash-example-02/index', { document });
   }

@@ -36,4 +36,17 @@ export class DocumentEntity extends BaseEntity {
   })
   @JoinColumn({ name: 'category_id' })
   readonly category: CategoryEntity;
+
+  getUrl() {
+    console.log(this.slug);
+    // slug에 '/'가 있는지 확인
+    if (this.slug.includes('/')) {
+      console.log(`/${this.slug}`);
+      return `/${this.slug}`; // 이미 '/'가 있다면 그대로 반환
+    } else {
+      // '/'가 없다면 '/documents/' 경로 추가
+      console.log(`/documents/${this.slug}`);
+      return `/documents/${this.slug}`;
+    }
+  }
 }

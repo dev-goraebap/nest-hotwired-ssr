@@ -3,18 +3,16 @@ import {
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
   Put,
-  Res,
+  Res
 } from '@nestjs/common';
 import { Response } from 'express';
 
 import { EdgeView, View } from 'src/shared/edge-in-nest';
 
-import { DocumentEntity } from '../entities/document.entity';
 import { DocumentsService } from '../services/documents.service';
 
 @Controller({ path: 'documents' })
@@ -34,9 +32,9 @@ export class DocumentsController {
     return await view.render('pages/documents/new');
   }
 
-  @Get(':id')
-  async show(@Param('id', ParseIntPipe) id: number, @View() view: EdgeView) {
-    const document = await this.documentsService.getById(id);
+  @Get(':slug')
+  async show(@Param('slug') slug: string, @View() view: EdgeView) {
+    const document = await this.documentsService.getBySlug(slug);
     return view.render('pages/documents/show', { document });
   }
 

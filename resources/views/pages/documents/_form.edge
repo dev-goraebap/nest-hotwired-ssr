@@ -2,27 +2,28 @@
 @let(method = isEdit ? 'put' : 'post')
 @let(buttonText = isEdit ? '수정' : '생성')
 
-<form 
-  action="{{action}}"
-  method="{{method}}"
-  data-controller="modal-03 document-form" 
-  class="h-full">
-  
+<form action="{{action}}" method="{{method}}" data-controller="modal-03 document-form" class="h-full w-5xl">
+
   @!uikit.flash()
   <input type="text" class="hidden" name="document[id]" value="{{ document?.id ?? '' }}">
 
   <div class="flex w-full h-full">
     <div class="grow flex flex-col gap-4 h-full border-x border-base-300 bg-base-100">
-      <input name="document[title]" class="hidden" value="{{document?.title ?? ''}}"/>
-      <div data-controller="tiny-mce" id="tinyMceEditor" class="grow">
-        {{{document?.content ?? ''}}}
+      <input name="document[title]" class="hidden" value="{{document?.title ?? ''}}" />
+
+      <!-- 텍스트 에디터 -->
+      <div class="w-[700px] h-full">
+        <div data-controller="tiny-mce" id="tinyMceEditor" class="grow h-full">
+          {{{document?.content ?? ''}}}
+        </div>
       </div>
+      <!-- 텍스트 에디터 데이터 바인딩 -->
       <textarea name="document[content]" id="content_hidden" class="hidden">
         {{{document?.content ?? ''}}}
       </textarea>
     </div>
 
-    <div class="flex flex-col justify-between gap-4 h-full w-sm p-4">
+    <div class="flex flex-col justify-between gap-4 h-full w-sm max-w-sm p-4">
       <div class="flex flex-col gap-2">
         <fieldset class="fieldset">
           <legend class="fieldset-legend text-sm">카테고리</legend>
@@ -39,31 +40,27 @@
         </template>
         <div data-document-form-target="categoryContainer">
           @if(document?.category?.id)
-            <input type="text" name="document[category][id]" class="hidden" value="{{document?.category?.id}}">
+          <input type="text" name="document[category][id]" class="hidden" value="{{document?.category?.id}}">
 
-            <!-- 플레시 저장용 -->
-            <input type="text" name="document[category][name]" class="hidden" value="{{document?.category?.name}}">
-            <div class="badge badge-accent">{{document?.category?.name}}</div>
+          <!-- 플레시 저장용 -->
+          <input type="text" name="document[category][name]" class="hidden" value="{{document?.category?.name}}">
+          <div class="badge badge-accent">{{document?.category?.name}}</div>
           @end
         </div>
 
         <fieldset class="fieldset">
           <legend class="fieldset-legend text-sm">슬러그</legend>
-          <input 
-            type="text" 
-            name="document[slug]" 
-            class="input w-full" 
-            placeholder="고유한 slug(url)을 만들어주세요" 
-            value="{{{document?.slug ?? ''}}}"/>
+          <label class="input w-full">
+            /
+            <input type="text" name="document[slug]" class="w-full" placeholder="고유한 slug(url)을 만들어주세요"
+            value="{{{document?.slug ?? ''}}}" />
+          </label>
         </fieldset>
 
       </div>
 
       <div class="flex justify-between gap-4">
-        <a 
-          href="/"
-          data-turbo-method="get"
-          data-turbo-confirm="작업 내용이 초기화됩니다. 취소하시겠어요?"
+        <a href="/" data-turbo-method="get" data-turbo-confirm="작업 내용이 초기화됩니다. 취소하시겠어요?"
           class="flex-1/2 btn btn-soft btn-warning">작업 취소</a>
         <button class="flex-1/2 btn btn-soft btn-success">{{ buttonText }}</button>
       </div>

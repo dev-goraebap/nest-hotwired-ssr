@@ -34,7 +34,7 @@ export class ThemeSwitcherExampleController {
     }));
 
     const document = await this.documentsService.getBySlug(
-      '/lab/theme-switcher-example',
+      'lab/theme-switcher-example',
     );
     return await view.render('pages/lab/theme-switcher-example/index', {
       themes: themesWithActive,

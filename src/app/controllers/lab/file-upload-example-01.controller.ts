@@ -23,7 +23,7 @@ export class FileUploadExample01Controller {
   @Get()
   async index(@View() view: EdgeView) {
     const document = await this.documentsService.getBySlug(
-      '/lab/file-upload-example-01',
+      'lab/file-upload-example-01',
     );
     const attachments = await this.activeStorage.findAttachmentsByRecord(
       'file-upload-test-01',
