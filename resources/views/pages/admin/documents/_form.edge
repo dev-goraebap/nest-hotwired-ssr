@@ -1,4 +1,4 @@
-@let(action = isEdit ? `/documents/${document?.id}` : '/documents')
+@let(action = isEdit ? `/admin/documents/${document?.id}` : '/admin/documents')
 @let(method = isEdit ? 'put' : 'post')
 @let(buttonText = isEdit ? '수정' : '생성')
 
@@ -27,7 +27,7 @@
       <div class="flex flex-col gap-2">
         <fieldset class="fieldset">
           <legend class="fieldset-legend text-sm">카테고리</legend>
-          <button type="button" data-url="/categories" data-action="modal-03#onOpen" class="btn btn-soft btn-primary">
+          <button type="button" data-url="/admin/categories" data-action="modal-03#onOpen" class="btn btn-soft btn-primary">
             카테고리 선택
           </button>
         </fieldset>

@@ -1,5 +1,5 @@
-import { BadRequestException } from '@nestjs/common';
 import { In } from 'typeorm';
+import { MvcValidationException } from 'nestjs-mvc-tools';
 
 import { CategoryEntity } from '../entities/category.entity';
 
@@ -33,7 +33,7 @@ export class CategoriesService {
   async create(name: string) {
     let category = await CategoryEntity.findOne({ where: { name } });
     if (category) {
-      throw new BadRequestException('중복된 이름입니다.');
+      throw new MvcValidationException('중복된 이름입니다.');
     }
 
     category = CategoryEntity.create({ name, rank: 0 });
@@ -43,7 +43,7 @@ export class CategoriesService {
   async updateName(id: number, name: string) {
     let category = await CategoryEntity.findOne({ where: { id } });
     if (!category) {
-      throw new BadRequestException('카테고리를 찾을 수 없습니다.');
+      throw new MvcValidationException('카테고리를 찾을 수 없습니다.');
     }
 
     category = CategoryEntity.create({ ...category, name });
@@ -71,7 +71,7 @@ export class CategoriesService {
   async destroy(id: number) {
     let category = await CategoryEntity.findOne({ where: { id } });
     if (!category) {
-      throw new BadRequestException('카테고리를 찾을 수 없습니다.');
+      throw new MvcValidationException('카테고리를 찾을 수 없습니다.');
     }
     await CategoryEntity.remove(category);
   }

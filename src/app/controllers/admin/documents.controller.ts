@@ -8,11 +8,12 @@ import {
   Post,
   Put,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 
 import { DocumentsService } from 'src/app/services/documents.service';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { CsrfGuard, EdgeView, View } from 'nestjs-mvc-tools';
 
 @Controller({ path: 'admin/documents' })
 export class AdminDocumentsController {

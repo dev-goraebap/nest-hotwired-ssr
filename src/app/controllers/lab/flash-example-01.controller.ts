@@ -2,7 +2,7 @@ import { Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 
 import { DocumentsService } from 'src/app/services/documents.service';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 
 @Controller({ path: 'lab/flash-example-01' })
 export class FlashExample01Controller {

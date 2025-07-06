@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 
 import { getMarkdownHtml } from 'src/app/helpers/markdown';
 import { DocumentsService } from 'src/app/services/documents.service';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 
 @Controller({ path: 'lab/modal-example-01' })
 export class ModalExample01Controller {

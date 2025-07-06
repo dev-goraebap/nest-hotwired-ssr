@@ -9,19 +9,19 @@ import {
   Post,
   Res
 } from '@nestjs/common';
-
 import { Response } from 'express';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
-import { CategoriesService } from '../services/categories.service';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 
-@Controller({ path: 'categories' })
-export class CategoriesController {
+import { CategoriesService } from 'src/app/services/categories.service';
+
+@Controller({ path: 'admin/categories' })
+export class AdminCategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Get()
   async index(@View() view: EdgeView) {
     const categories = await this.categoriesService.index();
-    return await view.render('pages/documents/categories/index_turbo_frame', {
+    return await view.render('pages/admin/documents/categories/index_turbo_frame', {
       categories,
     });
   }
@@ -31,7 +31,7 @@ export class CategoriesController {
     console.log(dto);
     await this.categoriesService.create(dto?.name);
     view.setFlash('notice', '카테고리 생성 완료');
-    return res.redirect('/categories');
+    return res.redirect('/admin/categories');
   }
 
   @Patch(':id/name')
@@ -48,6 +48,6 @@ export class CategoriesController {
   ) {
     await this.categoriesService.destroy(id);
     view.setFlash('notice', '카테고리 삭제 완료');
-    return res.redirect(303, '/categories');
+    return res.redirect(303, '/admin/categories');
   }
 }

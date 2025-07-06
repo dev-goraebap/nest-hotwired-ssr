@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 import { getMarkdownHtml } from '../helpers/markdown';
 
 @Controller({ path: '' })

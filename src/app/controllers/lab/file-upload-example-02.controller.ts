@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
 import { DocumentsService } from 'src/app/services/documents.service';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 import { GoogleVisionService } from 'src/shared/google-vision';
 import { ActiveStorageService } from 'src/shared/typeorm-active-storage';
 

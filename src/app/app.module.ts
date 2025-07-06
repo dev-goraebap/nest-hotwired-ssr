@@ -2,19 +2,18 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { NestMvcCoreModule } from 'nestjs-mvc-tools';
 import { join } from 'path';
 
-import { EdgeInNestConfig } from 'src/config/edge-in-nest.config';
 import { GoogleVisionConfig } from 'src/config/google-vision.config';
 import { TypeormActiveStorageConfig } from 'src/config/typeorm-active-storage.config';
 import { TypeOrmConfig } from 'src/config/typeorm.config';
-import { EdgeInNestModule } from 'src/shared/edge-in-nest';
 import { GoogleVisionModule } from 'src/shared/google-vision';
 import { TypeormActiveStorageModule } from 'src/shared/typeorm-active-storage';
 
 import { AdminController } from './controllers/admin.controller';
+import { AdminCategoriesController } from './controllers/admin/categories.controller';
 import { AdminDocumentsController } from './controllers/admin/documents.controller';
-import { CategoriesController } from './controllers/categories.controller';
 import { DocumentsController } from './controllers/documents.controller';
 import { ErrorsController } from './controllers/errors.controller';
 import { HomeController } from './controllers/home.controller';
@@ -44,8 +43,8 @@ import { DocumentsService } from './services/documents.service';
     TypeormActiveStorageModule.forRootAsync({
       useClass: TypeormActiveStorageConfig,
     }),
-    EdgeInNestModule.forRootAsync({
-      useClass: EdgeInNestConfig,
+    NestMvcCoreModule.forRoot({
+      debug: true
     }),
     GoogleVisionModule.forRootAsync({
       useClass: GoogleVisionConfig,
@@ -63,10 +62,10 @@ import { DocumentsService } from './services/documents.service';
     FileUploadExample01Controller,
     FileUploadExample02Controller,
     DocumentsController,
-    CategoriesController,
     ErrorsController,
     AdminController,
-    AdminDocumentsController
+    AdminDocumentsController,
+    AdminCategoriesController
   ],
   providers: [
     CategoriesService,

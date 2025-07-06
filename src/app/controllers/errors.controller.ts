@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 
 @Controller({ path: '' })
 export class ErrorsController {

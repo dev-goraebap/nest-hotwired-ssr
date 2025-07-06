@@ -4,13 +4,13 @@ import {
   Post,
   Res,
   UploadedFile,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 
+import { EdgeView, View } from 'nestjs-mvc-tools';
 import { DocumentsService } from 'src/app/services/documents.service';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
 import { ActiveStorageService } from 'src/shared/typeorm-active-storage';
 
 @Controller({ path: 'lab/file-upload-example-01' })

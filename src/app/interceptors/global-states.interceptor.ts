@@ -2,14 +2,13 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  InternalServerErrorException,
   Logger,
-  NestInterceptor,
+  NestInterceptor
 } from '@nestjs/common';
+import { Request } from 'express';
+import { EdgeView, MvcException } from 'nestjs-mvc-tools';
 import { Observable, tap } from 'rxjs';
 
-import { Request } from 'express';
-import { EdgeView } from 'src/shared/edge-in-nest';
 import { CategoriesService } from '../services/categories.service';
 
 @Injectable()
@@ -32,8 +31,9 @@ export class GlobalStatesInterceptor implements NestInterceptor {
 
     const view: EdgeView = req['view'];
     if (!(view instanceof EdgeView)) {
-      throw new InternalServerErrorException(
+      throw new MvcException(
         '상태를 저장할 view 인스턴스를 찾을 수 없습니다',
+        500,
       );
     }
 

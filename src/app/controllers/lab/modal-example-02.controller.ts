@@ -1,14 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 
 import { DocumentsService } from 'src/app/services/documents.service';
-import { EdgeView, View } from 'src/shared/edge-in-nest';
+import { EdgeView, View } from 'nestjs-mvc-tools';
 
 @Controller({ path: 'lab/modal-example-02' })
 export class ModalExample02Controller {
-
-  constructor(
-    private readonly documentsService: DocumentsService
-  ) {}
+  constructor(private readonly documentsService: DocumentsService) {}
 
   @Get()
   async index(@View() view: EdgeView) {
@@ -25,10 +22,7 @@ export class ModalExample02Controller {
       content:
         'Ea mollit consectetur qui duis laborum irure. Sunt elit ex irure duis non irure irure aute aliquip consectetur elit commodo tempor. Duis eiusmod est nulla incididunt in excepteur ad eu ea exercitation.',
     };
-    return await view.renderOnlyTurboRequest(
-      'pages/lab/modal-example-02/_content',
-      data,
-    );
+    return await view.render('pages/lab/modal-example-02/_content', data);
   }
 
   @Get('lazy-content')
