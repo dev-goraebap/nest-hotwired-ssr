@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title || "Nestjs MVC" }}</title>
+  <meta name="description" content="NestJS MVC Scaffold" />
+  <meta name="csrf-token" content="{{ csrfToken }}">
+
+  @if ($slots.meta)
+  {{{ await $slots.meta() }}}
+  @endif
+
+  <link rel="stylesheet" href="{{ asset('src/tailwind.css') }}">
+  <script src="{{ asset('src/app.js') }}" type="module" defer></script>
+
+  <!-- 파비콘 -->
+  <link rel="shortcut icon" href="/public/favicon.svg" type="image/x-icon" />
+</head>
+
+<body>
+  {{{ await $slots.main() }}}
+</body>
+
+</html>
