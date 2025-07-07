@@ -25,6 +25,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "concurrently": "^9.2.0",
+    "nestjs-i18n": "^10.5.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
