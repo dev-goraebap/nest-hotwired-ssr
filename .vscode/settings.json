@@ -1,0 +1,6 @@
+{
+  // edge 확장자에서 html 자동완성 지원
+  "emmet.includeLanguages": {
+    "edge": "html"
+  },
+}
