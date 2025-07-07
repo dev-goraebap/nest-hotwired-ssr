@@ -1,2 +1,5 @@
-@layout.app({ title: 'Nestjs MVC - Home'})
+@layout.app({ title: 'Nestjs MVC - Home' })
+  {{ inspect(i18nContent) }}
+  {{ inspect(i18nContent?.title) }}
+  {{ inspect(i18nContent?.description) }}
 @end

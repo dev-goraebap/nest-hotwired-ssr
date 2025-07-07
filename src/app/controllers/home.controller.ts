@@ -1,11 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 import { EdgeView, View } from 'nestjs-mvc-tools';
-import { Lang } from '../decorators/lang';
 
 @Controller()
 export class HomeController {
+  constructor(private readonly i18n: I18nService) {}
+
   @Get()
-  index(@View() view: EdgeView, @Lang() lang: string) {
-    return view.render('pages/home', {});
+  async index(@View() view: EdgeView) {
+    const i18nContext = I18nContext.current();
+    const lang = i18nContext?.lang;
+    const i18nContent = this.i18n.translate('pages.home', { lang });
+    return view.render('pages/home', { i18nContent });
   }
 }
