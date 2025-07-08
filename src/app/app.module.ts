@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { NestMvcCoreModule } from 'nestjs-mvc-tools';
 
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { join } from 'path';
 import { AdminController } from './controllers/admin.controller';
@@ -8,6 +9,7 @@ import { CategoriesController } from './controllers/admin/categories.controller'
 import { DocumentsController as AdminDocumentsController } from './controllers/admin/documents.controller';
 import { HomeController } from './controllers/home.controller';
 import { SessionsController } from './controllers/sessions.controller';
+import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
 
 @Module({
   imports: [
@@ -22,7 +24,9 @@ import { SessionsController } from './controllers/sessions.controller';
         { use: HeaderResolver, options: ['x-custom-lang'] },
       ],
     }),
-    NestMvcCoreModule.forRoot({ debug: true }),
+    NestMvcCoreModule.forRoot({ 
+      debug: true,
+    }),
   ],
   controllers: [
     HomeController,
@@ -31,6 +35,8 @@ import { SessionsController } from './controllers/sessions.controller';
     CategoriesController,
     SessionsController,
   ],
-  providers: [],
+  providers: [
+    { provide: APP_INTERCEPTOR, useClass: GlobalPageStatesInterceptor },
+  ],
 })
 export class AppModule {}
