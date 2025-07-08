@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { NestMvcCoreModule } from 'nestjs-mvc-tools';
-
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import { NestMvcCoreModule } from 'nestjs-mvc-tools';
 import { join } from 'path';
+
+import { TypeOrmConfig } from 'src/config/typeorm.config';
 import { AdminController } from './controllers/admin.controller';
 import { CategoriesController } from './controllers/admin/categories.controller';
 import { DocumentsController as AdminDocumentsController } from './controllers/admin/documents.controller';
 import { HomeController } from './controllers/home.controller';
 import { SessionsController } from './controllers/sessions.controller';
+import { CategoryEntity } from './entities/category.entity';
+import { DocumentEntity } from './entities/document.entity';
 import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
 
 @Module({
@@ -24,9 +28,13 @@ import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.i
         { use: HeaderResolver, options: ['x-custom-lang'] },
       ],
     }),
-    NestMvcCoreModule.forRoot({ 
+    NestMvcCoreModule.forRoot({
       debug: true,
     }),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfig,
+    }),
+    TypeOrmModule.forFeature([DocumentEntity, CategoryEntity]),
   ],
   controllers: [
     HomeController,
