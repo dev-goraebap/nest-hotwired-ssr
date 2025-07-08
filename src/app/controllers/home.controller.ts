@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { I18nContext, I18nService } from 'nestjs-i18n';
-import { EdgeView, View } from 'nestjs-mvc-tools';
+import { NestMvcView, View } from 'nestjs-mvc-tools';
 
 @Controller()
 export class HomeController {
   constructor(private readonly i18n: I18nService) {}
 
   @Get()
-  async index(@View() view: EdgeView) {
+  async index(@View() view: NestMvcView) {
     const i18nContext = I18nContext.current();
     const lang = i18nContext?.lang;
     const i18nContent = this.i18n.translate('pages.home', { lang });

@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -6,56 +7,68 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Res,
+  Req,
+  Res
 } from '@nestjs/common';
 import { Response } from 'express';
-import { EdgeView, View } from 'nestjs-mvc-tools';
+import {
+  Flash,
+  MvcValidationException,
+  NestMvcFlash,
+  NestMvcReq,
+  NestMvcView,
+  View
+} from 'nestjs-mvc-tools';
 
 @Controller({ path: 'admin/documents' })
 export class DocumentsController {
   @Get()
-  async index(@View() view: EdgeView) {
+  async index(@View() view: NestMvcView) {
     return view.render('pages/admin/documents/index', {});
   }
 
   @Get('new')
-  async new(@View() view: EdgeView) {
+  async new(@View() view: NestMvcView) {
     return view.render('pages/admin/documents/new', {});
   }
 
   @Get(':id')
-  async show(@Param('id', ParseIntPipe) id: number, @View() view: EdgeView) {
+  async show(@Param('id', ParseIntPipe) id: number, @View() view: NestMvcView) {
     return view.render('pages/admin/documents/show', {});
   }
 
   @Post()
-  async create(@View() view: EdgeView, @Res() res: Response) {
-    view.setFlash('notice', '작업 성공');
+  async create(@Req() req: NestMvcReq, @Res() res: Response) {
+    if (!req.body) {
+      // 제공되는 MVC 예외처리. 내부적으로 양식에 작성했던 데이터를 그대로 화면에 전달
+      throw new MvcValidationException('작업 실패');
+    }
+    req.flash.success('작업 성공');
     return res.redirect('/admin/documents');
   }
 
   @Get(':id/edit')
-  async edit(@Param('id', ParseIntPipe) id: number, @View() view: EdgeView) {
+  async edit(@Param('id', ParseIntPipe) id: number, @View() view: NestMvcView) {
     return view.render('pages/admin/documents/edit', {});
   }
 
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @View() view: EdgeView,
+    @Flash() flash: NestMvcFlash,
     @Res() res: Response,
   ) {
-    view.setFlash('notice', '작업 성공');
+    flash.success('작업 성공');
     return res.redirect('/admin/documents');
   }
 
   @Delete(':id')
   async destroy(
     @Param('id', ParseIntPipe) id: number,
-    @View() view: EdgeView,
+    @Flash() flash: NestMvcFlash,
     @Res() res: Response,
   ) {
-    view.setFlash('notice', '삭제 성공');
+    flash.success('삭제 성공');
     return res.redirect('/admin/documents');
   }
 }
