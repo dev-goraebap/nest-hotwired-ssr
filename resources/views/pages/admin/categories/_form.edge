@@ -2,10 +2,10 @@
 @let(method = editMode ? 'PUT' : 'POST')
 @let(submitText = editMode ? '수정' : '등록')
 
+@!uikit.flash()
 <form 
   action="{{action}}"
   method="{{method}}"
-  data-turbo-frame="_top"
   class="flex flex-col items-center gap-4 w-full">
   <fieldset class="fieldset w-full">
     <legend class="fieldset-legend">카테고리 이름</legend>
@@ -20,7 +20,10 @@
   
   <fieldset class="fieldset w-full">
     <legend class="fieldset-legend">카테고리 설명</legend>
-    <textarea class="textarea h-24 w-full" placeholder="간단한 설명 입력"></textarea>
+    <textarea
+      name="category[description]"
+      class="textarea h-24 w-full" 
+      placeholder="간단한 설명 입력">{{category?.description ?? ''}}</textarea>
   </fieldset>
 
   <button class="btn btn-primary btn-soft w-full">{{submitText}}</button>

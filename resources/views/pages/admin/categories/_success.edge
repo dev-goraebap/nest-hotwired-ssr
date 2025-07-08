@@ -1,0 +1,37 @@
+{{-- 
+Turbo Frame 모달에서 폼 제출 시 리다이렉트 처리 방법
+
+문제 상황:
+1. 모달 내 Turbo Frame에서 폼 요청을 진행
+2. Turbo는 응답 HTML에 <turbo-frame id="modalContentFrame">이 있을 것으로 예상
+3. 실패 시: /admin/categories/new로 리다이렉트되어 프레임이 유지됨 (문제없음)
+4. 성공 시: 목적지 페이지에 해당 프레임이 없어 TurboFrameMissingError 발생
+
+해결 방법:
+공식 문서에서 권장하는 방법은 <meta name="turbo-visit-control" content="reload"> 사용
+- 참조: https://turbo.hotwired.dev/handbook/frames#breaking-out-from-a-frame
+- 효과: Frame 요청이었어도 강제로 전체 페이지 네비게이션으로 처리
+
+현재 적용한 방법:
+메타 태그 방식 사용 시 페이지 깜빡임이 발생해서 대안으로 Frame 내에서 Turbo.visit() 직접 호출
+완전히 표준적인 방법은 아니지만 동작상 문제는 없음
+--}}
+
+{{-- <!DOCTYPE html>
+<html>
+<head>
+  <meta name="turbo-visit-control" content="reload">
+  <title>처리 완료</title>
+</head>
+<body>
+  <script>
+    Turbo.visit("/admin/categories");
+  </script>
+</body>
+</html> --}}
+
+<turbo-frame id="modalContentFrame">
+  <script>
+    Turbo.visit('/admin/categories');
+  </script>
+</turbo-frame>

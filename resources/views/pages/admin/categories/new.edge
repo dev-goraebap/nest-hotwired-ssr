@@ -1,3 +1,5 @@
 <turbo-frame id="modalContentFrame">
-  @!component('pages/admin/categories/_form', {  })
+  @!component('pages/admin/categories/_form', {  
+    category: flash?.input?.category ?? null
+  })
 </turbo-frame>
