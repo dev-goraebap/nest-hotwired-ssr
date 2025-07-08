@@ -1,1 +1,19 @@
-<form action=""></form>
+@let(action = editMode ? `/admin/documents/${document?.id}` : '/admin/documents')
+@let(method = editMode ? 'PUT' : 'POST')
+@let(submitText = editMode ? '수정' : '등록')
+<form 
+  action="{{action}}"
+  method="{{method}}"
+  class="flex flex-col gap-4 p-10">
+
+  <input 
+    type="text" 
+    name="document[title]"
+    value="{{document?.title ?? ''}}"
+    class="input w-full">
+  <textarea name="document[content]" class="input w-full">
+    {{document?.content ?? ''}}
+  </textarea>
+
+  <button class="btn btn-primary">{{submitText}}</button>
+</form>
