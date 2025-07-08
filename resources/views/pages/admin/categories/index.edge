@@ -1,2 +1,46 @@
 @layout.admin({ title: 'Nestjs MVC Admin - 카테고리 관리' })
+  <div class="flex flex-col gap-4">
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold">카테고리 관리</h1>
+      <button
+        data-url="/admin/categories/new"
+        data-action="modal#onOpen"
+        class="btn btn-primary btn-soft">등록</button>
+    </div>
+    <div class="rounded-box border border-base-content/5 bg-base-100">
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th></th>
+            <th>카테고리명</th>
+            <th>설명</th>
+            <th>생성일</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- row 1 -->
+          <tr>
+            <th>1</th>
+            <td>Cy Ganderton</td>
+            <td>Quality Control Specialist</td>
+            <td>Blue</td>
+            <td>
+              <div>
+                <a href="/admin/categories/999/edit" class="text-warning">수정</a>
+                /
+                <a href="/admin/categories/999" 
+                  data-turbo-method="delete" 
+                  data-turbo-confirm="삭제하시겠어요?"
+                  class="text-error">
+                  삭제
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 @end
