@@ -1,0 +1,19 @@
+/* TinyMCE 에디터 테두리 제거 */
+.tox.tox-tinymce {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.tox.tox-tinymce:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* TinyMCE 포커스시 파란 테두리 제거 */
+.tox.tox-edit-focus .tox-edit-area::before {
+  opacity: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}

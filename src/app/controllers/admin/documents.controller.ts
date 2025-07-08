@@ -39,9 +39,9 @@ export class DocumentsController {
 
   @Post()
   async create(@Req() req: NestMvcReq, @Res() res: Response) {
+    // 제공되는 MVC 예외처리. 내부적으로 양식에 작성했던 데이터를 그대로 화면에 전달
+    throw new MvcValidationException('작업 실패');
     if (!req.body) {
-      // 제공되는 MVC 예외처리. 내부적으로 양식에 작성했던 데이터를 그대로 화면에 전달
-      throw new MvcValidationException('작업 실패');
     }
     req.flash.success('작업 성공');
     return res.redirect('/admin/documents');
