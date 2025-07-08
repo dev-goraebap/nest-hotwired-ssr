@@ -1,11 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as session from 'express-session';
 import { join } from 'path';
 
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+
+  // app.use(express.urlencoded({ extended: true }))
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'your-secret-key',
+    }),
+  );
 
   app.useStaticAssets(join(process.cwd(), 'resources', 'public'), {
     prefix: '/public',
