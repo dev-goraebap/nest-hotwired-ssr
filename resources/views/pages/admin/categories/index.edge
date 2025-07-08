@@ -1,4 +1,7 @@
 @layout.admin({ title: 'Nestjs MVC Admin - 카테고리 관리' })
+
+  @!uikit.flash()
+
   <div class="flex flex-col gap-4">
     <div class="flex justify-between items-center">
       <h1 class="text-3xl font-bold">카테고리 관리</h1>
@@ -20,25 +23,27 @@
           </tr>
         </thead>
         <tbody>
-          <!-- row 1 -->
-          <tr>
-            <th>1</th>
-            <td>Cy Ganderton</td>
-            <td>Quality Control Specialist</td>
-            <td>Blue</td>
-            <td>
-              <div>
-                <a href="/admin/categories/999/edit" class="text-warning">수정</a>
-                /
-                <a href="/admin/categories/999" 
-                  data-turbo-method="delete" 
-                  data-turbo-confirm="삭제하시겠어요?"
-                  class="text-error">
-                  삭제
-                </a>
-              </div>
-            </td>
-          </tr>
+          @each((category, index) in categories)
+            <tr>
+              <th>{{index+1}}</th>
+              <td>{{category?.name}}</td>
+              <td>{{category?.description}}</td>
+              <td>{{category?.createdAt}}</td>
+              <td>
+                <div>
+                  <a href="/admin/categories/999/edit" class="text-warning">수정</a>
+                  /
+                  <a href="/admin/categories/{{category?.id}}"
+                    data-turbo-method="delete" 
+                    data-turbo-confirm="삭제하시겠어요?"
+                    class="text-error">
+                    삭제
+                  </a>
+                </div>
+              </td>
+            </tr>
+          @end
+          
         </tbody>
       </table>
     </div>
