@@ -1,19 +1,69 @@
 @let(action = editMode ? `/admin/documents/${document?.id}` : '/admin/documents')
 @let(method = editMode ? 'PUT' : 'POST')
 @let(submitText = editMode ? '수정' : '등록')
-<form 
-  action="{{action}}"
-  method="{{method}}"
-  class="flex flex-col gap-4 p-10">
 
-  <input 
-    type="text" 
-    name="document[title]"
-    value="{{document?.title ?? ''}}"
-    class="input w-full">
-  <textarea name="document[content]" class="input w-full">
-    {{document?.content ?? ''}}
-  </textarea>
+<form action="{{action}}" method="{{method}}" data-controller="modal document-form" class="h-full w-5xl">
+  <input type="text" class="hidden" name="document[id]" value="{{ document?.id ?? '' }}">
 
-  <button class="btn btn-primary">{{submitText}}</button>
+  <div class="flex w-full h-full">
+    <div class="grow flex flex-col gap-4 h-full border-x border-base-300 bg-base-100">
+      <input name="document[title]" class="hidden" value="{{document?.title ?? ''}}" />
+
+      <!-- 텍스트 에디터 -->
+      <div class="w-[700px] h-full">
+        <div data-controller="tiny-mce" id="tinyMceEditor" class="grow h-full">
+          {{{document?.content ?? ''}}}
+        </div>
+      </div>
+      <!-- 텍스트 에디터 데이터 바인딩 -->
+      <textarea name="document[content]" id="content_hidden" class="hidden">
+        {{{document?.content ?? ''}}}
+      </textarea>
+    </div>
+
+    <div class="flex flex-col justify-between gap-4 h-full w-sm max-w-sm p-4">
+      <div class="flex flex-col gap-2">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-sm">카테고리</legend>
+          <button type="button" data-url="/admin/categories" data-action="modal#onOpen" class="btn btn-soft btn-primary">
+            카테고리 선택
+          </button>
+        </fieldset>
+
+        <template data-document-form-target="categoryIdTemplate">
+          <input type="text" name="document[category][id]" class="hidden">
+          <!-- 플레시 저장용 -->
+          <input type="text" name="document[category][name]" class="hidden">
+          <div class="badge badge-accent"></div>
+        </template>
+        <div data-document-form-target="categoryContainer">
+          @if(document?.category?.id)
+          <input type="text" name="document[category][id]" class="hidden" value="{{document?.category?.id}}">
+
+          <!-- 플레시 저장용 -->
+          <input type="text" name="document[category][name]" class="hidden" value="{{document?.category?.name}}">
+          <div class="badge badge-accent">{{document?.category?.name}}</div>
+          @end
+        </div>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-sm">슬러그</legend>
+          <label class="input w-full">
+            /
+            <input type="text" name="document[slug]" class="w-full" placeholder="고유한 slug(url)을 만들어주세요"
+            value="{{{document?.slug ?? ''}}}" />
+          </label>
+        </fieldset>
+
+      </div>
+
+      <div class="flex justify-between gap-4">
+        <a href="/admin/documents" data-turbo-method="get" data-turbo-confirm="작업 내용이 초기화됩니다. 취소하시겠어요?"
+          class="flex-1/2 btn btn-soft btn-warning">작업 취소</a>
+        <button class="flex-1/2 btn btn-soft btn-success">{{ submitText }}</button>
+      </div>
+    </div>
+  </div>
+
+  @!uikit.modal()
 </form>
