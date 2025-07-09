@@ -25,17 +25,17 @@
             <tr>
               <td>{{index+1}}</td>
               <td>{{document?.category?.name}}</td>
-              <td>{{document?.title}}</td>
+              <td>
+                <a href="/admin/documents/{{document?.id}}"
+                  class="text-blue-500">
+                  {{document?.title}}
+                </a>
+              </td>
               <td>{{document?.slug}}</td>
               <td>{{document?.createdAt?.toISOString()}}</td>
               <td>
                 <div>
-                  <button
-                    data-url="/admin/documents/{{document?.id}}/edit"
-                    data-action="modal#onOpen"
-                    class="text-warning">
-                    수정
-                  </button>
+                  <a href="/admin/documents/{{document?.id}}/edit" class="text-warning">수정</a>
                   /
                   <a href="/admin/documents/{{document?.id}}"
                     data-turbo-method="delete" 
