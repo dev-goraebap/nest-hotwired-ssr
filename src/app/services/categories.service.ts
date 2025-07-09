@@ -7,10 +7,18 @@ export class CategoriesService {
   async index() {
     return await CategoryEntity.find({
       order: {
-        rank: 'asc',
+        order: 'asc',
         createdAt: 'desc',
       },
     });
+  }
+
+  async show(id: number) {
+    const result = await CategoryEntity.findOne({ where: { id } });
+    if (!result) {
+      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
+    }
+    return result;
   }
 
   async getSidebarCategories() {
@@ -34,41 +42,47 @@ export class CategoriesService {
     const { name, description } = dto;
 
     if (!name) {
-      throw new MvcValidationException(
-        '카테고리 이름을 입력해 주세요',
-        '/admin/categories/new',
-      );
+      throw new MvcValidationException('카테고리 이름을 입력해 주세요');
     }
 
     let category = await CategoryEntity.findOne({ where: { name } });
     if (category) {
-      throw new MvcValidationException(
-        '중복된 이름입니다.',
-        '/admin/categories/new',
-      );
+      throw new MvcValidationException('중복된 이름입니다.');
     }
 
     category = CategoryEntity.create({
       name,
       description,
-      rank: 0,
+      order: 1,
     });
     await category.save();
   }
 
-  async update(id: number, name: string, description: string) {
+  async update(id: number, dto: any) {
+    const { name, description } = dto;
     let category = await CategoryEntity.findOne({ where: { id } });
     if (!category) {
-      throw new MvcValidationException('카테고리를 찾을 수 없습니다.');
+      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
+    }
+
+    if (!name) {
+      throw new MvcValidationException('카테고리 이름을 입력해 주세요');
+    }
+
+    if (category.name !== name) {
+      let category = await CategoryEntity.findOne({ where: { name } });
+      if (category) {
+        throw new MvcValidationException('중복된 이름입니다.');
+      }
     }
 
     category = CategoryEntity.create({ ...category, name, description });
     await category.save();
   }
 
-  async updateRanks(idAndRanks: { id: number; rank: number }[]) {
-    const idToRank = new Map(idAndRanks.map(({ id, rank }) => [id, rank]));
-    const ids = Array.from(idToRank.keys());
+  async updateOrders(idAndOrders: { id: number; order: number }[]) {
+    const idAndOrderMap = new Map(idAndOrders.map(({ id, order }) => [id, order]));
+    const ids = Array.from(idAndOrderMap.keys());
 
     const categories = await CategoryEntity.find({
       where: { id: In(ids) },
@@ -77,7 +91,7 @@ export class CategoriesService {
     const updated = categories.map((category) =>
       CategoryEntity.create({
         ...category,
-        rank: idToRank.get(category.id) ?? 0,
+        order: idAndOrderMap.get(category.id) ?? 0,
       }),
     );
 

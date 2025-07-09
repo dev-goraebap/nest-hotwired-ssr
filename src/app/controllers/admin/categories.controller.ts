@@ -45,17 +45,22 @@ export class CategoriesController {
 
   @Get(':id/edit')
   async edit(@Param('id', ParseIntPipe) id: number, @View() view: NestMvcView) {
-    return view.render('pages/admin/categories/edit', {});
+    const category = await this.categoriesService.show(id);
+    return view.render('pages/admin/categories/edit', { category });
+  }
+
+  @Put('orders')
+  async updateOrders(@Req() req: NestMvcReq) {
+    await this.categoriesService.updateOrders(req.body?.items);
+    console.log(req.body);
+    req.flash.success('순서 변경 성공!');
   }
 
   @Put(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Flash() flash: NestMvcFlash,
-    @Res() res: Response,
-  ) {
-    flash.success('작업 성공');
-    return res.redirect('/admin/categories');
+  async update(@Param('id', ParseIntPipe) id: number, @Req() req: NestMvcReq) {
+    await this.categoriesService.update(id, req.body?.category);
+    req.flash.success('작업 성공');
+    return req.view.render('pages/admin/categories/_success');
   }
 
   @Delete(':id')

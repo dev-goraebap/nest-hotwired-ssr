@@ -21,7 +21,7 @@ export class CategoryEntity extends BaseEntity {
   readonly description: string;
 
   @Column()
-  readonly rank: number;
+  readonly order: number;
 
   @CreateDateColumn()
   readonly createdAt: Date;
