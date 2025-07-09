@@ -1,6 +1,6 @@
 @layout.editor({ title: 'Nestjs MVC Admin - 문서 수정' })
   @!component('pages/admin/documents/_form', { 
     editMode: true,
-    document: flash?.old ?? document
+    document: flash?.input?.document ?? document
   })
 @end
