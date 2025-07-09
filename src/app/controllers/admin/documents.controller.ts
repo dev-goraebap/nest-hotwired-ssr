@@ -12,11 +12,10 @@ import {
 import { Response } from 'express';
 import {
   Flash,
-  MvcValidationException,
   NestMvcFlash,
   NestMvcReq,
   NestMvcView,
-  View,
+  View
 } from 'nestjs-mvc-tools';
 
 import { DocumentsService } from 'src/app/services/documents.service';
@@ -33,33 +32,37 @@ export class DocumentsController {
 
   @Get('new')
   async new(@View() view: NestMvcView) {
-    return view.render('pages/admin/documents/new', {});
+    return view.render('pages/admin/documents/new');
   }
 
   @Get(':id')
   async show(@Param('id', ParseIntPipe) id: number, @View() view: NestMvcView) {
-    return view.render('pages/admin/documents/show', {});
+    const document = await this.documentsService.getById(id);
+    return view.render('pages/admin/documents/show', { document });
   }
 
   @Post()
   async create(@Req() req: NestMvcReq, @Res() res: Response) {
     await this.documentsService.create(req.body?.document);
+    req.flash.success('작업 성공');
     return res.redirect('/admin/documents');
   }
 
   @Get(':id/edit')
   async edit(@Param('id', ParseIntPipe) id: number, @View() view: NestMvcView) {
-    return view.render('pages/admin/documents/edit', {});
+    const document = await this.documentsService.getById(id);
+    return view.render('pages/admin/documents/edit', { document });
   }
 
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Flash() flash: NestMvcFlash,
+    @Req() req: NestMvcReq,
     @Res() res: Response,
   ) {
-    flash.success('작업 성공');
-    return res.redirect('/admin/documents');
+    await this.documentsService.update(id, req.body?.document);
+    req.flash.success('작업 성공');
+    return res.redirect(303, '/admin/documents');
   }
 
   @Delete(':id')
@@ -68,7 +71,8 @@ export class DocumentsController {
     @Flash() flash: NestMvcFlash,
     @Res() res: Response,
   ) {
+    await this.documentsService.destroy(id);
     flash.success('삭제 성공');
-    return res.redirect('/admin/documents');
+    return res.redirect(303, '/admin/documents');
   }
 }
