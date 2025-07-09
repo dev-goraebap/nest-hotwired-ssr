@@ -29,6 +29,12 @@ export class CategoriesController {
     return view.render('pages/admin/categories/index', { categories });
   }
 
+  @Get('modal')
+  async modalIndex(@View() view: NestMvcView) {
+    const categories = await this.categoriesService.index();
+    return view.render('pages/admin/categories/index_turbo_frame', { categories });
+  }
+
   @Get('new')
   async new(@View() view: NestMvcView) {
     return view.render('pages/admin/categories/new', {});
