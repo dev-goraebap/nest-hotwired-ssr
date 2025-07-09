@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
@@ -8,7 +7,7 @@ import {
   Post,
   Put,
   Req,
-  Res
+  Res,
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
@@ -17,14 +16,19 @@ import {
   NestMvcFlash,
   NestMvcReq,
   NestMvcView,
-  View
+  View,
 } from 'nestjs-mvc-tools';
+
+import { DocumentsService } from 'src/app/services/documents.service';
 
 @Controller({ path: 'admin/documents' })
 export class DocumentsController {
+  constructor(private readonly documentsService: DocumentsService) {}
+
   @Get()
   async index(@View() view: NestMvcView) {
-    return view.render('pages/admin/documents/index', {});
+    const documents = await this.documentsService.index();
+    return view.render('pages/admin/documents/index', { documents });
   }
 
   @Get('new')
@@ -39,11 +43,7 @@ export class DocumentsController {
 
   @Post()
   async create(@Req() req: NestMvcReq, @Res() res: Response) {
-    // 제공되는 MVC 예외처리. 내부적으로 양식에 작성했던 데이터를 그대로 화면에 전달
-    throw new MvcValidationException('작업 실패');
-    if (!req.body) {
-    }
-    req.flash.success('작업 성공');
+    await this.documentsService.create(req.body?.document);
     return res.redirect('/admin/documents');
   }
 
