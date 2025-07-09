@@ -1,19 +1,31 @@
-/* TinyMCE 에디터 테두리 제거 */
+/* TinyMCE 에디터 커스텀 CSS */
 .tox.tox-tinymce {
   border: none !important;
   box-shadow: none !important;
   background: transparent !important;
 }
-
 .tox.tox-tinymce:focus-within {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
 }
-
-/* TinyMCE 포커스시 파란 테두리 제거 */
 .tox.tox-edit-focus .tox-edit-area::before {
   opacity: 0 !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+/* Sortable 커스텀 CSS */
+.sortable-ghost {
+  opacity: 0.4;
+  background: #e5e7eb;
+}
+
+.sortable-chosen {
+  background: #f3f4f6;
+}
+
+.sortable-drag {
+  transform: rotate(2deg);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
