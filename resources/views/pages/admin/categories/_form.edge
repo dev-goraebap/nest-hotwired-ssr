@@ -1,12 +1,34 @@
 @let(action = editMode ? `/admin/categories/${category?.id}` : '/admin/categories')
 @let(method = editMode ? 'PUT' : 'POST')
 @let(submitText = editMode ? '수정' : '등록')
+@let(redirectTo = editMode ? `/admin/categories/${category?.id}/edit` : '/admin/categories/new')
 
 @!uikit.flash()
 <form 
   action="{{action}}"
   method="{{method}}"
   class="flex flex-col items-center gap-4 w-full">
+
+  <!-- 
+    모달 내 Turbo Frame 폼 validation 에러 시 컨텍스트 인식 리다이렉트를 위한 URL 설정
+    
+    배경:
+    - data-turbo-frame="modal" 방식은 모달 자체를 HTTP로 불러와 느린 UX
+    - Stimulus로 모달 UI를 프론트에서 그리고, 내부 컨텐츠만 turbo-frame으로 로드하는 방식 채택
+    
+    문제 상황:
+    - 모달 내 turbo-frame에서 폼 제출 시 validation 오류 발생
+    - 일반적으로 request.referer를 사용하지만, 모달에서는 referer가 모달을 연 원본 페이지가 됨
+    - 예: /admin/categories에서 "새 카테고리" 버튼 클릭 → 모달 열림 → 폼 에러 시 /admin/categories로 리다이렉트
+    - 실제로는 폼 자체 URL(/admin/categories/new, /admin/categories/{id}/edit)로 돌아가야 함
+    
+    해결책:
+    - _redirect_to hidden input으로 폼이 어디로 돌아가야 하는지 명시적 지정
+    - 수동 구현: 컨트롤러에서 @Body('_redirect_to') 파라미터로 받아서 직접 처리
+    - nestjs-mvc-tools 자동 처리: MvcValidationException 사용 시 _redirect_to 값을 자동으로 확인하여 우선적으로 해당 경로로 리다이렉트
+  -->
+  <input type="hidden" name="_redirect_to" value="{{ redirectTo }}">
+
   <fieldset class="fieldset w-full">
     <legend class="fieldset-legend">카테고리 이름</legend>
     <input 
