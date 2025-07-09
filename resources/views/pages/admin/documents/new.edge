@@ -1,5 +1,4 @@
 @layout.editor({ title: 'Nestjs MVC Admin - 문서 생성' })
-  {{ inspect(flash) }}
   @!component('pages/admin/documents/_form', {  
     document: flash?.input?.document ?? null
   })
