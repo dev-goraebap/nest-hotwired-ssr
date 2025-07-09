@@ -15,6 +15,7 @@ import { CategoryEntity } from './entities/category.entity';
 import { DocumentEntity } from './entities/document.entity';
 import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
 import { CategoriesService } from './services/categories.service';
+import { DocumentsService } from './services/documents.service';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { CategoriesService } from './services/categories.service';
   ],
   providers: [
     CategoriesService,
+    DocumentsService,
     { provide: APP_INTERCEPTOR, useClass: GlobalPageStatesInterceptor },
   ],
 })
