@@ -1,0 +1,19 @@
+<turbo-frame id="modalContentFrame">
+  <div class="flex flex-col gap-2">
+    @each(category in categories)
+      <div class="flex justify-between items-center border-t border-base-300 p-4">
+        <span>{{ category.name}}</span>
+        <div class="flex gap-2">
+          <button
+            data-id="{{category.id}}"
+            data-name="{{category.name}}"
+            data-action="document-form#selectCategory modal#onClose" 
+            type="button" 
+            class="btn btn-soft btn-info">
+            선택
+          </button>
+        </div>
+      </div>
+    @end
+  </div>
+</turbo-frame>
