@@ -10,13 +10,6 @@ export class ModalController extends Controller {
     console.log(url);
     this.#render(url);
   }
-  
-  onLazyOpen(e) {
-    const template = this.modalTemplateTarget.content.cloneNode(true);
-    this.element.appendChild(template);
-    const url = this.#getUrl(e);
-    this.#render(url);
-  }
 
   onClose() {
     this.modalOverlayTarget.remove();
