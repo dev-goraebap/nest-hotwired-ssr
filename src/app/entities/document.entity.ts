@@ -38,7 +38,6 @@ export class DocumentEntity extends BaseEntity {
   readonly category: CategoryEntity;
 
   getUrl() {
-    console.log(this.slug);
     if (this.slug.includes('/')) {
       return `/${this.slug}`;
     } else {
