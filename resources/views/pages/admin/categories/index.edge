@@ -16,22 +16,40 @@
         <thead>
           <tr>
             <th></th>
+            <th></th>
             <th>카테고리명</th>
             <th>설명</th>
             <th>생성일</th>
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody 
+          data-controller="sortable" 
+          data-sortable-target="container"
+          data-sortable-order-api-value="/admin/categories/orders">
           @each((category, index) in categories)
-            <tr>
-              <th>{{index+1}}</th>
+            <tr data-id="{{category?.id}}">
+              <td>{{index+1}}</td>
+              <td>
+                <button
+                  data-sortable-target="handle"
+                  class="cursor-pointer relative top-[2px]">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+                  </svg>
+                </button>
+              </td>
               <td>{{category?.name}}</td>
               <td>{{category?.description}}</td>
-              <td>{{category?.createdAt}}</td>
+              <td>{{category?.createdAt?.toISOString()}}</td>
               <td>
                 <div>
-                  <a href="/admin/categories/999/edit" class="text-warning">수정</a>
+                  <button
+                    data-url="/admin/categories/{{category?.id}}/edit"
+                    data-action="modal#onOpen"
+                    class="text-warning">
+                    수정
+                  </button>
                   /
                   <a href="/admin/categories/{{category?.id}}"
                     data-turbo-method="delete" 
