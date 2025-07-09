@@ -1,3 +1,55 @@
 @layout.admin({ title: 'Nestjs MVC Admin - 문서 관리' })
-  {{ inspect(flash) }}
+
+  @!uikit.flash()
+
+  <div class="flex flex-col gap-4">
+    <div class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold">문서 관리</h1>
+      <a href="/admin/documents/new" class="btn btn-primary btn-soft">등록</a>
+    </div>
+    <div class="rounded-box border border-base-content/5 bg-base-100">
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th></th>
+            <th>카테고리</th>
+            <th>제목</th>
+            <th>슬러그</th>
+            <th>생성일</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @each((document, index) in documents)
+            <tr>
+              <td>{{index+1}}</td>
+              <td>{{document?.category?.name}}</td>
+              <td>{{document?.title}}</td>
+              <td>{{document?.slug}}</td>
+              <td>{{document?.createdAt?.toISOString()}}</td>
+              <td>
+                <div>
+                  <button
+                    data-url="/admin/documents/{{document?.id}}/edit"
+                    data-action="modal#onOpen"
+                    class="text-warning">
+                    수정
+                  </button>
+                  /
+                  <a href="/admin/documents/{{document?.id}}"
+                    data-turbo-method="delete" 
+                    data-turbo-confirm="삭제하시겠어요?"
+                    class="text-error">
+                    삭제
+                  </a>
+                </div>
+              </td>
+            </tr>
+          @end
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
 @end
