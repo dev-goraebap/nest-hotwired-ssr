@@ -1,2 +1,15 @@
 @layout.admin({ title: 'Nestjs MVC Admin - 문서 상세' })
+  <div class="flex gap-4 items-start">
+    <div>
+      <a href="/admin/documents">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+        </svg>
+      </a>
+
+    </div>
+    <div class="prose prose-sm w-full min-w-3xl">
+      {{{ document?.content }}}
+    </div>
+  </div>
 @end
