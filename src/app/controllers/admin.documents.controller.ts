@@ -19,10 +19,17 @@ import {
 } from 'nestjs-mvc-tools';
 
 import { AdminDocumentsService } from 'src/app/services/admin.documents.service';
+import { CreateDocumentUseCase } from '../use-cases/create-document.use-case';
+import { UpdateDocumentUseCase } from '../use-cases/update-document.use-case';
 
 @Controller({ path: 'admin/documents' })
 export class AdminDocumentsController {
-  constructor(private readonly documentsService: AdminDocumentsService) {}
+  
+  constructor(
+    private readonly documentsService: AdminDocumentsService,
+    private readonly createDocumentUseCase: CreateDocumentUseCase,
+    private readonly updateDocumentUseCase: UpdateDocumentUseCase,
+  ) {}
 
   @Get()
   async index(@View() view: NestMvcView) {
@@ -43,7 +50,7 @@ export class AdminDocumentsController {
 
   @Post()
   async create(@Req() req: NestMvcReq, @Res() res: Response) {
-    await this.documentsService.create(req.body?.document);
+    await this.createDocumentUseCase.execute(req.body?.document);
     req.flash.success('작업 성공');
     return res.redirect('/admin/documents');
   }
@@ -60,7 +67,7 @@ export class AdminDocumentsController {
     @Req() req: NestMvcReq,
     @Res() res: Response,
   ) {
-    await this.documentsService.update(id, req.body?.document);
+    await this.updateDocumentUseCase.execute(id, req.body?.document);
     req.flash.success('작업 성공');
     return res.redirect(303, '/admin/documents');
   }
