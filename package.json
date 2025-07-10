@@ -1,12 +1,11 @@
 {
   "name": "nestjs-mvc-is-coming",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "0.7.9",
+  "author": "dev.goraebap",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && cd resources && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:resource": "cd resources && npm run dev",
@@ -31,6 +30,7 @@
     "cross-env": "^7.0.3",
     "express-session": "^1.18.1",
     "nestjs-i18n": "^10.5.1",
+    "nestjs-mvc-tools": "^0.7.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7",
