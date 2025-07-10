@@ -1,9 +1,9 @@
-import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { CategoryEntity } from './category.entity';
 
 @Entity({ name: 'category_translations' })
 @Index(['category', 'languageCode'], { unique: true })
-export class CategoryTranslationEntity {
+export class CategoryTranslationEntity extends BaseEntity{
   @PrimaryGeneratedColumn()
   readonly id: number;
 
