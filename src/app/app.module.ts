@@ -5,6 +5,7 @@ import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { NestMvcCoreModule } from 'nestjs-mvc-tools';
 import { join } from 'path';
 
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfig } from 'src/config/typeorm.config';
 import { AdminCategoriesController } from './controllers/admin.categories.controller';
 import { AdminController } from './controllers/admin.controller';
@@ -21,9 +22,14 @@ import { AdminCategoriesService } from './services/admin.categories.service';
 import { AdminDocumentsService } from './services/admin.documents.service';
 import { CategoriesService } from './services/categories.service';
 import { DocumentsService } from './services/documents.service';
+import { TranslationService } from './services/translation.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: join(process.cwd(), `.env.${process.env.NODE_ENV}.local`),
+      isGlobal: true
+    }),
     I18nModule.forRoot({
       fallbackLanguage: 'ko', // 기본 언어
       loaderOptions: {
@@ -61,6 +67,7 @@ import { DocumentsService } from './services/documents.service';
     AdminDocumentsService,
     CategoriesService,
     DocumentsService,
+    TranslationService,
     { provide: APP_INTERCEPTOR, useClass: GlobalPageStatesInterceptor },
   ],
 })
