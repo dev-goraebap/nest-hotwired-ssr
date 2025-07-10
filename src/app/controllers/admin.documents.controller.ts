@@ -8,6 +8,7 @@ import {
   Put,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
@@ -15,16 +16,17 @@ import {
   NestMvcFlash,
   NestMvcReq,
   NestMvcView,
-  View
+  View,
 } from 'nestjs-mvc-tools';
 
 import { AdminDocumentsService } from 'src/app/services/admin.documents.service';
 import { CreateDocumentUseCase } from '../use-cases/create-document.use-case';
 import { UpdateDocumentUseCase } from '../use-cases/update-document.use-case';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller({ path: 'admin/documents' })
+@UseGuards(AuthGuard)
 export class AdminDocumentsController {
-  
   constructor(
     private readonly documentsService: AdminDocumentsService,
     private readonly createDocumentUseCase: CreateDocumentUseCase,
