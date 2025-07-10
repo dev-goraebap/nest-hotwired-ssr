@@ -8,6 +8,7 @@ import {
   Put,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
@@ -18,10 +19,12 @@ import {
   View,
 } from 'nestjs-mvc-tools';
 import { AdminCategoriesService } from 'src/app/services/admin.categories.service';
+import { AuthGuard } from '../guards/auth.guard';
 import { CreateCategoryUseCase } from '../use-cases/create-category.use-case';
 import { UpdateCategoryUseCase } from '../use-cases/update-category.use-case';
 
 @Controller({ path: 'admin/categories' })
+@UseGuards(AuthGuard)
 export class AdminCategoriesController {
   constructor(
     private readonly categoriesService: AdminCategoriesService,
