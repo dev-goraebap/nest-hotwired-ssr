@@ -8,7 +8,7 @@ export class TypeOrmConfig implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     return {
       type: 'sqlite',
-      database: join(process.cwd(), 'tmp', 'development.sqlite'),
+      database: join(process.cwd(), 'storage', 'development.sqlite'),
       synchronize: true,
       autoLoadEntities: true,
       logger: 'debug',
