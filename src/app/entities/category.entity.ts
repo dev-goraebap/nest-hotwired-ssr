@@ -7,19 +7,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { DocumentEntity } from './document.entity';
 import { CategoryTranslationEntity } from './category-translation.entity';
+import { DocumentEntity } from './document.entity';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
-
-  @Column()
-  readonly name: string;
-
-  @Column()
-  readonly description: string;
 
   @Column()
   readonly order: number;
@@ -37,4 +31,20 @@ export class CategoryEntity extends BaseEntity {
     cascade: true,
   })
   readonly translations: CategoryTranslationEntity[];
+
+  /**
+   * 서비스를 통해 이미 현재 언어코드조건을 사용했다고 가정
+   */
+  get translation() {
+    return this.translations[0];
+  }
+
+  // 편의 속성들도 추가할 수 있음
+  get name() {
+    return this.translation?.name || '';
+  }
+
+  get description() {
+    return this.translation?.description || '';
+  }
 }
