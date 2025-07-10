@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { DocumentEntity } from './document.entity';
+import { CategoryTranslationEntity } from './category-translation.entity';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity extends BaseEntity {
@@ -29,6 +30,11 @@ export class CategoryEntity extends BaseEntity {
   @UpdateDateColumn()
   readonly updatedAt: Date;
 
-  @OneToMany(() => DocumentEntity, e => e.category)
+  @OneToMany(() => DocumentEntity, (e) => e.category)
   readonly documents: DocumentEntity[];
+
+  @OneToMany(() => CategoryTranslationEntity, (e) => e.category, {
+    cascade: true,
+  })
+  readonly translations: CategoryTranslationEntity[];
 }

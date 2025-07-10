@@ -5,10 +5,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryEntity } from './category.entity';
+import { DocumentTranslationEntity } from './document-translation.entity';
 
 @Entity({ name: 'documents' })
 export class DocumentEntity extends BaseEntity {
@@ -36,6 +38,11 @@ export class DocumentEntity extends BaseEntity {
   })
   @JoinColumn({ name: 'category_id' })
   readonly category: CategoryEntity;
+
+  @OneToMany(() => DocumentTranslationEntity, (e) => e.document, {
+    cascade: true,
+  })
+  readonly translations: DocumentTranslationEntity[];
 
   getUrl() {
     if (this.slug.includes('/')) {

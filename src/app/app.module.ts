@@ -12,7 +12,9 @@ import { AdminDocumentsController } from './controllers/admin.documents.controll
 import { DocumentsControllers } from './controllers/documents.controller';
 import { HomeController } from './controllers/home.controller';
 import { SessionsController } from './controllers/sessions.controller';
+import { CategoryTranslationEntity } from './entities/category-translation.entity';
 import { CategoryEntity } from './entities/category.entity';
+import { DocumentTranslationEntity } from './entities/document-translation.entity';
 import { DocumentEntity } from './entities/document.entity';
 import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
 import { AdminCategoriesService } from './services/admin.categories.service';
@@ -39,7 +41,12 @@ import { DocumentsService } from './services/documents.service';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfig,
     }),
-    TypeOrmModule.forFeature([DocumentEntity, CategoryEntity]),
+    TypeOrmModule.forFeature([
+      CategoryEntity,
+      CategoryTranslationEntity,
+      DocumentEntity, 
+      DocumentTranslationEntity
+    ]),
   ],
   controllers: [
     HomeController,
