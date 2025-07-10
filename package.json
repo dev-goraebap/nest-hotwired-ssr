@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
     "concurrently": "^9.2.0",
+    "cookie-parser": "^1.4.7",
     "cross-env": "^7.0.3",
     "express-session": "^1.18.1",
     "nestjs-i18n": "^10.5.1",
