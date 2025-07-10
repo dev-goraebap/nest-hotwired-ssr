@@ -31,6 +31,10 @@
   <div>
     {{{ await $slots.main() }}}
   </div>
+
+  <div class="fixed left-5 bottom-5 z-[999]">
+    @!uikit.flash()
+  </div>
 </body>
 
 </html>
