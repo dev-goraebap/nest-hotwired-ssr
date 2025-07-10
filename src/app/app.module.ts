@@ -6,16 +6,19 @@ import { NestMvcCoreModule } from 'nestjs-mvc-tools';
 import { join } from 'path';
 
 import { TypeOrmConfig } from 'src/config/typeorm.config';
+import { AdminCategoriesController } from './controllers/admin.categories.controller';
 import { AdminController } from './controllers/admin.controller';
-import { CategoriesController } from './controllers/admin/categories.controller';
-import { DocumentsController as AdminDocumentsController } from './controllers/admin/documents.controller';
+import { AdminDocumentsController } from './controllers/admin.documents.controller';
+import { DocumentsControllers } from './controllers/documents.controller';
 import { HomeController } from './controllers/home.controller';
 import { SessionsController } from './controllers/sessions.controller';
 import { CategoryEntity } from './entities/category.entity';
 import { DocumentEntity } from './entities/document.entity';
 import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
-import { CategoriesService } from './services/admin/categories.service';
-import { DocumentsService } from './services/admin/documents.service';
+import { AdminCategoriesService } from './services/admin.categories.service';
+import { AdminDocumentsService } from './services/admin.documents.service';
+import { CategoriesService } from './services/categories.service';
+import { DocumentsService } from './services/documents.service';
 
 @Module({
   imports: [
@@ -40,12 +43,15 @@ import { DocumentsService } from './services/admin/documents.service';
   ],
   controllers: [
     HomeController,
+    DocumentsControllers,
     AdminController,
     AdminDocumentsController,
-    CategoriesController,
+    AdminCategoriesController,
     SessionsController,
   ],
   providers: [
+    AdminCategoriesService,
+    AdminDocumentsService,
     CategoriesService,
     DocumentsService,
     { provide: APP_INTERCEPTOR, useClass: GlobalPageStatesInterceptor },

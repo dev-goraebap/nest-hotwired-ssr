@@ -30,7 +30,7 @@
             <ul>
               @each(document in category?.documents)
                 <li>
-                  <a href="#">{{document?.title}}</a>
+                  <a href="{{document?.getUrl()}}">{{document?.title}}</a>
                 </li>
               @end
             </ul>

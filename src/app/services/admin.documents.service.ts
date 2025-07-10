@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
 import { Not } from 'typeorm';
 
-import { CategoryEntity } from '../../entities/category.entity';
-import { DocumentEntity } from '../../entities/document.entity';
+import { CategoryEntity } from '../entities/category.entity';
+import { DocumentEntity } from '../entities/document.entity';
 
 @Injectable()
-export class DocumentsService {
+export class AdminDocumentsService {
   index() {
     return DocumentEntity.find({
       relations: {
@@ -21,16 +21,6 @@ export class DocumentsService {
       relations: {
         category: true,
       },
-    });
-    if (!result) {
-      throw new NotFoundException('게시물을 찾을 수 없습니다.');
-    }
-    return result;
-  }
-
-  async getBySlug(slug: string) {
-    const result = await DocumentEntity.findOne({
-      where: { slug },
     });
     if (!result) {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');

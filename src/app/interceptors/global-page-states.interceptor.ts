@@ -8,7 +8,7 @@ import { Request } from 'express';
 import { I18nContext } from 'nestjs-i18n';
 import { NestMvcView } from 'nestjs-mvc-tools';
 
-import { CategoriesService } from '../services/admin/categories.service';
+import { CategoriesService } from '../services/categories.service';
 
 @Injectable()
 export class GlobalPageStatesInterceptor implements NestInterceptor {

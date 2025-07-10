@@ -18,11 +18,11 @@ import {
   View
 } from 'nestjs-mvc-tools';
 
-import { DocumentsService } from 'src/app/services/admin/documents.service';
+import { AdminDocumentsService } from 'src/app/services/admin.documents.service';
 
 @Controller({ path: 'admin/documents' })
-export class DocumentsController {
-  constructor(private readonly documentsService: DocumentsService) {}
+export class AdminDocumentsController {
+  constructor(private readonly documentsService: AdminDocumentsService) {}
 
   @Get()
   async index(@View() view: NestMvcView) {

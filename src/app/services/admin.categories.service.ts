@@ -1,9 +1,9 @@
 import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
 import { In } from 'typeorm';
 
-import { CategoryEntity } from '../../entities/category.entity';
+import { CategoryEntity } from '../entities/category.entity';
 
-export class CategoriesService {
+export class AdminCategoriesService {
   async index() {
     return await CategoryEntity.find({
       order: {
@@ -11,23 +11,6 @@ export class CategoriesService {
         createdAt: 'desc',
       },
     });
-  }
-
-  async getSidebarCategories() {
-    const results = await CategoryEntity.createQueryBuilder('category')
-      .leftJoinAndSelect('category.documents', 'document')
-      .select([
-        'category.id',
-        'category.name',
-        'document.id',
-        'document.title',
-        'document.slug',
-      ])
-      .orderBy('category.order', 'ASC')
-      .addOrderBy('category.createdAt', 'DESC')
-      .addOrderBy('document.createdAt', 'ASC')
-      .getMany();
-    return results;
   }
 
   async show(id: number) {

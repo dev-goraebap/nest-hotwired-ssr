@@ -17,11 +17,11 @@ import {
   NestMvcView,
   View,
 } from 'nestjs-mvc-tools';
-import { CategoriesService } from 'src/app/services/admin/categories.service';
+import { AdminCategoriesService } from 'src/app/services/admin.categories.service';
 
 @Controller({ path: 'admin/categories' })
-export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+export class AdminCategoriesController {
+  constructor(private readonly categoriesService: AdminCategoriesService) {}
 
   @Get()
   async index(@View() view: NestMvcView) {
