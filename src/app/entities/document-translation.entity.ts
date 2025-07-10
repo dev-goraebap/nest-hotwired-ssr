@@ -1,9 +1,18 @@
-import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { DocumentEntity } from './document.entity';
 
 @Entity({ name: 'document_translations' })
 @Index(['document', 'languageCode'], { unique: true })
-export class DocumentTranslationEntity {
+export class DocumentTranslationEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   readonly id: number;
 
