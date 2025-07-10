@@ -1,25 +1,57 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
-import { Not } from 'typeorm';
+import { EntityManager, Not } from 'typeorm';
 
 import { CategoryEntity } from '../entities/category.entity';
+import { DocumentTranslationEntity } from '../entities/document-translation.entity';
 import { DocumentEntity } from '../entities/document.entity';
 
 @Injectable()
 export class AdminDocumentsService {
+  constructor(private readonly entityManager: EntityManager) {}
+
   index() {
     return DocumentEntity.find({
       relations: {
-        category: true,
+        category: {
+          translations: true,
+        },
+        translations: true,
+      },
+      where: {
+        translations: {
+          languageCode: 'ko',
+        },
+        category: {
+          translations: {
+            languageCode: 'ko',
+          },
+        },
+      },
+      order: {
+        createdAt: 'asc',
       },
     });
   }
 
   async getById(id: number) {
     const result = await DocumentEntity.findOne({
-      where: { id },
+      where: {
+        id,
+        translations: {
+          languageCode: 'ko',
+        },
+        category: {
+          translations: {
+            languageCode: 'ko',
+          },
+        },
+      },
       relations: {
-        category: true,
+        category: {
+          translations: true,
+        },
+        translations: true,
       },
     });
     if (!result) {
@@ -28,35 +60,85 @@ export class AdminDocumentsService {
     return result;
   }
 
-  async create(dto: any) {
-    const { title, content, slug, category } =
-      await this.validateAndPrepareData(dto);
+  async create(dto: any, manager?: EntityManager): Promise<DocumentEntity> {
+    const em = manager || this.entityManager;
 
-    const document = DocumentEntity.create({
-      title,
-      content,
+    // 유효성 검증 및 데이터 준비 (slug, category만 필요)
+    const { slug, category } = await this.validateAndPrepareData(dto);
+
+    const document = em.create(DocumentEntity, {
       slug,
       category,
     });
 
-    await document.save();
-    return document;
+    return await em.save(document);
   }
 
-  async update(id: number, dto: any) {
+  async createTranslation(
+    documentId: number,
+    languageCode: string,
+    translationDto: { title: string; content: string },
+    manager?: EntityManager,
+  ): Promise<DocumentTranslationEntity> {
+    const em = manager || this.entityManager;
+
+    const translation = em.create(DocumentTranslationEntity, {
+      document: { id: documentId },
+      languageCode,
+      title: translationDto.title,
+      content: translationDto.content,
+    });
+
+    return await em.save(translation);
+  }
+
+  async update(
+    id: number,
+    dto: any,
+    manager?: EntityManager,
+  ): Promise<DocumentEntity> {
+    const em = manager || this.entityManager;
+
     const document = await DocumentEntity.findOne({ where: { id } });
     if (!document) {
       throw new MvcValidationException('문서를 찾을 수 없습니다.');
     }
 
-    const { title, content, slug, category } =
-      await this.validateAndPrepareData(dto, document);
+    const { slug, category } = await this.validateAndPrepareData(dto, document);
 
-    // 문서 업데이트
-    Object.assign(document, { title, content, slug, category });
-    await document.save();
+    // 문서 기본 정보 업데이트 (slug, category만)
+    Object.assign(document, { slug, category });
+    await em.save(document);
 
     return document;
+  }
+
+  async updateTranslation(
+    documentId: number,
+    languageCode: string,
+    translationDto: { title: string; content: string },
+    manager?: EntityManager,
+  ): Promise<DocumentTranslationEntity> {
+    const em = manager || this.entityManager;
+
+    let translation = await em.findOne(DocumentTranslationEntity, {
+      where: { document: { id: documentId }, languageCode },
+    });
+
+    if (!translation) {
+      // 번역이 없으면 생성
+      translation = em.create(DocumentTranslationEntity, {
+        document: { id: documentId },
+        languageCode,
+        title: translationDto.title,
+        content: translationDto.content,
+      });
+    } else {
+      // 기존 번역 업데이트
+      Object.assign(translation, translationDto);
+    }
+
+    return await em.save(translation);
   }
 
   async destroy(id: number) {
@@ -112,13 +194,22 @@ export class AdminDocumentsService {
       throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
     }
 
-    // 제목 중복 검증
-    if (!existingDocument || title !== existingDocument.title) {
-      const titleCondition = existingDocument
-        ? { where: { title, id: Not(existingDocument.id) } }
-        : { where: { title } };
-
-      const existsByTitle = await DocumentEntity.exists(titleCondition);
+    // 제목 중복 검증 (번역 테이블에서 한국어 기준으로)
+    if (!existingDocument) {
+      const existsByTitle = await DocumentTranslationEntity.findOne({
+        where: { title, languageCode: 'ko' },
+      });
+      if (existsByTitle) {
+        throw new MvcValidationException('이미 존재하는 제목입니다.');
+      }
+    } else {
+      const existsByTitle = await DocumentTranslationEntity.findOne({
+        where: {
+          title,
+          languageCode: 'ko',
+          document: { id: Not(existingDocument.id) },
+        },
+      });
       if (existsByTitle) {
         throw new MvcValidationException('이미 존재하는 제목입니다.');
       }
