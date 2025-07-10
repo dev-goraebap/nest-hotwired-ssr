@@ -21,7 +21,32 @@
 </head>
 
 <body>
-  {{{ await $slots.main() }}}
+  <div class="flex h-screen overflow-hidden">
+    <aside class="bg-base-200 w-sm min-w-sm flex-shrink-0 prose prose-sm p-10">
+      <h1>Nestjs MVC</h1>
+        @each(category in categories)
+          <h2>{{category?.name}}</h2>
+          @if(category?.documents?.length > 0)
+            <ul>
+              @each(document in category?.documents)
+                <li>
+                  <a href="#">{{document?.title}}</a>
+                </li>
+              @end
+            </ul>
+          @end
+        @end
+    </aside>
+    
+    <main class="flex-1 min-w-0">
+      <div class="h-full overflow-auto">
+        <div class="p-10 min-w-[1024px]">
+          {{{ await $slots.main() }}}
+        </div>
+      </div>
+    </main>
+  </div>
+  @!uikit.modal() 
 </body>
 
 </html>
