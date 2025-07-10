@@ -127,20 +127,6 @@ export class AdminCategoriesService {
     await CategoryEntity.remove(category);
   }
 
-  // 특정 언어의 카테고리 목록 조회
-  async getByLanguage(languageCode: string = 'ko') {
-    return await CategoryEntity.createQueryBuilder('category')
-      .leftJoinAndSelect(
-        'category.translations',
-        'translation',
-        'translation.languageCode = :languageCode',
-        { languageCode },
-      )
-      .orderBy('category.order', 'ASC')
-      .addOrderBy('category.createdAt', 'DESC')
-      .getMany();
-  }
-
   // 유효성 검증 메서드들
   private async validateCreateData(dto: any) {
     const { name } = dto;
