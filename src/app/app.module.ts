@@ -23,6 +23,10 @@ import { AdminDocumentsService } from './services/admin.documents.service';
 import { CategoriesService } from './services/categories.service';
 import { DocumentsService } from './services/documents.service';
 import { TranslationService } from './services/translation.service';
+import { CreateCategoryUseCase } from './use-cases/create-category.use-case';
+import { CreateDocumentUseCase } from './use-cases/create-document.use-case';
+import { UpdateCategoryUseCase } from './use-cases/update-category.use-case';
+import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
 
 @Module({
   imports: [
@@ -31,7 +35,7 @@ import { TranslationService } from './services/translation.service';
       isGlobal: true
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'ko', // 기본 언어
+      fallbackLanguage: 'en', // 기본 언어
       loaderOptions: {
         path: join(process.cwd(), 'src', 'i18n'),
         watch: process.env.NODE_ENV === 'development' || true,
@@ -65,6 +69,10 @@ import { TranslationService } from './services/translation.service';
   providers: [
     AdminCategoriesService,
     AdminDocumentsService,
+    CreateDocumentUseCase,
+    CreateCategoryUseCase,
+    UpdateDocumentUseCase,
+    UpdateCategoryUseCase,
     CategoriesService,
     DocumentsService,
     TranslationService,
