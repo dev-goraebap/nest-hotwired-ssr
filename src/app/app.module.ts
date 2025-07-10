@@ -14,8 +14,8 @@ import { SessionsController } from './controllers/sessions.controller';
 import { CategoryEntity } from './entities/category.entity';
 import { DocumentEntity } from './entities/document.entity';
 import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
-import { CategoriesService } from './services/categories.service';
-import { DocumentsService } from './services/documents.service';
+import { CategoriesService } from './services/admin/categories.service';
+import { DocumentsService } from './services/admin/documents.service';
 
 @Module({
   imports: [

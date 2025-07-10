@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
 import { Not } from 'typeorm';
 
-import { CategoryEntity } from '../entities/category.entity';
-import { DocumentEntity } from '../entities/document.entity';
+import { CategoryEntity } from '../../entities/category.entity';
+import { DocumentEntity } from '../../entities/document.entity';
 
 @Injectable()
 export class DocumentsService {

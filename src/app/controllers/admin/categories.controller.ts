@@ -17,7 +17,7 @@ import {
   NestMvcView,
   View,
 } from 'nestjs-mvc-tools';
-import { CategoriesService } from 'src/app/services/categories.service';
+import { CategoriesService } from 'src/app/services/admin/categories.service';
 
 @Controller({ path: 'admin/categories' })
 export class CategoriesController {

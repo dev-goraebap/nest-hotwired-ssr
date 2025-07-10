@@ -1,7 +1,7 @@
 import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
 import { In } from 'typeorm';
 
-import { CategoryEntity } from '../entities/category.entity';
+import { CategoryEntity } from '../../entities/category.entity';
 
 export class CategoriesService {
   async index() {
@@ -11,14 +11,6 @@ export class CategoriesService {
         createdAt: 'desc',
       },
     });
-  }
-
-  async show(id: number) {
-    const result = await CategoryEntity.findOne({ where: { id } });
-    if (!result) {
-      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
-    }
-    return result;
   }
 
   async getSidebarCategories() {
@@ -31,11 +23,19 @@ export class CategoriesService {
         'document.title',
         'document.slug',
       ])
-      .orderBy('category.rank', 'ASC')
+      .orderBy('category.order', 'ASC')
       .addOrderBy('category.createdAt', 'DESC')
       .addOrderBy('document.createdAt', 'ASC')
       .getMany();
     return results;
+  }
+
+  async show(id: number) {
+    const result = await CategoryEntity.findOne({ where: { id } });
+    if (!result) {
+      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
+    }
+    return result;
   }
 
   async create(dto: any) {
@@ -81,7 +81,9 @@ export class CategoriesService {
   }
 
   async updateOrders(idAndOrders: { id: number; order: number }[]) {
-    const idAndOrderMap = new Map(idAndOrders.map(({ id, order }) => [id, order]));
+    const idAndOrderMap = new Map(
+      idAndOrders.map(({ id, order }) => [id, order]),
+    );
     const ids = Array.from(idAndOrderMap.keys());
 
     const categories = await CategoryEntity.find({

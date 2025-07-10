@@ -18,7 +18,7 @@ import {
   View
 } from 'nestjs-mvc-tools';
 
-import { DocumentsService } from 'src/app/services/documents.service';
+import { DocumentsService } from 'src/app/services/admin/documents.service';
 
 @Controller({ path: 'admin/documents' })
 export class DocumentsController {
