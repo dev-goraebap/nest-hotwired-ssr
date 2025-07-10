@@ -1,11 +1,22 @@
+import { Injectable } from '@nestjs/common';
 import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
-import { In } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 
+import { CategoryTranslationEntity } from '../entities/category-translation.entity';
 import { CategoryEntity } from '../entities/category.entity';
 
+@Injectable()
 export class AdminCategoriesService {
-  async index() {
+  constructor(private readonly entityManager: EntityManager) {}
+
+  async getAll() {
     return await CategoryEntity.find({
+      where: {
+        translations: {
+          languageCode: 'ko',
+        },
+      },
+      relations: ['translations'],
       order: {
         order: 'asc',
         createdAt: 'desc',
@@ -13,54 +24,79 @@ export class AdminCategoriesService {
     });
   }
 
-  async show(id: number) {
-    const result = await CategoryEntity.findOne({ where: { id } });
+  async getById(id: number) {
+    const result = await CategoryEntity.findOne({
+      where: {
+        id,
+        translations: {
+          languageCode: 'ko',
+        },
+      },
+      relations: ['translations'],
+    });
     if (!result) {
       throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
     }
     return result;
   }
 
-  async create(dto: any) {
-    const { name, description } = dto;
+  async create(dto: any, manager?: EntityManager): Promise<CategoryEntity> {
+    const em = manager || this.entityManager;
 
-    if (!name) {
-      throw new MvcValidationException('카테고리 이름을 입력해 주세요');
-    }
+    // 유효성 검증
+    await this.validateCreateData(dto);
 
-    let category = await CategoryEntity.findOne({ where: { name } });
-    if (category) {
-      throw new MvcValidationException('중복된 이름입니다.');
-    }
-
-    category = CategoryEntity.create({
-      name,
-      description,
+    const category = em.create(CategoryEntity, {
       order: 1,
     });
-    await category.save();
+
+    return await em.save(category);
   }
 
-  async update(id: number, dto: any) {
-    const { name, description } = dto;
-    let category = await CategoryEntity.findOne({ where: { id } });
-    if (!category) {
-      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
+  async createTranslation(
+    categoryId: number,
+    languageCode: string,
+    translationDto: { name: string; description: string },
+    manager?: EntityManager,
+  ): Promise<CategoryTranslationEntity> {
+    const em = manager || this.entityManager;
+
+    const translation = em.create(CategoryTranslationEntity, {
+      category: { id: categoryId },
+      languageCode,
+      name: translationDto.name,
+      description: translationDto.description,
+    });
+
+    return await em.save(translation);
+  }
+
+  async updateTranslation(
+    categoryId: number,
+    languageCode: string,
+    translationDto: { name: string; description: string },
+    manager?: EntityManager,
+  ): Promise<CategoryTranslationEntity> {
+    const em = manager || this.entityManager;
+
+    let translation = await em.findOne(CategoryTranslationEntity, {
+      where: { category: { id: categoryId }, languageCode },
+    });
+
+    if (!translation) {
+      // 번역이 없으면 생성
+      translation = em.create(CategoryTranslationEntity, {
+        category: { id: categoryId },
+        languageCode,
+        name: translationDto.name,
+        description: translationDto.description,
+      });
+    } else {
+      // 기존 번역 업데이트
+      Object.assign(translation, translationDto);
     }
 
-    if (!name) {
-      throw new MvcValidationException('카테고리 이름을 입력해 주세요');
-    }
-
-    if (category.name !== name) {
-      let category = await CategoryEntity.findOne({ where: { name } });
-      if (category) {
-        throw new MvcValidationException('중복된 이름입니다.');
-      }
-    }
-
-    category = CategoryEntity.create({ ...category, name, description });
-    await category.save();
+    return await em.save(translation);
   }
 
   async updateOrders(idAndOrders: { id: number; order: number }[]) {
@@ -84,10 +120,41 @@ export class AdminCategoriesService {
   }
 
   async destroy(id: number) {
-    let category = await CategoryEntity.findOne({ where: { id } });
+    const category = await CategoryEntity.findOne({ where: { id } });
     if (!category) {
       throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
     }
     await CategoryEntity.remove(category);
+  }
+
+  // 특정 언어의 카테고리 목록 조회
+  async getByLanguage(languageCode: string = 'ko') {
+    return await CategoryEntity.createQueryBuilder('category')
+      .leftJoinAndSelect(
+        'category.translations',
+        'translation',
+        'translation.languageCode = :languageCode',
+        { languageCode },
+      )
+      .orderBy('category.order', 'ASC')
+      .addOrderBy('category.createdAt', 'DESC')
+      .getMany();
+  }
+
+  // 유효성 검증 메서드들
+  private async validateCreateData(dto: any) {
+    const { name } = dto;
+
+    if (!name) {
+      throw new MvcValidationException('카테고리 이름을 입력해 주세요');
+    }
+
+    // 한국어 번역에서 중복 체크
+    const existingTranslation = await CategoryTranslationEntity.findOne({
+      where: { name, languageCode: 'ko' },
+    });
+    if (existingTranslation) {
+      throw new MvcValidationException('중복된 이름입니다.');
+    }
   }
 }
