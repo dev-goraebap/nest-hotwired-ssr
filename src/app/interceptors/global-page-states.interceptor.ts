@@ -27,7 +27,9 @@ export class GlobalPageStatesInterceptor implements NestInterceptor {
     const i18nContext = I18nContext.current();
     const lang = i18nContext?.lang;
 
-    const categories = await this.categoriesService.getSidebarCategories();
+    // 언어 코드를 전달하여 카테고리 가져오기
+    const categories = await this.categoriesService.getSidebarCategories(lang);
+    console.log(categories);
 
     // 전역 상태로 lang 처리
     view.share({ lang, categories });
