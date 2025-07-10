@@ -32,12 +32,15 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
   imports: [
     ConfigModule.forRoot({
       envFilePath: join(process.cwd(), `.env.${process.env.NODE_ENV}.local`),
-      isGlobal: true
+      isGlobal: true,
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en', // 기본 언어
       loaderOptions: {
-        path: join(process.cwd(), 'src', 'i18n'),
+        path:
+          process.env.NODE_ENV === 'development'
+            ? join(process.cwd(), 'src', 'i18n')
+            : join(process.cwd(), 'dist', 'i18n'),
         watch: process.env.NODE_ENV === 'development' || true,
       },
       resolvers: [
@@ -46,7 +49,13 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
       ],
     }),
     NestMvcCoreModule.forRoot({
-      debug: true,
+      debug: process.env.NODE_ENV === 'development',
+      vite: {
+        buildOutDir: join(process.cwd(), 'resources', 'public', 'builds'),
+        developServerUrl: 'http://localhost:5173',
+        mode:
+          process.env.NODE_ENV === 'development' ? 'development' : 'production',
+      },
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfig,
@@ -54,8 +63,8 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
     TypeOrmModule.forFeature([
       CategoryEntity,
       CategoryTranslationEntity,
-      DocumentEntity, 
-      DocumentTranslationEntity
+      DocumentEntity,
+      DocumentTranslationEntity,
     ]),
   ],
   controllers: [
