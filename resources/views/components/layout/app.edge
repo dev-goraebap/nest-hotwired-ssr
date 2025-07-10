@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="{{ theme }}">
 
 <head>
   <meta charset="UTF-8">
@@ -22,8 +22,9 @@
 
 <body>
   <div class="flex h-screen overflow-hidden">
-    <aside class="bg-base-200 border-r border-base-300 w-sm min-w-sm flex-shrink-0 prose prose-sm p-10">
-      <h1>Nestjs MVC</h1>
+    <aside class="flex flex-col justify-between bg-base-200 border-r border-base-300 w-sm min-w-sm flex-shrink-0 prose prose-sm p-10">
+      <div>
+        <h1>Nestjs MVC</h1>
         @each(category in categories)
           <h2>{{category?.name}}</h2>
           @if(category?.documents?.length > 0)
@@ -36,6 +37,9 @@
             </ul>
           @end
         @end
+      </div>
+
+      @!uikit.themeSwitcher()
     </aside>
     
     <main class="flex-1 min-w-0">
