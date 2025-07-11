@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HeaderResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import { CookieResolver, I18nModule } from 'nestjs-i18n';
 import { NestMvcCoreModule } from 'nestjs-mvc-tools';
 import { join } from 'path';
 
@@ -44,8 +44,7 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
         watch: process.env.NODE_ENV === 'development' || true,
       },
       resolvers: [
-        { use: QueryResolver, options: ['lang'] }, // ?lang=ko
-        { use: HeaderResolver, options: ['x-custom-lang'] },
+        { use: CookieResolver, options: ['language'] },
       ],
     }),
     NestMvcCoreModule.forRoot({
