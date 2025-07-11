@@ -1,19 +1,17 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as session from 'express-session';
-import * as cookieParser from 'cookie-parser';
 import { join } from 'path';
 
 import { AppModule } from './app/app.module';
-import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const configService = app.get(ConfigService);
-
-  console.log(configService.get('SESSION_SECRET'));
 
   app.use(cookieParser());
 
