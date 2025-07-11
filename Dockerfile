@@ -40,6 +40,7 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/resources/public ./resources/public
 COPY --from=builder --chown=nestjs:nodejs /app/resources/views ./resources/views
+COPY --from=builder --chown=nestjs:nodejs /app/.env.production.local ./
 
 # storage 폴더 생성 및 권한 부여
 RUN mkdir -p ./storage && chown -R nestjs:nodejs ./storage
