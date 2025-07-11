@@ -17,12 +17,6 @@ export class SortableController extends Controller {
       dragClass: 'sortable-drag', // 드래그되는 요소 스타일
 
       onEnd: async (event) => {
-        console.log('순서 변경:', {
-          from: event.oldIndex,
-          to: event.newIndex,
-          element: event.item,
-        });
-
         await this.updateOrder();
       },
     });

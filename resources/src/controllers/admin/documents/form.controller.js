@@ -4,7 +4,7 @@ export class DocumentFormController extends Controller {
   static targets = ['categoryIdTemplate', 'categoryContainer'];
 
   connect() {
-    console.log(this.element);
+    console.debug(this.element);
   }
 
   selectCategory(e) {

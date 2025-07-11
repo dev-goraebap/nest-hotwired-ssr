@@ -64,7 +64,7 @@ export class TinyMceController extends Controller {
 
         // 초기화 완료 시 이벤트
         editor.on('init', function () {
-          console.log('TinyMCE 초기화 완료');
+          console.debug('TinyMCE 초기화 완료');
         });
       },
     });
