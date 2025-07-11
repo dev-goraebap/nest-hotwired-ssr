@@ -7,6 +7,7 @@ import { ModalController } from './modal.controller';
 import { SortableController } from './sortable_controller';
 import { ThemeSwitcherController } from './theme_switcher_controller';
 import { TinyMceController } from './tiny-mce.controller';
+import { LanguageSwitcherController } from './language_switcher_controller';
 
 application.register('hello', HelloWorldController);
 application.register('tiny-mce', TinyMceController);
@@ -15,3 +16,4 @@ application.register('document-form', DocumentFormController);
 application.register('flash', FlashController);
 application.register('sortable', SortableController);
 application.register('theme-switcher', ThemeSwitcherController);
+application.register('language-switcher', LanguageSwitcherController);
