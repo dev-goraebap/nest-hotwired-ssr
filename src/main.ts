@@ -17,6 +17,7 @@ async function bootstrap() {
 
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
   app.use(
     session({
       name: 'connect.sid',
@@ -26,7 +27,7 @@ async function bootstrap() {
       cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 24시간 (밀리초)
         httpOnly: true, // XSS 보안
-        secure: process.env.NODE_ENV === 'production', // HTTPS에서만 전송
+        secure: 'auto',
         sameSite: 'lax', // CSRF 보호
       },
     }),
