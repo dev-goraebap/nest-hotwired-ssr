@@ -6,9 +6,14 @@ import * as cookieParser from 'cookie-parser';
 import { join } from 'path';
 
 import { AppModule } from './app/app.module';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  const configService = app.get(ConfigService);
+
+  console.log(configService.get('SESSION_SECRET'));
 
   app.use(cookieParser());
 
@@ -16,10 +21,16 @@ async function bootstrap() {
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || 'your-secret-key',
+      name: 'connect.sid',
+      secret: configService.get('SESSION_SECRET')!,
       resave: false,
       saveUninitialized: false,
-      cookie: { maxAge: 60000 },
+      cookie: {
+        maxAge: 24 * 60 * 60 * 1000, // 24시간 (밀리초)
+        httpOnly: true, // XSS 보안
+        secure: process.env.NODE_ENV === 'production', // HTTPS에서만 전송
+        sameSite: 'lax', // CSRF 보호
+      },
     }),
   );
 
