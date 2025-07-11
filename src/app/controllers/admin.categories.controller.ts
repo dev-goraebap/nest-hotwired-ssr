@@ -51,7 +51,6 @@ export class AdminCategoriesController {
 
   @Post()
   async create(@Req() req: NestMvcReq) {
-    console.log(req.body?.category);
     await this.createCategoryUseCase.execute(req.body?.category);
 
     req.flash.success('작업 성공');
@@ -67,7 +66,6 @@ export class AdminCategoriesController {
   @Put('orders')
   async updateOrders(@Req() req: NestMvcReq) {
     await this.categoriesService.updateOrders(req.body?.items);
-    console.log(req.body);
     req.flash.success('순서 변경 성공!');
   }
 
