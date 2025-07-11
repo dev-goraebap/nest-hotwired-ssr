@@ -11,7 +11,6 @@ export class TranslationService {
     const apiKey = this.configService.get<string>('GEMINI_API_KEY')!;
     this.genAI = new GoogleGenerativeAI(apiKey);
     this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    console.log('Init TranslationService');
   }
 
   async translateText(text: string, targetLanguage: string): Promise<string> {
