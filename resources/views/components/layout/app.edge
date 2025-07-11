@@ -22,35 +22,25 @@
 
 <body>
   <div class="flex h-screen overflow-hidden">
-    <aside class="flex flex-col justify-between bg-base-200 border-r border-base-300 w-sm min-w-sm flex-shrink-0 prose prose-sm p-10">
-      <div>
-        <h1>Nestjs MVC</h1>
-        @each(category in categories)
-          <h2>{{category?.name}}</h2>
-          @if(category?.documents?.length > 0)
-            <ul>
-              @each(document in category?.documents)
-                <li>
-                  <a href="{{document?.getUrl()}}">{{document?.title}}</a>
-                </li>
-              @end
-            </ul>
-          @end
-        @end
-      </div>
+    @!partial.sidebar({ adminMode })
 
-      @!uikit.themeSwitcher()
-    </aside>
-    
-    <main class="flex-1 min-w-0">
-      <div class="h-full overflow-auto">
-        <div class="p-10 min-w-[1024px]">
-          {{{ await $slots.main() }}}
+    <main class="flex-1 min-w-0 flex flex-col overflow-auto">
+      <div class="navbar sticky left-0 top-0 bg-base-100 shadow-sm z-10">
+        <div class="flex-1">
+          {{-- <a class="btn btn-ghost text-xl"></a> --}}
+        </div>
+        <div class="flex-none">
+          @!partial.themeDropdown()
+          @!partial.languageDropdown()
         </div>
       </div>
+      <div class="p-10 min-w-[1024px] flex-1 ">
+        {{{ await $slots.main() }}}
+      </div>
+      @!partial.footer()
     </main>
   </div>
-  @!uikit.modal() 
+  @!uikit.modal()
 </body>
 
 </html>
