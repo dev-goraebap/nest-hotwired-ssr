@@ -5,16 +5,15 @@ export class ThemeSwitcherController extends Controller {
 
   onChangeTheme(e) {
     const target = e.currentTarget;
-    const theme = target.dataset.theme;
+    const themeType = target.dataset.type;
 
     // 전체 html 테마 변경
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', themeType);
 
     // 쿠키 설정
-    this.setThemeCookie(theme);
+    this.setThemeCookie(themeType);
 
-    // 모든 버튼들 강조효과 제거
-    this.highlightActiveButton(theme);
+    Turbo.visit(window.location.href);
   }
 
   setThemeCookie(theme) {
@@ -34,15 +33,5 @@ export class ThemeSwitcherController extends Controller {
   getThemeFromCookie() {
     const match = document.cookie.match(/(?:^|;\s*)theme=([^;]*)/);
     return match ? decodeURIComponent(match[1]) : null;
-  }
-
-  highlightActiveButton(theme) {
-    this.buttonTargets.forEach((button) => {
-      if (button.dataset.theme === theme) {
-        button.classList.add('border-primary', 'border-2');
-      } else {
-        button.classList.remove('border-primary', 'border-2');
-      }
-    });
   }
 }
