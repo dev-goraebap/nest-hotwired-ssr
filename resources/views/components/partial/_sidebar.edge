@@ -1,0 +1,39 @@
+@let(isCommon = !adminMode)
+@let(isAdmin = adminMode)
+
+<aside
+  class="flex flex-col justify-between bg-base-200 border-r border-base-300 w-sm min-w-sm flex-shrink-0 prose prose-sm p-10 z-50">
+  @if(isCommon)
+    <div>
+      <h1>Nestjs MVC</h1>
+      @each(category in categories)
+        <h2>{{category?.name}}</h2>
+        @if(category?.documents?.length > 0)
+        <ul>
+          @each(document in category?.documents)
+          <li>
+            <a href="{{document?.getUrl()}}">{{document?.title}}</a>
+          </li>
+          @end
+        </ul>
+        @end
+      @end
+    </div>
+  @end
+
+  @if(isAdmin)
+    <div>
+      <h1>Nestjs MVC 관리</h1>
+      <ul>
+        <li><a href="/admin/documents">문서 관리</a></li>
+        <li><a href="/admin/categories">카테고리 관리</a></li>
+      </ul>
+    </div>
+
+    <form action="/sessions/logout" method="POST" class="inline">
+      <button type="submit" class="btn btn-warning border border-warning btn-soft w-full">
+        로그아웃
+      </button>
+    </form>
+  @end
+</aside>
