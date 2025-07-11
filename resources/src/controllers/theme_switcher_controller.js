@@ -10,15 +10,39 @@ export class ThemeSwitcherController extends Controller {
     // 전체 html 테마 변경
     document.documentElement.setAttribute('data-theme', theme);
 
-    // 쿠키에 테마 저장 (1달 유효)
-    const oneMonthInSeconds = 30 * 24 * 60 * 60; // 30일을 초로 환산
-    document.cookie = `theme=${theme}; path=/; max-age=${oneMonthInSeconds}`;
+    // 쿠키 설정
+    this.setThemeCookie(theme);
 
     // 모든 버튼들 강조효과 제거
-    this.buttonTargets.forEach((x) => {
-      x.classList.remove('border-primary', 'border-2');
+    this.highlightActiveButton(theme);
+  }
+
+  setThemeCookie(theme) {
+    const oneMonthInSeconds = 30 * 24 * 60 * 60;
+
+    document.cookie = [
+      `theme=${encodeURIComponent(theme)}`,
+      `path=/`,
+      `max-age=${oneMonthInSeconds}`,
+      `SameSite=Lax`, // CSRF 보호
+      location.protocol === 'https:' ? 'Secure' : '', // HTTPS에서만 Secure
+    ]
+      .filter(Boolean)
+      .join('; ');
+  }
+
+  getThemeFromCookie() {
+    const match = document.cookie.match(/(?:^|;\s*)theme=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+
+  highlightActiveButton(theme) {
+    this.buttonTargets.forEach((button) => {
+      if (button.dataset.theme === theme) {
+        button.classList.add('border-primary', 'border-2');
+      } else {
+        button.classList.remove('border-primary', 'border-2');
+      }
     });
-    // 선택된 버튼에 강조효과 추가
-    target.classList.add('border-primary', 'border-2');
   }
 }
