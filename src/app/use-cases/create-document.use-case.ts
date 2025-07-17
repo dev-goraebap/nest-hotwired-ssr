@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 
-import { MvcValidationException } from 'nestjs-mvc-tools';
 import { DocumentEntity } from '../entities/document.entity';
 import { AdminDocumentsService } from '../services/admin.documents.service';
 import { TranslationService } from '../services/translation.service';
@@ -78,7 +77,7 @@ export class CreateDocumentUseCase {
     // 한국어 번역 실패 체크
     if (koreanResult.status === 'rejected') {
       const error = koreanResult.reason;
-      throw new MvcValidationException(
+      throw new BadRequestException(
         `한국어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }
@@ -86,7 +85,7 @@ export class CreateDocumentUseCase {
     // 영어 번역 실패 체크
     if (englishResult.status === 'rejected') {
       const error = englishResult.reason;
-      throw new MvcValidationException(
+      throw new BadRequestException(
         `영어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }

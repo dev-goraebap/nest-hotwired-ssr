@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { MvcNotFoundException, MvcValidationException } from 'nestjs-mvc-tools';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager, In } from 'typeorm';
 
 import { CategoryTranslationEntity } from '../entities/category-translation.entity';
@@ -35,7 +34,7 @@ export class AdminCategoriesService {
       relations: ['translations'],
     });
     if (!result) {
-      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
+      throw new NotFoundException('카테고리를 찾을 수 없습니다.');
     }
     return result;
   }
@@ -122,7 +121,7 @@ export class AdminCategoriesService {
   async destroy(id: number) {
     const category = await CategoryEntity.findOne({ where: { id } });
     if (!category) {
-      throw new MvcNotFoundException('카테고리를 찾을 수 없습니다.');
+      throw new NotFoundException('카테고리를 찾을 수 없습니다.');
     }
     await CategoryEntity.remove(category);
   }
@@ -132,7 +131,7 @@ export class AdminCategoriesService {
     const { name } = dto;
 
     if (!name) {
-      throw new MvcValidationException('카테고리 이름을 입력해 주세요');
+      throw new BadRequestException('카테고리 이름을 입력해 주세요');
     }
 
     // 한국어 번역에서 중복 체크
@@ -140,7 +139,7 @@ export class AdminCategoriesService {
       where: { name, languageCode: 'ko' },
     });
     if (existingTranslation) {
-      throw new MvcValidationException('중복된 이름입니다.');
+      throw new BadRequestException('중복된 이름입니다.');
     }
   }
 }

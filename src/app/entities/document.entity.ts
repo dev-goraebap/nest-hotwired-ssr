@@ -20,6 +20,9 @@ export class DocumentEntity extends BaseEntity {
   @Column({ unique: true })
   readonly slug: string;
 
+  @Column()
+  readonly isDraft: boolean;
+
   @CreateDateColumn()
   readonly createdAt: Date;
 

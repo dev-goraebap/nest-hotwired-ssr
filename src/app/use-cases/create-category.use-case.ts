@@ -1,7 +1,6 @@
 // src/app/use-cases/create-category.use-case.ts
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { MvcValidationException } from 'nestjs-mvc-tools';
 
 import { CategoryEntity } from '../entities/category.entity';
 import { AdminCategoriesService } from '../services/admin.categories.service';
@@ -71,7 +70,7 @@ export class CreateCategoryUseCase {
     // 한국어 번역 실패 체크
     if (koreanResult.status === 'rejected') {
       const error = koreanResult.reason;
-      throw new MvcValidationException(
+      throw new BadRequestException(
         `한국어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }
@@ -79,7 +78,7 @@ export class CreateCategoryUseCase {
     // 영어 번역 실패 체크
     if (englishResult.status === 'rejected') {
       const error = englishResult.reason;
-      throw new MvcValidationException(
+      throw new BadRequestException(
         `영어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }

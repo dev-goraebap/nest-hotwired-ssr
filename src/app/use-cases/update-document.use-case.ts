@@ -1,7 +1,6 @@
 // src/app/use-cases/update-document.use-case.ts
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { MvcValidationException } from 'nestjs-mvc-tools';
 
 import { DocumentEntity } from '../entities/document.entity';
 import { AdminDocumentsService } from '../services/admin.documents.service';
@@ -53,8 +52,13 @@ export class UpdateDocumentUseCase {
     manager: EntityManager,
   ) {
     // 영어 번역 자동 업데이트
-    const englishTitle = await this.translationService.translateToEnglish(dto.title);
-    const englishContent = await this.translationService.translateHtmlContent(dto.content, 'English');
+    const englishTitle = await this.translationService.translateToEnglish(
+      dto.title,
+    );
+    const englishContent = await this.translationService.translateHtmlContent(
+      dto.content,
+      'English',
+    );
 
     return await this.documentsService.updateTranslation(
       document.id,
@@ -71,7 +75,7 @@ export class UpdateDocumentUseCase {
     // 한국어 번역 실패 체크
     if (koreanResult.status === 'rejected') {
       const error = koreanResult.reason;
-      throw new MvcValidationException(
+      throw new BadRequestException(
         `한국어 번역 업데이트에 실패했습니다: ${error.message || error}`,
       );
     }
@@ -79,7 +83,7 @@ export class UpdateDocumentUseCase {
     // 영어 번역 실패 체크
     if (englishResult.status === 'rejected') {
       const error = englishResult.reason;
-      throw new MvcValidationException(
+      throw new BadRequestException(
         `영어 번역 업데이트에 실패했습니다: ${error.message || error}`,
       );
     }

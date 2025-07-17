@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CookieResolver, I18nModule } from 'nestjs-i18n';
 import { NestMvcCoreModule } from 'nestjs-mvc-tools';
@@ -17,6 +17,7 @@ import { CategoryTranslationEntity } from './entities/category-translation.entit
 import { CategoryEntity } from './entities/category.entity';
 import { DocumentTranslationEntity } from './entities/document-translation.entity';
 import { DocumentEntity } from './entities/document.entity';
+import { AppExceptionFilter } from './filters/app-exception.filter';
 import { GlobalPageStatesInterceptor } from './interceptors/global-page-states.interceptor';
 import { AdminCategoriesService } from './services/admin.categories.service';
 import { AdminDocumentsService } from './services/admin.documents.service';
@@ -43,9 +44,7 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
             : join(process.cwd(), 'dist', 'i18n'),
         watch: process.env.NODE_ENV === 'development' || true,
       },
-      resolvers: [
-        { use: CookieResolver, options: ['language'] },
-      ],
+      resolvers: [{ use: CookieResolver, options: ['language'] }],
     }),
     NestMvcCoreModule.forRoot({
       debug: process.env.NODE_ENV === 'development',
@@ -84,6 +83,7 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
     CategoriesService,
     DocumentsService,
     TranslationService,
+    { provide: APP_FILTER, useClass: AppExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: GlobalPageStatesInterceptor },
   ],
 })

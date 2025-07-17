@@ -1,4 +1,4 @@
-import { MvcNotFoundException } from 'nestjs-mvc-tools';
+import { NotFoundException } from '@nestjs/common';
 import { DocumentEntity } from '../entities/document.entity';
 
 export class DocumentsService {
@@ -15,7 +15,7 @@ export class DocumentsService {
       },
     });
     if (!result) {
-      throw new MvcNotFoundException('게시물을 찾을 수 없습니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
     }
     return result;
   }

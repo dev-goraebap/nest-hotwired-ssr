@@ -1,11 +1,11 @@
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
   Logger,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { MvcValidationException } from 'nestjs-mvc-tools';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -44,7 +44,7 @@ export class CsrfGuard implements CanActivate {
 
     if (!token || token! == sessionToken) {
       this.logger.debug('Invalid CSRF token');
-      throw new MvcValidationException(
+      throw new BadRequestException(
         '보안 토큰이 만료되었습니다. 페이지를 새로고침 후 다시 시도해주세요.',
       );
     }
