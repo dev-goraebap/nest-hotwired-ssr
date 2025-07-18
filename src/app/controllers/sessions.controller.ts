@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { NestMvcReq } from 'nestjs-mvc-tools';
@@ -34,23 +41,24 @@ export class SessionsController {
 
   @Post('/login')
   async doLogin(@Req() req: NestMvcReq, @Res() res: Response) {
+    console.log(req.body);
+
     const { username, password } = req.body;
 
     const adminUsername = this.configService.get<string>('ADMIN_USERNAME');
     const adminPassword = this.configService.get<string>('ADMIN_PASSWORD');
 
     // 인증 확인
-    if (username === adminUsername && password === adminPassword) {
-      // 세션에 로그인 상태 저장
-      req.session.isLoggedIn = true;
-      req.session.username = username;
-
-      req.flash.success('로그인 성공');
-      return res.redirect('/admin');
-    } else {
-      req.flash.error('아이디 또는 비밀번호가 잘못되었습니다.');
-      return res.redirect('/sessions/login');
+    if (username !== adminUsername || password !== adminPassword) {
+      throw new BadRequestException('아이디 또는 비밀번호가 잘못되었습니다.');
     }
+
+    // 세션에 로그인 상태 저장
+    req.session.isLoggedIn = true;
+    req.session.username = username;
+
+    req.flash.success('로그인 성공');
+    return res.redirect('/admin');
   }
 
   @Post('/logout')
