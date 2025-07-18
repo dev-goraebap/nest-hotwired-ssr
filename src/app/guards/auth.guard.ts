@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     }
 
     req.flash.error('로그인이 필요합니다.');
-    res.redirect('/session/login');
-    return false;
+    res.redirect('/sessions/login');
+    return true;
   }
 }
