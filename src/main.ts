@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -6,10 +7,10 @@ import * as express from 'express';
 import * as session from 'express-session';
 import { join } from 'path';
 
-import { AppModule } from './app/app.module';
+import { MainModule } from './main.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(MainModule);
 
   const configService = app.get(ConfigService);
 
@@ -36,6 +37,14 @@ async function bootstrap() {
   app.useStaticAssets(join(process.cwd(), 'resources', 'public'), {
     prefix: '/public',
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
