@@ -1,36 +1,50 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 
 import { CategoryEntity, DocumentEntity, TranslationService } from 'src/shared';
 
-import { AdminDocumentsService } from '../documents.service';
+import { AdminDocumentsService } from '../services/documents.service';
 import { CreateDocumentDto } from '../dto/create-document.dto';
+import { DocumentValidateService } from '../services/document-validate.service';
 
 @Injectable()
 export class CreateDocumentUseCase {
   constructor(
     private readonly documentsService: AdminDocumentsService,
     private readonly translationService: TranslationService,
+    private readonly documentValidateService: DocumentValidateService,
     private readonly entityManager: EntityManager,
   ) {}
 
   async execute(dto: CreateDocumentDto): Promise<DocumentEntity> {
+    // 1. 카테고리 조회 및 존재 여부 확인
     const category = await CategoryEntity.findOne({
       where: { id: dto.categoryId },
     });
     if (!category) {
-      throw new BadRequestException('카테고리를 찾을 수 없습니다.');
+      throw new NotFoundException('카테고리를 찾을 수 없습니다.');
     }
 
-    // 트랜잭션 실행
+    // 2. 비즈니스 로직 검증 (제목/슬러그 중복 등)
+    await this.documentValidateService.validate(dto);
+
+    // 3. 트랜잭션 실행
     return await this.entityManager.transaction(async (manager) => {
       // 문서 생성
-      const document = await this.documentsService.create(category, dto);
+      const document = await this.documentsService.create(
+        manager,
+        category,
+        dto,
+      );
 
       // 병렬로 번역 생성
       const translations = await Promise.allSettled([
-        this.createKoreanTranslation(document, dto),
-        this.createEnglishTranslation(document, dto),
+        this.createKoreanTranslation(manager, document, dto),
+        this.createEnglishTranslation(manager, document, dto),
       ]);
 
       // 번역 실패 처리
@@ -39,16 +53,21 @@ export class CreateDocumentUseCase {
       return document;
     });
   }
+  '';
 
-  private async createKoreanTranslation(document: DocumentEntity, dto: any) {
+  private async createKoreanTranslation(manager: EntityManager, document: DocumentEntity, dto: any) {
     // 한글로 작성할거기 때문에 그냥 그대로 저장
-    return await this.documentsService.createTranslation(document, 'ko', {
+    return await this.documentsService.createTranslation(manager, document, 'ko', {
       title: dto.title,
       content: dto.content,
     });
   }
 
-  private async createEnglishTranslation(document: DocumentEntity, dto: any) {
+  private async createEnglishTranslation(
+    manager: EntityManager,
+    document: DocumentEntity,
+    dto: any,
+  ) {
     const englishTitle = await this.translationService.translateToEnglish(
       dto.title,
     );
@@ -57,7 +76,7 @@ export class CreateDocumentUseCase {
       'English',
     );
 
-    return await this.documentsService.createTranslation(document, 'en', {
+    return await this.documentsService.createTranslation(manager, document, 'en', {
       title: englishTitle,
       content: englishContent,
     });

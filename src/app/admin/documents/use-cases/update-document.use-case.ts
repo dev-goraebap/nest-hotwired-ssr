@@ -3,25 +3,35 @@ import { EntityManager } from 'typeorm';
 
 import { DocumentEntity, TranslationService } from 'src/shared';
 
-import { AdminDocumentsService } from '../documents.service';
+import { UpdateDocumentDto } from '../dto/update-document.dto'; // Assuming you have an UpdateDocumentDto
+import { DocumentValidateService } from '../services/document-validate.service';
+import { AdminDocumentsService } from '../services/documents.service';
 
 @Injectable()
 export class UpdateDocumentUseCase {
   constructor(
     private readonly documentsService: AdminDocumentsService,
     private readonly translationService: TranslationService,
+    private readonly documentValidateService: DocumentValidateService,
     private readonly entityManager: EntityManager,
   ) {}
 
-  async execute(id: number, dto: any): Promise<DocumentEntity> {
+  async execute(id: number, dto: UpdateDocumentDto): Promise<DocumentEntity> {
+    // 1. 기존 문서 조회
+    const existingDocument = await this.documentsService.getById(id);
+
+    // 2. 비즈니스 로직 검증 (제목/슬러그 중복 등)
+    await this.documentValidateService.validate(dto, existingDocument);
+
+    // 3. 트랜잭션 실행
     return await this.entityManager.transaction(async (manager) => {
       // 문서 업데이트 (기본 정보: slug, category)
-      const document = await this.documentsService.update(id, dto, manager);
+      const document = await this.documentsService.update(manager, id, dto);
 
       // 번역 업데이트 (병렬 처리)
       const translations = await Promise.allSettled([
-        this.updateKoreanTranslation(document, dto, manager),
-        this.updateEnglishTranslation(document, dto, manager),
+        this.updateKoreanTranslation(manager, document, dto),
+        this.updateEnglishTranslation(manager, document, dto),
       ]);
 
       // 번역 실패 처리
@@ -32,23 +42,23 @@ export class UpdateDocumentUseCase {
   }
 
   private async updateKoreanTranslation(
+    manager: EntityManager,
     document: DocumentEntity,
     dto: any,
-    manager: EntityManager,
   ) {
     // 한국어 번역 업데이트 (원본 데이터 그대로)
     return await this.documentsService.updateTranslation(
+      manager,
       document.id,
       'ko',
       { title: dto.title, content: dto.content },
-      manager,
     );
   }
 
   private async updateEnglishTranslation(
+    manager: EntityManager,
     document: DocumentEntity,
     dto: any,
-    manager: EntityManager,
   ) {
     // 영어 번역 자동 업데이트
     const englishTitle = await this.translationService.translateToEnglish(
@@ -60,10 +70,10 @@ export class UpdateDocumentUseCase {
     );
 
     return await this.documentsService.updateTranslation(
+      manager,
       document.id,
       'en',
       { title: englishTitle, content: englishContent },
-      manager,
     );
   }
 

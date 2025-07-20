@@ -24,11 +24,15 @@ import { ZodValidationPipe } from 'src/common/pipes/zod.pipe';
 
 import { AuthGuard } from 'src/common/guards/auth.guard';
 
-import { AdminDocumentsService } from './documents.service';
+import { AdminDocumentsService } from './services/documents.service';
 import {
   CreateDocumentDto,
   CreateDocumentSchema,
 } from './dto/create-document.dto';
+import {
+  UpdateDocumentDto,
+  UpdateDocumentSchema,
+} from './dto/update-document.dto';
 import { CreateDocumentUseCase } from './use-cases/create-document.use-case';
 import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
 
@@ -66,7 +70,7 @@ export class AdminDocumentsController {
     @Res() res: Response,
   ) {
     console.log(dto);
-    // await this.createDocumentUseCase.execute(dto);
+    await this.createDocumentUseCase.execute(dto);
     flash.success('작업 성공');
     return res.redirect('/admin/documents');
   }
@@ -78,12 +82,14 @@ export class AdminDocumentsController {
   }
 
   @Put(':id')
+  @UsePipes(new ZodValidationPipe(UpdateDocumentSchema))
   async update(
     @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateDocumentDto,
     @Req() req: NestMvcReq,
     @Res() res: Response,
   ) {
-    await this.updateDocumentUseCase.execute(id, req.body?.document);
+    await this.updateDocumentUseCase.execute(id, dto);
     req.flash.success('작업 성공');
     return res.redirect(303, '/admin/documents');
   }

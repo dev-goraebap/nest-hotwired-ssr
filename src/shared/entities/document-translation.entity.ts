@@ -31,6 +31,8 @@ export class DocumentTranslationEntity extends BaseEntity {
   @UpdateDateColumn()
   readonly updatedAt: Date;
 
-  @ManyToOne(() => DocumentEntity, (d) => d.translations)
+  @ManyToOne(() => DocumentEntity, (d) => d.translations, {
+    onDelete: 'CASCADE',
+  })
   readonly document: DocumentEntity;
 }
