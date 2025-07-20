@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -9,6 +10,7 @@ import {
   Req,
   Res,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
@@ -18,10 +20,15 @@ import {
   NestMvcView,
   View,
 } from 'nestjs-mvc-tools';
+import { ZodValidationPipe } from 'src/common/pipes/zod.pipe';
 
 import { AuthGuard } from 'src/common/guards/auth.guard';
 
 import { AdminDocumentsService } from './documents.service';
+import {
+  CreateDocumentDto,
+  CreateDocumentSchema,
+} from './dto/create-document.dto';
 import { CreateDocumentUseCase } from './use-cases/create-document.use-case';
 import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
 
@@ -52,9 +59,15 @@ export class AdminDocumentsController {
   }
 
   @Post()
-  async create(@Req() req: NestMvcReq, @Res() res: Response) {
-    await this.createDocumentUseCase.execute(req.body?.document);
-    req.flash.success('작업 성공');
+  @UsePipes(new ZodValidationPipe(CreateDocumentSchema))
+  async create(
+    @Body() dto: CreateDocumentDto,
+    @Flash() flash: NestMvcFlash,
+    @Res() res: Response,
+  ) {
+    console.log(dto);
+    // await this.createDocumentUseCase.execute(dto);
+    flash.success('작업 성공');
     return res.redirect('/admin/documents');
   }
 

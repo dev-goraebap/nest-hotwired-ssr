@@ -5,7 +5,12 @@ import {
 } from '@nestjs/common';
 import { EntityManager, Not } from 'typeorm';
 
-import { CategoryEntity, DocumentEntity, DocumentTranslationEntity } from 'src/shared';
+import {
+  CategoryEntity,
+  DocumentEntity,
+  DocumentTranslationEntity,
+} from 'src/shared';
+import { CreateDocumentDto } from './dto/create-document.dto';
 
 @Injectable()
 export class AdminDocumentsService {
@@ -61,36 +66,31 @@ export class AdminDocumentsService {
     return result;
   }
 
-  async create(dto: any, manager?: EntityManager): Promise<DocumentEntity> {
-    const em = manager || this.entityManager;
-
-    // 유효성 검증 및 데이터 준비 (slug, category만 필요)
-    const { slug, category } = await this.validateAndPrepareData(dto);
-
-    const document = em.create(DocumentEntity, {
-      slug,
+  async create(
+    category: CategoryEntity,
+    dto: CreateDocumentDto,
+  ): Promise<DocumentEntity> {
+    const document = DocumentEntity.create({
+      slug: dto.slug,
       category,
     });
 
-    return await em.save(document);
+    return await document.save();
   }
 
   async createTranslation(
-    documentId: number,
+    document: DocumentEntity,
     languageCode: string,
     translationDto: { title: string; content: string },
-    manager?: EntityManager,
   ): Promise<DocumentTranslationEntity> {
-    const em = manager || this.entityManager;
-
-    const translation = em.create(DocumentTranslationEntity, {
-      document: { id: documentId },
+    const translation = DocumentTranslationEntity.create({
+      document,
       languageCode,
       title: translationDto.title,
       content: translationDto.content,
     });
 
-    return await em.save(translation);
+    return await translation.save();
   }
 
   async update(

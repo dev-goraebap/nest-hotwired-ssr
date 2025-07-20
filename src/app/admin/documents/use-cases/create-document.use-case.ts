@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 
-import { DocumentEntity, TranslationService } from 'src/shared';
+import { CategoryEntity, DocumentEntity, TranslationService } from 'src/shared';
 
 import { AdminDocumentsService } from '../documents.service';
+import { CreateDocumentDto } from '../dto/create-document.dto';
 
 @Injectable()
 export class CreateDocumentUseCase {
@@ -13,19 +14,23 @@ export class CreateDocumentUseCase {
     private readonly entityManager: EntityManager,
   ) {}
 
-  async execute(dto: any): Promise<DocumentEntity> {
-    // 유효성 검증
-    // await this.validateDto(dto);
+  async execute(dto: CreateDocumentDto): Promise<DocumentEntity> {
+    const category = await CategoryEntity.findOne({
+      where: { id: dto.categoryId },
+    });
+    if (!category) {
+      throw new BadRequestException('카테고리를 찾을 수 없습니다.');
+    }
 
     // 트랜잭션 실행
     return await this.entityManager.transaction(async (manager) => {
       // 문서 생성
-      const document = await this.documentsService.create(dto, manager);
+      const document = await this.documentsService.create(category, dto);
 
       // 병렬로 번역 생성
       const translations = await Promise.allSettled([
-        this.createKoreanTranslation(document, dto, manager),
-        this.createEnglishTranslation(document, dto, manager),
+        this.createKoreanTranslation(document, dto),
+        this.createEnglishTranslation(document, dto),
       ]);
 
       // 번역 실패 처리
@@ -35,25 +40,15 @@ export class CreateDocumentUseCase {
     });
   }
 
-  private async createKoreanTranslation(
-    document: DocumentEntity,
-    dto: any,
-    manager: EntityManager,
-  ) {
+  private async createKoreanTranslation(document: DocumentEntity, dto: any) {
     // 한글로 작성할거기 때문에 그냥 그대로 저장
-    return await this.documentsService.createTranslation(
-      document.id,
-      'ko',
-      { title: dto.title, content: dto.content },
-      manager,
-    );
+    return await this.documentsService.createTranslation(document, 'ko', {
+      title: dto.title,
+      content: dto.content,
+    });
   }
 
-  private async createEnglishTranslation(
-    document: DocumentEntity,
-    dto: any,
-    manager: EntityManager,
-  ) {
+  private async createEnglishTranslation(document: DocumentEntity, dto: any) {
     const englishTitle = await this.translationService.translateToEnglish(
       dto.title,
     );
@@ -62,12 +57,10 @@ export class CreateDocumentUseCase {
       'English',
     );
 
-    return await this.documentsService.createTranslation(
-      document.id,
-      'en',
-      { title: englishTitle, content: englishContent },
-      manager,
-    );
+    return await this.documentsService.createTranslation(document, 'en', {
+      title: englishTitle,
+      content: englishContent,
+    });
   }
 
   private handleTranslationFailures(translations: PromiseSettledResult<any>[]) {
