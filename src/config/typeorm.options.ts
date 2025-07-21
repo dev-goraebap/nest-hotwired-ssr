@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { join } from 'path';
 
-import { CategoryEntity, CategoryTranslationEntity, DocumentEntity, DocumentTranslationEntity } from 'src/shared';
+import { CategoryEntity, CategoryTranslationEntity, DocumentEntity, DocumentTranslationEntity, PostEntity, PostTranslationEntity, SeriesEntity, SeriesTranslationEntity, TagEntity, TagTranslationEntity } from 'src/shared';
 
 @Injectable()
 export class TypeOrmOptionsImpl implements TypeOrmOptionsFactory {
@@ -18,6 +18,12 @@ export class TypeOrmOptionsImpl implements TypeOrmOptionsFactory {
         CategoryTranslationEntity,
         DocumentEntity,
         DocumentTranslationEntity,
+        PostEntity,
+        PostTranslationEntity,
+        TagEntity,
+        TagTranslationEntity,
+        SeriesEntity,
+        SeriesTranslationEntity
       ],
     };
   }
