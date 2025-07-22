@@ -1,0 +1,52 @@
+@layout.app({ title: 'Nestjs MVC Admin - 게시물 관리', adminMode: true })
+
+@!uikit.flash()
+
+<div class="flex flex-col gap-4">
+    <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold">게시물 관리</h1>
+        <a href="/admin/posts/new" class="btn btn-primary btn-soft">등록</a>
+    </div>
+    <div class="rounded-box border border-base-content/5 bg-base-100">
+        <table class="table">
+            <!-- head -->
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>카테고리</th>
+                    <th>제목</th>
+                    <th>슬러그</th>
+                    <th>생성일</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @each((post, index) in posts)
+                <tr>
+                    <td>{{index+1}}</td>
+                    <td>{{post?.category?.name}}</td>
+                    <td>
+                        <a href="/admin/posts/{{post?.id}}" class="text-blue-500">
+                            {{post?.title}}
+                        </a>
+                    </td>
+                    <td>{{post?.slug}}</td>
+                    <td>{{post?.createdAt?.toISOString()}}</td>
+                    <td>
+                        <div>
+                            <a href="/admin/posts/{{post?.id}}/edit" class="text-warning">수정</a>
+                            /
+                            <a href="/admin/posts/{{post?.id}}" data-turbo-method="delete"
+                                data-turbo-confirm="삭제하시겠어요?" class="text-error">
+                                삭제
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                @end
+
+            </tbody>
+        </table>
+    </div>
+</div>
+@end
