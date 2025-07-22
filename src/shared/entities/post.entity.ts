@@ -45,7 +45,9 @@ export class PostEntity extends BaseEntity {
   @JoinColumn({ name: 'series_id' })
   readonly series: SeriesEntity;
 
-  @ManyToMany(() => TagEntity, (tag) => tag.posts)
+  @ManyToMany(() => TagEntity, (tag) => tag.posts, {
+    cascade: true,
+  })
   @JoinTable({
     name: 'post_tags',
     joinColumn: { name: 'post_id' },
