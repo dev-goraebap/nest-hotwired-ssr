@@ -1,4 +1,4 @@
-import { CategoryEntity } from 'src/shared/entities/category.entity';
+import { CategoryEntity } from '../entities';
 
 export class SharedCategoriesService {
   async getSidebarCategories(languageCode: string = 'en') {
