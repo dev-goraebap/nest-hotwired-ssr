@@ -12,6 +12,10 @@ import {
   TranslationService,
 } from 'src/shared';
 
+import {
+  ActiveStorageService,
+  AttachmentEntity,
+} from 'src/libs/typeorm-active-storage';
 import { CreatePostUseCase } from './create-post.use-case';
 
 void describe('CreatePostUseCase', () => {
@@ -26,6 +30,9 @@ void describe('CreatePostUseCase', () => {
       translateHtmlContent: jest
         .fn()
         .mockResolvedValue('<h1>Test Post Title</h1><p>Test content</p>'),
+    };
+    const mockActiveStorageService = {
+      attach: jest.fn().mockResolvedValue(new AttachmentEntity()),
     };
 
     const module = await Test.createTestingModule({
@@ -52,6 +59,10 @@ void describe('CreatePostUseCase', () => {
           provide: TranslationService,
           useValue: mockTranslationService,
         },
+        {
+          provide: ActiveStorageService,
+          useValue: mockActiveStorageService,
+        },
       ],
     }).compile();
     createPostUseCase = module.get(CreatePostUseCase);
@@ -74,7 +85,7 @@ void describe('CreatePostUseCase', () => {
   // 테스트 항목
   // ---------------------------------------------
 
-  void it('게시물 생성 성공', async () => {
+  void it('게시물 생성 성공 (파일 첨부 테스트 제외)', async () => {
     await createPostUseCase.execute({
       title: '게시물 제목',
       content: '<h1>게시물 제목</h1><p>게시물 내용</p>',

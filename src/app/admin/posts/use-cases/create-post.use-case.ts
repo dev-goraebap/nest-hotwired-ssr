@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { In } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 
 import { CreatePostDto } from '../dto/create-post.dto';
 
+import { ActiveStorageService } from 'src/libs/typeorm-active-storage';
 import {
   PostEntity,
   PostTranslationEntity,
@@ -12,9 +13,13 @@ import {
 
 @Injectable()
 export class CreatePostUseCase {
-  constructor(private readonly translationService: TranslationService) {}
+  constructor(
+    private readonly entityManager: EntityManager,
+    private readonly translationService: TranslationService,
+    private readonly activeStorageService: ActiveStorageService,
+  ) {}
 
-  async execute(dto: CreatePostDto) {
+  async execute(dto: CreatePostDto, file?: Express.Multer.File) {
     // 존재하는 테그만 추리기
     const tagIds = dto.tags.map((x) => x.id);
     const tags = await TagEntity.find({
@@ -55,7 +60,6 @@ export class CreatePostUseCase {
       'english',
     );
 
-    // 트랜잭션 단위: PostEntity측의 cascade로 일괄 생성 처리
     const koPostTranslation = PostTranslationEntity.create({
       languageCode: 'ko',
       title: dto.title,
@@ -66,11 +70,28 @@ export class CreatePostUseCase {
       title: enTitle,
       content: enContent,
     });
-    const post = PostEntity.create({
+    let post = PostEntity.create({
       slug: dto.slug,
       tags: tags,
       translations: [koPostTranslation, enPostTranslation],
     });
-    await post.save();
+
+    // 트랜잭션 단위: 게시물 생성 및 파일이 있을 경우 첨부파일 생성
+    await this.entityManager.transaction(async () => {
+      post = await post.save();
+
+      // -------------------------------------------------------------------------------
+      // <외부 연계 (ActiveStorage 서비스에 의존적)>
+      // STEP1: 파일이 없는 경우 프로세스 종료
+      // STEP2: 파일 저장 및 게시물 첨부 파일 레코드 생성
+      // -------------------------------------------------------------------------------
+      if (!file) return;
+      await this.activeStorageService.attach(
+        file,
+        'post',
+        String(post.id),
+        'thumbnail',
+      );
+    });
   }
 }
