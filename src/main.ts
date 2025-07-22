@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as session from 'express-session';
 import { join } from 'path';
