@@ -15,6 +15,36 @@ import {
 
 @Module({})
 export class TypeormActiveStorageModule {
+  static forRoot(options: TypeormActiveStorageOptions): DynamicModule {
+    const storageAdapterProvider: Provider = {
+      provide: STORAGE_PORT,
+      useFactory: () => {
+        switch (options.serviceType) {
+          case 'gcs':
+            return new GcsStorageAdapter(options);
+          case 'local':
+          default:
+            return new LocalStorageAdapter(options);
+        }
+      },
+    };
+
+    return {
+      imports: [TypeOrmModule.forFeature([BlobEntity, AttachmentEntity])],
+      providers: [
+        {
+          provide: TYPEORM_ACTIVE_STORAGE_OPTIONS,
+          useValue: options,
+        },
+        storageAdapterProvider,
+        ActiveStorageService,
+      ],
+      exports: [STORAGE_PORT, ActiveStorageService],
+      module: TypeormActiveStorageModule,
+      global: true,
+    };
+  }
+
   static forRootAsync(options: {
     useClass: Type<TypeormActiveStorageOptionsFactory>;
   }): DynamicModule {
