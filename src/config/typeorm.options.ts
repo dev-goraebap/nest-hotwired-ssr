@@ -19,7 +19,7 @@ import {
 export class TypeOrmOptionsImpl implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     return {
-      type: 'sqlite',
+      type: 'better-sqlite3',
       database: join(process.cwd(), 'storage', 'development.sqlite'),
       synchronize: process.env.NODE_ENV === 'development' ? true : false,
       logger: 'debug',
