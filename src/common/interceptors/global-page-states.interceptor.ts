@@ -62,11 +62,11 @@ export class GlobalPageStatesInterceptor implements NestInterceptor {
     }));
 
     // 전역 상태로 lang, categories, themes, languages 처리
-    view.share({ 
-      lang, 
+    view.share({
+      lang,
       categories,
       languages: languagesWithActive,
-      currentLanguage: lang 
+      currentLanguage: lang,
     });
 
     return next.handle();
@@ -86,10 +86,12 @@ export class GlobalPageStatesInterceptor implements NestInterceptor {
       return defaultTheme;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const theme = cookies?.theme;
     if (!theme) {
       return defaultTheme;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return theme;
   }
 
@@ -102,24 +104,27 @@ export class GlobalPageStatesInterceptor implements NestInterceptor {
   initLanguage(req: Request): string {
     const defaultLanguage = 'en';
     const cookies = req.cookies;
-    
+
     if (!cookies) {
       this.logger.warn('쿠키가 활성화되지 않았습니다.');
       return defaultLanguage;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const language = cookies?.language;
     if (!language) {
       return defaultLanguage;
     }
 
     // 지원하는 언어인지 확인
-    const supportedLanguages = languages.map(l => l.code);
+    const supportedLanguages = languages.map((l) => l.code);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (!supportedLanguages.includes(language)) {
       this.logger.warn(`지원하지 않는 언어: ${language}`);
       return defaultLanguage;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return language;
   }
 }

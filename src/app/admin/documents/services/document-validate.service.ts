@@ -1,11 +1,5 @@
-import {
-  BadRequestException,
-  Injectable,
-} from '@nestjs/common';
-import {
-  DocumentEntity,
-  DocumentTranslationEntity,
-} from 'src/shared';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { DocumentEntity, DocumentTranslationEntity } from 'src/shared';
 import { Not } from 'typeorm';
 import { CreateDocumentDto } from '../dto/create-document.dto';
 import { UpdateDocumentDto } from '../dto/update-document.dto';

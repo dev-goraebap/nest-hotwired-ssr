@@ -105,6 +105,7 @@ export class AdminDocumentsService {
       throw new BadRequestException('문서를 찾을 수 없습니다.');
     }
     // 문서 기본 정보 업데이트 (slug, category)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     Object.assign(document, { slug: dto.slug, category: dto.category });
     await manager.save(document);
 

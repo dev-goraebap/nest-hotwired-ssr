@@ -7,7 +7,7 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 @UseGuards(AuthGuard)
 export class AdminController {
   @Get()
-  async index(@Res() res: Response) {
+  index(@Res() res: Response) {
     return res.redirect('admin/documents');
   }
 }

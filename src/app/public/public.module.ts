@@ -5,10 +5,6 @@ import { PublicHomeModule } from './home/home.module';
 import { PublicSessionsModule } from './sessions/sessions.module';
 
 @Module({
-  imports: [
-    PublicHomeModule,
-    PublicDocumentsModule,
-    PublicSessionsModule,
-  ]
+  imports: [PublicHomeModule, PublicDocumentsModule, PublicSessionsModule],
 })
 export class PublicModule {}

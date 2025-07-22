@@ -6,7 +6,7 @@ import { NestMvcReq } from 'nestjs-mvc-tools';
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext) {
     const req: NestMvcReq = context.switchToHttp().getRequest();
-    const res: Response= context.switchToHttp().getResponse();
+    const res: Response = context.switchToHttp().getResponse();
 
     // 세션에서 로그인 상태 확인
     if (req.session?.isLoggedIn) {

@@ -4,9 +4,6 @@ import { AdminModule } from './admin/admin.module';
 import { PublicModule } from './public/public.module';
 
 @Module({
-  imports: [
-    AdminModule,
-    PublicModule
-  ]
+  imports: [AdminModule, PublicModule],
 })
 export class AppModule {}

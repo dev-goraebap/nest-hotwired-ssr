@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { EntityManager, In } from 'typeorm';
 
 import { CategoryEntity, CategoryTranslationEntity } from 'src/shared';
@@ -126,7 +130,9 @@ export class AdminCategoriesService {
   }
 
   // 유효성 검증 메서드들
+
   private async validateCreateData(dto: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { name } = dto;
 
     if (!name) {
@@ -134,7 +140,9 @@ export class AdminCategoriesService {
     }
 
     // 한국어 번역에서 중복 체크
+
     const existingTranslation = await CategoryTranslationEntity.findOne({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       where: { name, languageCode: 'ko' },
     });
     if (existingTranslation) {

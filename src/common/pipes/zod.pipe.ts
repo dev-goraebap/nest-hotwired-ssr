@@ -12,12 +12,16 @@ export class ZodValidationPipe implements PipeTransform {
 
   transform(value: any, metadata: ArgumentMetadata) {
     if (metadata.type !== 'body') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return value;
     }
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const objectToValidate = value?.document || value; // 요청 본문 구조에 따라 조정
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const parsedValue = this.schema.parse(objectToValidate);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return parsedValue;
     } catch (error) {
       if (error instanceof ZodError) {

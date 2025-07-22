@@ -39,6 +39,7 @@ export class CreateCategoryUseCase {
     return await this.categoriesService.createTranslation(
       category.id,
       'ko',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       { name: dto.name, description: dto.description || '' },
       manager,
     );
@@ -49,9 +50,14 @@ export class CreateCategoryUseCase {
     dto: any,
     manager: EntityManager,
   ) {
-    const englishName = await this.translationService.translateToEnglish(dto.name);
-    const englishDescription = dto.description 
-      ? await this.translationService.translateToEnglish(dto.description)
+    const englishName = await this.translationService.translateToEnglish(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+      dto.name,
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const englishDescription = dto.description
+      ? // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+        await this.translationService.translateToEnglish(dto.description)
       : '';
 
     return await this.categoriesService.createTranslation(
@@ -68,16 +74,20 @@ export class CreateCategoryUseCase {
 
     // 한국어 번역 실패 체크
     if (koreanResult.status === 'rejected') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = koreanResult.reason;
       throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         `한국어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }
 
     // 영어 번역 실패 체크
     if (englishResult.status === 'rejected') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = englishResult.reason;
       throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         `영어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }

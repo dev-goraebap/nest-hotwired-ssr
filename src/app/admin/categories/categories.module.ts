@@ -6,14 +6,12 @@ import { CreateCategoryUseCase } from './use-cases/create-category.use-case';
 import { UpdateCategoryUseCase } from './use-cases/update-category.use-case';
 
 @Module({
-  controllers: [
-    AdminCategoriesController
-  ],
+  controllers: [AdminCategoriesController],
   imports: [],
   providers: [
     AdminCategoriesService,
     CreateCategoryUseCase,
-    UpdateCategoryUseCase
+    UpdateCategoryUseCase,
   ],
 })
 export class AdminCategoriesModule {}

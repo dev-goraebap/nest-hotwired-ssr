@@ -101,4 +101,21 @@ export class Utils {
     const dir2 = key.substring(2, 4);
     return path.join(rootPath, dir1, dir2, key);
   }
+
+  /**
+   * GCS용 파일 경로 생성 (로컬 파일 시스템과 동일한 계층 구조)
+   *
+   * @param key 파일 키 (예: "abcd1234ef567890")
+   * @returns GCS 객체 경로 (예: "ab/cd/abcd1234ef567890")
+   *
+   * @description
+   * - 로컬 스토리지와 동일한 디렉토리 구조를 GCS에서도 사용
+   * - GCS는 실제 디렉토리가 아닌 객체명의 슬래시(/)로 계층 표현
+   * - 버킷 브라우저에서 폴더 구조로 보임
+   */
+  static getGcsFilePath(key: string): string {
+    const dir1 = key.substring(0, 2);
+    const dir2 = key.substring(2, 4);
+    return `${dir1}/${dir2}/${key}`;
+  }
 }

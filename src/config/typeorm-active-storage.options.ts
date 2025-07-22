@@ -1,5 +1,8 @@
 import { join } from 'path';
-import { TypeormActiveStorageOptions, TypeormActiveStorageOptionsFactory } from 'src/libs/typeorm-active-storage';
+import {
+  TypeormActiveStorageOptions,
+  TypeormActiveStorageOptionsFactory,
+} from 'src/libs/typeorm-active-storage';
 
 export class TypeormActiveStorageOptionsImpl
   implements TypeormActiveStorageOptionsFactory

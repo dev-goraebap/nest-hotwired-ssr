@@ -30,9 +30,11 @@ export class ActiveStorageService {
   ): Promise<AttachmentEntity[]> {
     const whereCondition: any = { recordType, recordId };
     if (name !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       whereCondition.name = name;
     }
     return await AttachmentEntity.find({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       where: whereCondition,
       relations: { blob: true },
     });
@@ -169,7 +171,7 @@ export class ActiveStorageService {
       `다중 파일 첨부 시작: ${files.length}개 파일 → ${recordType}:${recordId}:${name} [${mode} 모드]`,
     );
 
-    let attachments: AttachmentEntity[] = [];
+    const attachments: AttachmentEntity[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -267,6 +269,7 @@ export class ActiveStorageService {
   async detachAllByRecord(recordType: string, recordId: string, name?: string) {
     const whereCondition: any = { recordType, recordId };
     if (name !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       whereCondition.name = name;
     }
 
@@ -276,6 +279,7 @@ export class ActiveStorageService {
 
     this.logger.log(`일괄 첨부파일 삭제 시작: ${targetDescription}`);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const result = await AttachmentEntity.delete(whereCondition);
 
     if (result.affected && result.affected > 0) {

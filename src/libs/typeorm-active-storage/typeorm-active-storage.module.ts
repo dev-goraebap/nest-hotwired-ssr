@@ -4,10 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AttachmentEntity } from './entities/attachment.entity';
 import { BlobEntity } from './entities/blob.entity';
 import { LocalStorageAdapter } from './infra/adapters/local-storage.adapter';
+import { GcsStorageAdapter } from './infra/adapters/gcs-storage.adapter';
 import { STORAGE_PORT } from './infra/ports/storage.port';
 import { ActiveStorageService } from './services/active-storage.service';
 import {
   TYPEORM_ACTIVE_STORAGE_OPTIONS,
+  TypeormActiveStorageOptions,
   TypeormActiveStorageOptionsFactory,
 } from './options.factory';
 
@@ -24,15 +26,26 @@ export class TypeormActiveStorageModule {
       inject: [options.useClass],
     };
 
+    const storageAdapterProvider: Provider = {
+      provide: STORAGE_PORT,
+      useFactory: (config: TypeormActiveStorageOptions) => {
+        switch (config.serviceType) {
+          case 'gcs':
+            return new GcsStorageAdapter(config);
+          case 'local':
+          default:
+            return new LocalStorageAdapter(config);
+        }
+      },
+      inject: [TYPEORM_ACTIVE_STORAGE_OPTIONS],
+    };
+
     return {
       imports: [TypeOrmModule.forFeature([BlobEntity, AttachmentEntity])],
       providers: [
         options.useClass,
         optionsProvider,
-        {
-          provide: STORAGE_PORT,
-          useClass: LocalStorageAdapter,
-        },
+        storageAdapterProvider,
         ActiveStorageService,
       ],
       exports: [STORAGE_PORT, ActiveStorageService],

@@ -1,19 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { TYPEORM_ACTIVE_STORAGE_OPTIONS, TypeormActiveStorageOptions } from '../../options.factory';
+import { TypeormActiveStorageOptions } from '../../options.factory';
 import { Utils } from '../../utils';
 import { StoragePort } from '../ports/storage.port';
 
 @Injectable()
 export class LocalStorageAdapter implements StoragePort {
-
-  constructor(
-    @Inject(TYPEORM_ACTIVE_STORAGE_OPTIONS)
-    private readonly options: TypeormActiveStorageOptions
-  ) {
-    this.ensureRootDirectory();
+  constructor(private readonly options: TypeormActiveStorageOptions) {
+    void this.ensureRootDirectory();
   }
 
   getServiceName(): string {
@@ -53,9 +49,14 @@ export class LocalStorageAdapter implements StoragePort {
           break;
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       // 파일이 존재하지 않는 경우는 무시 (이미 삭제됨)
-      if (error.code !== 'ENOENT') {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code !== 'ENOENT'
+      ) {
         console.error(`Failed to delete file: ${key}`, error);
         throw error;
       }

@@ -45,6 +45,7 @@ export class BlobEntity extends BaseEntity {
       to: (value: Record<string, any>) => JSON.stringify(value),
       from: (value: string) => {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return JSON.parse(value || '{}');
         } catch {
           return {};

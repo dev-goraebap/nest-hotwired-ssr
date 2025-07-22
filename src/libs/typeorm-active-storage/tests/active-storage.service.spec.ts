@@ -11,7 +11,7 @@ import { STORAGE_PORT } from '../infra/ports/storage.port';
 import { ActiveStorageService } from '../services/active-storage.service';
 import { TestingHelper } from './testing.helper';
 
-describe('TypeOrmActiveStorage', () => {
+void describe('TypeOrmActiveStorage', () => {
   let activeStorageService: ActiveStorageService;
   let dataSource: DataSource;
 
@@ -313,20 +313,27 @@ describe('TypeOrmActiveStorage', () => {
     expect(deletedBlob).toBeNull();
 
     // 6. 실제 파일도 삭제되었는지 확인 (선택적 - 파일 시스템에서 확인)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
     const fs = require('fs/promises');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
     const path = require('path');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
     const { Utils } = require('../utils');
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const filePath = Utils.getFilePath(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
         path.join(process.cwd(), 'storage', 'uploads'),
         blobKey,
       );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       await fs.access(filePath);
       // 파일이 존재하면 테스트 실패
       expect(true).toBe(false);
     } catch (error) {
       // 파일이 존재하지 않으면 테스트 성공 (ENOENT 에러)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       expect(error.code).toBe('ENOENT');
     }
   });

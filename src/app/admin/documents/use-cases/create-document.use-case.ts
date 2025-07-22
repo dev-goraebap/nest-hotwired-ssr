@@ -55,31 +55,52 @@ export class CreateDocumentUseCase {
   }
   '';
 
-  private async createKoreanTranslation(manager: EntityManager, document: DocumentEntity, dto: any) {
+  private async createKoreanTranslation(
+    manager: EntityManager,
+    document: DocumentEntity,
+
+    dto: any,
+  ) {
     // 한글로 작성할거기 때문에 그냥 그대로 저장
-    return await this.documentsService.createTranslation(manager, document, 'ko', {
-      title: dto.title,
-      content: dto.content,
-    });
+    return await this.documentsService.createTranslation(
+      manager,
+      document,
+      'ko',
+      {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        title: dto.title,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        content: dto.content,
+      },
+    );
   }
 
   private async createEnglishTranslation(
     manager: EntityManager,
     document: DocumentEntity,
+
     dto: any,
   ) {
     const englishTitle = await this.translationService.translateToEnglish(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       dto.title,
     );
+
     const englishContent = await this.translationService.translateHtmlContent(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       dto.content,
       'English',
     );
 
-    return await this.documentsService.createTranslation(manager, document, 'en', {
-      title: englishTitle,
-      content: englishContent,
-    });
+    return await this.documentsService.createTranslation(
+      manager,
+      document,
+      'en',
+      {
+        title: englishTitle,
+        content: englishContent,
+      },
+    );
   }
 
   private handleTranslationFailures(translations: PromiseSettledResult<any>[]) {
@@ -88,16 +109,20 @@ export class CreateDocumentUseCase {
 
     // 한국어 번역 실패 체크
     if (koreanResult.status === 'rejected') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = koreanResult.reason;
       throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         `한국어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }
 
     // 영어 번역 실패 체크
     if (englishResult.status === 'rejected') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = englishResult.reason;
       throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         `영어 번역 생성에 실패했습니다: ${error.message || error}`,
       );
     }

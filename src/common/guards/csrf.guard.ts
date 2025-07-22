@@ -29,16 +29,21 @@ export class CsrfGuard implements CanActivate {
 
     // CSRF 토큰 검증 (헤더, 바디, 쿼리에서)
     const tokenFromHeader = req.headers['x-csrf-token'] as string;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     const tokenFromBody = req.body?._csrft;
     // 쿼리에서 토큰 확인 (일반적으로 권장되지 않음)
     // 하지만 multipart/form-data + Multer 사용 시 Guard가 Interceptor보다 먼저 실행되어
     // body 파싱 전에 CSRF 검증이 필요한 경우 임시 해결책으로 사용
+
     const tokenFromQuery = req.query._csrft;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const token = tokenFromHeader || tokenFromBody || tokenFromQuery;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const sessionToken = req.session['csrfToken'];
 
     this.logger.debug(`CSRF Token from header: ${tokenFromHeader}`);
     this.logger.debug(`CSRF Token from body: ${tokenFromBody}`);
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string, @typescript-eslint/restrict-template-expressions
     this.logger.debug(`CSRF Token from query: ${tokenFromQuery}`);
     this.logger.debug(`CSRF Token from session: ${sessionToken}`);
 

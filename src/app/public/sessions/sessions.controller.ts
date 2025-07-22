@@ -40,9 +40,10 @@ export class PublicSessionsController {
   }
 
   @Post('/login')
-  async doLogin(@Req() req: NestMvcReq, @Res() res: Response) {
+  doLogin(@Req() req: NestMvcReq, @Res() res: Response) {
     console.log(req.body);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { username, password } = req.body;
 
     const adminUsername = this.configService.get<string>('ADMIN_USERNAME');
@@ -54,7 +55,9 @@ export class PublicSessionsController {
     }
 
     // 세션에 로그인 상태 저장
+
     req.session.isLoggedIn = true;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     req.session.username = username;
 
     req.flash.success('로그인 성공');
@@ -62,7 +65,7 @@ export class PublicSessionsController {
   }
 
   @Post('/logout')
-  async logout(@Req() req: NestMvcReq, @Res() res: Response) {
+  logout(@Req() req: NestMvcReq, @Res() res: Response) {
     // 세션 삭제
     req.session.destroy((err) => {
       if (err) {

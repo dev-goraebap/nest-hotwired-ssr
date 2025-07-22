@@ -54,6 +54,7 @@ export class AdminCategoriesController {
 
   @Post()
   async create(@Req() req: NestMvcReq) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     await this.createCategoryUseCase.execute(req.body?.category);
 
     req.flash.success('작업 성공');
@@ -68,12 +69,14 @@ export class AdminCategoriesController {
 
   @Put('orders')
   async updateOrders(@Req() req: NestMvcReq) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     await this.categoriesService.updateOrders(req.body?.items);
     req.flash.success('순서 변경 성공!');
   }
 
   @Put(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Req() req: NestMvcReq) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     await this.updateCategoryUseCase.execute(id, req.body?.category);
     req.flash.success('작업 성공');
     return req.view.render('pages/admin/categories/_success');

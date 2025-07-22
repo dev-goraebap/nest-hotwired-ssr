@@ -12,6 +12,7 @@ export const UpdateDocumentSchema = z.object({
     .refine((val) => !/\s/.test(val), {
       message: '슬러그에 공백이 포함될 수 없습니다.',
     })
+    // eslint-disable-next-line no-useless-escape
     .refine((val) => /^[a-z0-9\-\/]+$/.test(val), {
       message:
         '슬러그는 영문 소문자, 숫자, 하이픈(-), 슬래시(/)만 사용할 수 있습니다.',

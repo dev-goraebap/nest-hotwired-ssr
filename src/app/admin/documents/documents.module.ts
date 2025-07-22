@@ -13,7 +13,7 @@ import { UpdateDocumentUseCase } from './use-cases/update-document.use-case';
     AdminDocumentsService,
     CreateDocumentUseCase,
     UpdateDocumentUseCase,
-    DocumentValidateService
-  ]
+    DocumentValidateService,
+  ],
 })
 export class AdminDocumentsModule {}

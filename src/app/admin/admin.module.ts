@@ -5,12 +5,7 @@ import { AdminCategoriesModule } from './categories/categories.module';
 import { AdminDocumentsModule } from './documents/documents.module';
 
 @Module({
-  imports: [
-    AdminCategoriesModule,
-    AdminDocumentsModule,
-  ],
-  controllers: [
-    AdminController
-  ]
+  imports: [AdminCategoriesModule, AdminDocumentsModule],
+  controllers: [AdminController],
 })
 export class AdminModule {}

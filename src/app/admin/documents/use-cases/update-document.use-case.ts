@@ -44,6 +44,7 @@ export class UpdateDocumentUseCase {
   private async updateKoreanTranslation(
     manager: EntityManager,
     document: DocumentEntity,
+
     dto: any,
   ) {
     // 한국어 번역 업데이트 (원본 데이터 그대로)
@@ -51,6 +52,7 @@ export class UpdateDocumentUseCase {
       manager,
       document.id,
       'ko',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       { title: dto.title, content: dto.content },
     );
   }
@@ -58,13 +60,18 @@ export class UpdateDocumentUseCase {
   private async updateEnglishTranslation(
     manager: EntityManager,
     document: DocumentEntity,
+
     dto: any,
   ) {
     // 영어 번역 자동 업데이트
+
     const englishTitle = await this.translationService.translateToEnglish(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       dto.title,
     );
+
     const englishContent = await this.translationService.translateHtmlContent(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       dto.content,
       'English',
     );
@@ -83,16 +90,20 @@ export class UpdateDocumentUseCase {
 
     // 한국어 번역 실패 체크
     if (koreanResult.status === 'rejected') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = koreanResult.reason;
       throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         `한국어 번역 업데이트에 실패했습니다: ${error.message || error}`,
       );
     }
 
     // 영어 번역 실패 체크
     if (englishResult.status === 'rejected') {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const error = englishResult.reason;
       throw new BadRequestException(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         `영어 번역 업데이트에 실패했습니다: ${error.message || error}`,
       );
     }

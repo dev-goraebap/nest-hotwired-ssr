@@ -20,7 +20,6 @@ import { SharedModule } from './shared';
 
 import { AppModule } from './app/app.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot(configOptions),
