@@ -36,6 +36,7 @@
 - **Translation**: 각 엔티티별 다국어 번역 지원
 
 ### 관계 설계
+
 ```
 Post ←→ Series (ManyToOne - 선택적)
 Post ←→ Tag (ManyToMany)
@@ -55,6 +56,7 @@ Series는 Tag와 독립적
   - 에러 핸들링
 
 ### 참조 방향
+
 ```
 Controller → Use-Case → Services → Entities
 ```
@@ -85,6 +87,33 @@ Controller → Use-Case → Services → Entities
 - 병렬 처리로 성능 최적화
 - 번역 실패 시 상세한 에러 메시지
 
+## 테스트 전략
+### 접근 방식
+- **클래시스트(Classicist) 방식** 채택
+- 복잡한 비즈니스 로직이 포함된 use cases에 집중
+- 테스트 비용 효율성을 중시하여 의미 있는 케이스만 선별적으로 테스트
+
+### 테스트 구조
+- **실제 사용**: 비즈니스 로직 서비스들, 데이터베이스(테스트용 SQLite/in-memory), Use-Case 레이어, 도메인 객체 상호작용
+- **Mock 처리**: 외부 인프라(파일 업로드 - S3/GCS, Google Gemini 번역 API, 이메일 발송 등)
+
+### NestJS 테스팅 모듈 활용
+
+```typescript
+// 실제 DI 컨테이너 구성
+Test.createTestingModule({
+  imports: [TypeOrmModule.forRoot(/* 인메모리 DB */)],
+  providers: [
+    // 실제 서비스들
+    DocumentsService,
+    TranslationService, 
+    // 외부 의존성만 Mock
+    { provide: StorageService, useValue: mockStorageService },
+    { provide: GeminiService, useValue: mockGeminiService }
+  ]
+})
+```
+
 ## 개발 환경
 - **개발 서버**: `npm run start:dev`
 - **리소스 빌드**: `npm run start:resource`
@@ -108,6 +137,7 @@ Controller → Use-Case → Services → Entities
 - Use-Case 아키텍처 도입 및 검증
 - ESLint 에러 139개 → 0개 해결 (타입 안전성 개선)
 - 시리즈 기능 설계 완료
+- 테스트 전략 수립 (클래시스트 방식, 복잡한 케이스 중심)
 
 ## Git 정보
 - **현재 브랜치**: develop
