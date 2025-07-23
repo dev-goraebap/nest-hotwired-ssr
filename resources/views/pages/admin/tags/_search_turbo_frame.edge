@@ -1,0 +1,13 @@
+<turbo-frame id="tagSearchFrame">
+  @if(tags.length > 0)
+    <ul class="tag-search-results">
+      @each(tag in tags)
+        <li data-tag-id="{{ tag.id }}" data-tag-name="{{ tag.name }}" class="cursor-pointer hover:bg-gray-100 p-2">
+          {{ tag.name }}
+        </li>
+      @end
+    </ul>
+  @else
+    <div class="text-gray-500">검색 결과가 없습니다.</div>
+  @end
+</turbo-frame>

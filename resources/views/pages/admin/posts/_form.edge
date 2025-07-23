@@ -3,11 +3,11 @@
 @let(submitText = editMode ? '수정' : '등록')
 
 <form action="{{action}}" method="{{method}}" data-controller="modal document-form" class="h-full w-5xl">
-  <input type="text" class="hidden" name="document[id]" value="{{ document?.id ?? '' }}">
+  <input type="text" class="hidden" name="post[id]" value="{{ document?.id ?? '' }}">
 
   <div class="flex w-full h-full">
     <div class="grow flex flex-col gap-4 h-full border-x border-base-300 bg-base-100">
-      <input name="document[title]" class="hidden" value="{{document?.title ?? ''}}" />
+      <input name="post[title]" class="hidden" value="{{document?.title ?? ''}}" />
 
       <!-- 텍스트 에디터 -->
       <div class="w-[700px] h-full">
@@ -16,7 +16,7 @@
         </div>
       </div>
       <!-- 텍스트 에디터 데이터 바인딩 -->
-      <textarea name="document[content]" id="content_hidden" class="hidden">
+      <textarea name="post[content]" id="content_hidden" class="hidden">
         {{{document?.content ?? ''}}}
       </textarea>
     </div>
@@ -31,17 +31,17 @@
         </fieldset>
 
         <template data-document-form-target="categoryIdTemplate">
-          <input type="text" name="document[category][id]" class="hidden">
+          <input type="text" name="post[category][id]" class="hidden">
           <!-- 플레시 저장용 -->
-          <input type="text" name="document[category][name]" class="hidden">
+          <input type="text" name="post[category][name]" class="hidden">
           <div class="badge badge-accent"></div>
         </template>
         <div data-document-form-target="categoryContainer">
           @if(document?.category?.id)
-          <input type="text" name="document[category][id]" class="hidden" value="{{document?.category?.id}}">
+          <input type="text" name="post[category][id]" class="hidden" value="{{document?.category?.id}}">
 
           <!-- 플레시 저장용 -->
-          <input type="text" name="document[category][name]" class="hidden" value="{{document?.category?.name}}">
+          <input type="text" name="post[category][name]" class="hidden" value="{{document?.category?.name}}">
           <div class="badge badge-accent">{{document?.category?.name}}</div>
           @end
         </div>
@@ -50,9 +50,45 @@
           <legend class="fieldset-legend text-sm">슬러그</legend>
           <label class="input w-full">
             /
-            <input type="text" name="document[slug]" class="w-full" placeholder="고유한 slug(url)을 만들어주세요"
+            <input type="text" name="post[slug]" class="w-full" placeholder="고유한 slug(url)을 만들어주세요"
             value="{{{document?.slug ?? ''}}}" />
           </label>
+        </fieldset>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend text-sm">태그</legend>
+          <div data-controller="tag-input" 
+               data-tag-input-search-url-value="/admin/tags/search"
+               class="w-full">
+            
+            <!-- 선택된 태그들 -->
+            <div data-tag-input-target="tagContainer" class="mb-2"></div>
+            
+            <!-- 입력 필드 -->
+            <label class="input w-full">
+              <input data-tag-input-target="input" 
+                     data-action="input->tag-input#search keydown->tag-input#handleKeydown"
+                     type="text" 
+                     class="w-full" 
+                     placeholder="태그를 입력하세요 (Enter로 생성)"
+                     autocomplete="off" />
+            </label>
+            
+            <!-- Turbo Frame (검색 결과) -->
+            <div class="relative">
+              <turbo-frame id="tagSearchFrame" 
+                           data-tag-input-target="frame"
+                           class="absolute top-1 left-0 w-full bg-white border border-gray-200 rounded shadow-lg z-10 max-h-48 overflow-y-auto">
+                <!-- 서버에서 렌더링된 검색 결과가 여기에 삽입됨 -->
+              </turbo-frame>
+            </div>
+            
+            <!-- 폼 전송용 숨겨진 입력 -->
+            <input type="hidden" 
+                   name="post[tagIds]" 
+                   data-tag-input-target="hiddenInput" 
+                   value="[]">
+          </div>
         </fieldset>
 
       </div>
