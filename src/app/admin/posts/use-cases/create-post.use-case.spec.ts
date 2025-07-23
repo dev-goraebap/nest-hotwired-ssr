@@ -8,7 +8,6 @@ import {
   SeriesEntity,
   SeriesTranslationEntity,
   TagEntity,
-  TagTranslationEntity,
   TranslationService,
 } from 'src/shared';
 
@@ -46,7 +45,6 @@ void describe('CreatePostUseCase', () => {
             SeriesEntity,
             SeriesTranslationEntity,
             TagEntity,
-            TagTranslationEntity,
           ],
           synchronize: true,
           dropSchema: true,
@@ -68,15 +66,10 @@ void describe('CreatePostUseCase', () => {
     createPostUseCase = module.get(CreatePostUseCase);
 
     // id:1 의 태그를 미리 생성
-    const tagTranslation = TagTranslationEntity.create({
-      languageCode: 'ko',
+    const tag = TagEntity.create({
       name: 'testTag',
       description: 'test tag',
-    });
-    const tag = TagEntity.create({
-      slug: 'test-tag',
       color: '#000000',
-      translations: [tagTranslation],
     });
     await tag.save();
   });
