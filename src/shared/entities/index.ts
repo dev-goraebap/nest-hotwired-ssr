@@ -6,5 +6,5 @@ export * from './post-translation.entity';
 export * from './post.entity';
 export * from './series-translation.entity';
 export * from './series.entity';
-export * from './tag-translation.entity';
 export * from './tag.entity';
+

@@ -12,7 +12,6 @@ import {
   SeriesEntity,
   SeriesTranslationEntity,
   TagEntity,
-  TagTranslationEntity,
 } from 'src/shared';
 
 @Injectable()
@@ -32,7 +31,6 @@ export class TypeOrmOptionsImpl implements TypeOrmOptionsFactory {
         PostEntity,
         PostTranslationEntity,
         TagEntity,
-        TagTranslationEntity,
         SeriesEntity,
         SeriesTranslationEntity,
       ],
